@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 // Import Routes
+const users = require('./routes/api/users');
 const assets = require('./routes/api/assets');
 const incomes = require('./routes/api/incomes');
 const expenses = require('./routes/api/expenses');
@@ -27,6 +28,7 @@ mongoose
   .catch(err => console.log(err));
 
 // Define Routes
+app.use('/api/users', users);
 app.use('/api/assets', assets);
 app.use('/api/incomes', incomes);
 app.use('/api/expenses', expenses);
