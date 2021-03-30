@@ -14,6 +14,8 @@ const Nav = () => {
   );
 };
 
+// test
+
 /*<NavLink target="/employ" text="Employ" icon=<FaFileContract size="40px" /> />
 <NavLink target="/hub" text="Hub" icon=<FaSpinner size="40px" /> />*/
 
