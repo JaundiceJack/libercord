@@ -1,0 +1,58 @@
+/* ./src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* NavLink Styling */
+.link { height: 75px; width: 75px; }
+.link:hover::before {
+  content: '';
+  height: 75%;
+  width: 5px;
+  background-color: #47a;
+  position: absolute;
+  left: 0;
+}
+.active::before {
+  content: '';
+  height: 75%;
+  width: 5px;
+  position: absolute;
+  left: 0;
+  background-color: green;
+}
+.active:hover::before { background-color: green; }
+
+/* Toggle Icon and Text on Hover */
+.link:hover .ref { opacity: 1; transition: opacity 0.4s; }
+.link:hover .icon { opacity: 0; transition: opacity 0.4s; }
+.ref { opacity: 0; transition: opacity 0.2s; }
+.icon { opacity: 1;  transition: opacity 0.2s; }
+
+/* Logo Styling */
+.logo {
+  width: 70px;
+  height: 70px;
+  margin: 5px;
+}
+.logo img {
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+}
+
+/* Media Queries*/
+@media screen and (max-width: 768px) {
+  .link:hover::before {
+    height: 5px;
+    width: 75%;
+    left: 10%;
+    top: 0;
+  }
+  .active::before {content: '';
+    height: 5px;
+    width: 75%;
+    left: 10%;
+    top: 0;
+  }
+}
