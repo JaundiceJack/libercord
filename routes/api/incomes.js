@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../../middleware/auth.js');
 
 // Income Model
 const Income = require('../../models/Income');
@@ -13,8 +14,8 @@ router.get('/', (req, res) => {
 
 // Route: api/incomes
 // Desc: make an income
-// Access: public
-router.post('/', (req, res) => {
+// Access: private
+router.post('/', auth, (req, res) => {
   const newIncome = new Income({
     category: req.body.category,
     value:   req.body.value,
@@ -29,8 +30,8 @@ router.post('/', (req, res) => {
 
 // Route: api/incomes
 // Desc: delete an income
-// Access: public
-router.delete('/:id', (req, res) => {
+// Access: private
+router.delete('/:id', auth, (req, res) => {
   Income
   .findById(req.params.id)
   .then(income => income.remove().then(() => res.json({success: true})))

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../../middleware/auth.js');
 
 // Liability Model
 const Liability = require('../../models/Liability');
@@ -12,9 +13,9 @@ router.get('/', (req, res) => {
 });
 
 // Route: api/liabilitys
-// Desc: make an liability
-// Access: public
-router.post('/', (req, res) => {
+// Desc: make a liability
+// Access: private
+router.post('/', auth, (req, res) => {
   const newLiability = new Liability({
     name: req.body.name,
     category: req.body.category,
@@ -30,9 +31,9 @@ router.post('/', (req, res) => {
 });
 
 // Route: api/liabilitys
-// Desc: delete an liability
-// Access: public
-router.delete('/:id', (req, res) => {
+// Desc: delete a liability
+// Access: private
+router.delete('/:id', auth, (req, res) => {
   Liability
   .findById(req.params.id)
   .then(liability => liability.remove().then(() => res.json({success: true})))

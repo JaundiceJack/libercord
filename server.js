@@ -2,12 +2,7 @@
 const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
-// Import Routes
-const users = require('./routes/api/users');
-const assets = require('./routes/api/assets');
-const incomes = require('./routes/api/incomes');
-const expenses = require('./routes/api/expenses');
-const liabilities = require('./routes/api/liabilities');
+const config = require('config')
 
 // Instance the express app
 const app = express();
@@ -16,23 +11,23 @@ const app = express();
 app.use(express.json());
 
 // DB Config
-const db = require('./config/keys.js').mongoURI
+const db = config.get('mongoURI');
 
 // Connect to MongoDB
-mongoose
-  .connect(db, {
+mongoose.connect(db, {
     useNewUrlParser: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useUnifiedTopology: true
   })
   .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.log(err));
 
 // Define Routes
-app.use('/api/users', users);
-app.use('/api/assets', assets);
-app.use('/api/incomes', incomes);
-app.use('/api/expenses', expenses);
-app.use('/api/liabilities', liabilities);
+app.use('/api/users', require('./routes/api/users'));
+app.use('/api/assets', require('./routes/api/assets'));
+app.use('/api/incomes', require('./routes/api/incomes'));
+app.use('/api/expenses', require('./routes/api/expenses'));
+app.use('/api/liabilities', require('./routes/api/liabilities'));
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {

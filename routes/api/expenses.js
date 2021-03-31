@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../../middleware/auth.js');
 
 // Expense Model
 const Expense = require('../../models/Expense');
@@ -13,8 +14,8 @@ router.get('/', (req, res) => {
 
 // Route: api/expenses
 // Desc: make an expense
-// Access: public
-router.post('/', (req, res) => {
+// Access: private
+router.post('/', auth, (req, res) => {
   const newExpense = new Expense({
     category: req.body.category,
     date:     req.body.date,
@@ -29,8 +30,8 @@ router.post('/', (req, res) => {
 
 // Route: api/expenses
 // Desc: delete an expense
-// Access: public
-router.delete('/:id', (req, res) => {
+// Access: private
+router.delete('/:id', auth, (req, res) => {
   Expense
   .findById(req.params.id)
   .then(expense => expense.remove().then(() => res.json({success: true})))

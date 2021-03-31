@@ -7,33 +7,8 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 
+import { formClasses, labelClasses, submitClasses, inputClasses, selectClasses } from '../../tailwinds';
 
-const formClasses =
-  "flex flex-col mb-3 px-2 py-4 " +
-  "rounded-md "
-
-const labelClasses =
-  "font-bold font-medium text-sm text-blue-200 "
-
-const submitClasses =
-  "flex flex-row items-center justify-center m-2 px-3 py-2 " +
-  "font-bold font-medium text-sm text-green-500 " +
-  "rounded-xl border-b-2 border-green-400 cursor-pointer " +
-  "bg-gradient-to-br from-gray-900 to-gray-700 " +
-  "hover:text-green-400 hover:border-blue-400 " +
-  "hover:bg-gradient-to-tl hover:from-gray-700 hover:to-gray-900 "
-
-const inputClasses =
-  "my-1 p-2 w-full " +
-  "text-gray-600  " +
-  "rounded-xl " +
-  "bg-white " +
-  "focus:outline-none focus:ring-4 ring-green-500 "
-
-const selectClasses =
-  "my-1 p-2 border w-full border-gray-300 rounded-xl " +
-  "text-gray-600 bg-white " +
-  "hover:border-gray-400 focus:outline-none appearance-none ";
 
 class AddExpense extends Component {
   // Make a state to hold the expense in creation

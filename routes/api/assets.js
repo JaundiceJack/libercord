@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../../middleware/auth.js');
 
 // Asset Model
 const Asset = require('../../models/Asset');
@@ -13,8 +14,8 @@ router.get('/', (req, res) => {
 
 // Route: api/assets
 // Desc: make an asset
-// Access: public
-router.post('/', (req, res) => {
+// Access: private
+router.post('/', auth, (req, res) => {
   const newAsset = new Asset({
     category: req.body.category,
     name:     req.body.name,
@@ -30,8 +31,8 @@ router.post('/', (req, res) => {
 
 // Route: api/assets
 // Desc: delete an asset
-// Access: public
-router.delete('/:id', (req, res) => {
+// Access: private
+router.delete('/:id', auth, (req, res) => {
   Asset
   .findById(req.params.id)
   .then(asset => asset.remove().then(() => res.json({success: true})))
