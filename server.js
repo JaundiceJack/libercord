@@ -10,7 +10,7 @@ const app = express();
 // Body parser middleware
 app.use(express.json());
 
-// DB Config
+// Get the mongo connection key
 const db = config.get('mongoURI');
 
 // Connect to MongoDB
@@ -23,6 +23,7 @@ mongoose.connect(db, {
   .catch(err => console.log(err));
 
 // Define Routes
+app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/assets', require('./routes/api/assets'));
 app.use('/api/incomes', require('./routes/api/incomes'));

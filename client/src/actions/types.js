@@ -14,7 +14,6 @@ export const GET_LIABILITIES      = 'GET_LIABILITIES';
 export const ADD_LIABILITY        = 'ADD_LIABILITY';
 export const DELETE_LIABILITY     = 'DELETE_LIABILITY';
 export const LOADING_LIABILITIES  = 'LOADING_LIABILITIES';
-
 export const USER_LOADING         = "USER_LOADING";
 export const USER_LOADED          = "USER_LOADED";
 export const AUTH_ERROR           = "AUTH_ERROR";

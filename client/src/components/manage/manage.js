@@ -1,49 +1,73 @@
-import ManageNav from './manageNav.js';
-import AssetOptions from './assets/assetOptions.js';
-import AssetTable from './assets/assetTable.js';
-import ExpenseOptions from './expenses/expenseOptions.js';
-import ExpenseTable from './expenses/expenseTable.js';
-import IncomeOptions from './income/incomeOptions.js';
-import IncomeTable from './income/incomeTable.js';
-import LiabilityOptions from './liabilities/liabilityOptions.js';
-import LiabilityTable from './liabilities/liabilityTable.js';
-import { useState } from 'react';
+// Import basic react stuff
+import React, { Component } from 'react';
+// Import state stuff
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+// Import router stuff
+import { Redirect } from 'react-router-dom';
+// Import the section selection
+import ManageNav from './manageNav';
+// Import options
+import AssetOptions from './assets/assetOptions';
+import IncomeOptions from './income/incomeOptions';
+import ExpenseOptions from './expenses/expenseOptions';
+import LiabilityOptions from './liabilities/liabilityOptions';
+// Import tables
+import AssetTable from './assets/assetTable';
+import IncomeTable from './income/incomeTable';
+import ExpenseTable from './expenses/expenseTable';
+import LiabilityTable from './liabilities/liabilityTable';
 
-const Manage = () => {
-  // Temporarily use this to manage the state of the manage component
-  const [ section, setSection ] = useState("assets");
+// Map the redux state to the component properties
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error
+})
+
+class Manage extends Component {
+  state = { section: 'assets' };
+  static propTypes = { isAuthenticated: PropTypes.bool }
   // Switch to the clicked section of manage (summary/expenses/income/assets/liabilities)
-  const changeSection = nextSection => { setSection(nextSection); }
+  changeSection = nextSection => { this.setState({section: nextSection}); }
 
-  return (
-    <section className="pt-2 flex flex-col mb-6">
-      <ManageNav currentSection={section} changeSection={changeSection} />
-      {section === 'assets' &&
-        <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
-          <AssetOptions />
-          <AssetTable />
-        </div>
-      }
-      {section === 'expenses' &&
-        <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
-          <ExpenseOptions />
-          <ExpenseTable />
-        </div>
-      }
-      {section === 'income' &&
-        <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
-          <IncomeOptions />
-          <IncomeTable />
-        </div>
-      }
-      {section === 'liabilities' &&
-        <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
-          <LiabilityOptions />
-          <LiabilityTable />
-        </div>
-      }
-    </section>
-  );
+  render () {
+    return (
+      <div>
+        {this.props.isAuthenticated ?
+          <section className="pt-2 flex flex-col mb-6">
+            <ManageNav currentSection={this.state.section} changeSection={this.changeSection} />
+            {this.state.section === 'assets' &&
+              <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
+                <AssetOptions />
+                <AssetTable />
+              </div>
+            }
+          </section> :
+          <Redirect to="/" />
+        }
+      </div>
+    );
+  }
 };
 
-export default Manage;
+/*
+{section === 'expenses' &&
+  <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
+    <ExpenseOptions />
+    <ExpenseTable />
+  </div>
+}
+{section === 'income' &&
+  <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
+    <IncomeOptions />
+    <IncomeTable />
+  </div>
+}
+{section === 'liabilities' &&
+  <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
+    <LiabilityOptions />
+    <LiabilityTable />
+  </div>
+} */
+
+export default connect(mapStateToProps)(Manage);

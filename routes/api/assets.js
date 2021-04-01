@@ -8,8 +8,8 @@ const Asset = require('../../models/Asset');
 // Route: api/assets
 // Desc: get all assets
 // Access: public
-router.get('/', (req, res) => {
-  Asset.find().then(assets => res.json(assets));
+router.get('/:user_id', auth, (req, res) => {
+  Asset.find({user_id: req.params.user_id}).then(assets => res.json(assets));
 });
 
 // Route: api/assets
@@ -17,6 +17,7 @@ router.get('/', (req, res) => {
 // Access: private
 router.post('/', auth, (req, res) => {
   const newAsset = new Asset({
+    user_id:  req.user._id,
     category: req.body.category,
     name:     req.body.name,
     amount:   req.body.amount,

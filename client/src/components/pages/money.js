@@ -1,4 +1,6 @@
+// Import components
 import InfoCard from './infocard.js';
+// Import main image
 import hero from '../../images/money.jpg';
 
 const Money = () => {

@@ -1,24 +1,24 @@
+// Import Libraries
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const config = require('config');
 const jwt = require('jsonwebtoken');
+// Import route access protection
 const auth = require('../../middleware/auth.js');
-
-// User Model
+// Import the User Model
 const User = require('../../models/User');
 
 // Route:  POST api/auth
 // Desc:   authenticate the user for logging in
 // Access: public
 router.post('/', (req, res) => {
-  const { name, email, password } = req.body;
-
-  // Validation
+  // Get the user entries from the request body
+  const { email, password } = req.body;
+  // Validate the entries
   if (!email || !password)
     return res.status(400).json({msg: "Please enter all fields."});
-
-  // Check for existing credentials
+  // Check for the user by email
   User.findOne({ email })
   .then(user => {
     if(!user) return res.status(400).json({msg: "User not found."});
@@ -27,20 +27,11 @@ router.post('/', (req, res) => {
     .then(isMatch => {
       if (!isMatch) return res.status(400).json({msg: "Incorrect password."});
       // Sign a web token for continued access
-      jwt.sign(
-        {id: user.id},
-        config.get('jwtSecret'),
-        {expiresIn: 3600},
+      jwt.sign({id: user.id}, config.get('jwtSecret'), {expiresIn: 3600},
         (err, token) => {
           if (err) throw err;
-          // Resond with the new user
-          res.json({
-            user: {
-              id: user.id,
-              name: user.name,
-              email: user.email
-            }
-          })
+          // Resond with the user
+          return res.json({ user: { id: user.id, name: user.name, email: user.email }})
         }
       )
     })

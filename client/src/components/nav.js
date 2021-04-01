@@ -1,29 +1,43 @@
-import { FaBalanceScale, FaSpinner, FaFileContract, FaBitcoin } from 'react-icons/fa';
-import { RiLoginCircleLine } from 'react-icons/ri';
-import NavLink from './navlink.js';
-import Logo from './logo.js';
+// Import basic react stuff
 import React, { Component } from 'react';
+// Import state stuff
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+// Import nav icons
+import { FaBalanceScale, FaFileContract, FaBitcoin } from 'react-icons/fa';
+import { RiLoginCircleLine, RiAccountPinCircleLine } from 'react-icons/ri';
+// Import components
+import NavLink from './navlink';
+import Logout from './account/logout'
+import Logo from './logo';
 
 class Nav extends Component {
-
+  // Define proptypes taken from the state
+  static propTypes = { isAuthenticated: PropTypes.bool };
   render() {
     return (
       <nav className="flex-grow flex flex-row md:flex-col bg-black rounded-bl" style={{"border-top-left-radius": "40px"}}>
         <Logo />
-        <NavLink className="" target="/" text="Crypto" icon=<FaBitcoin size="40px" /> />
-        <NavLink className="active" target="/create" text="Sign Up" icon=<RiLoginCircleLine size="40px" /> />
-        <NavLink className="" target="/login" text="Login" icon=<RiLoginCircleLine size="40px" /> />
-        <NavLink className="" target="/manage" text="Manage" icon=<FaBalanceScale size="40px" /> />
+        <NavLink target="/" text="Crypto" icon=<FaBitcoin size="40px" /> />
+        {/*If not logged in, show the account creation and login buttons*/}
+        {!this.props.isAuthenticated &&
+          <NavLink target="/login" text="Login" icon=<RiLoginCircleLine size="40px" /> />}
+        {!this.props.isAuthenticated &&
+          <NavLink  target="/create" text="Sign Up" icon=<RiAccountPinCircleLine size="40px" /> />}
+        {/* If logged in, show the app and logout buttons*/}
+        {this.props.isAuthenticated &&
+          <Logout />}
+        {this.props.isAuthenticated &&
+          <NavLink target="/manage" text="Manage" icon=<FaBalanceScale size="40px" /> />}
         <div className="flex-grow"></div>
-
+        <NavLink target="/employ" text="Employ" icon=<FaFileContract size="40px" /> />
       </nav>
     );
   }
 };
 
-// test
+// Map the redux state to the component properties
+const mapStateToProps = (state) =>
+  ({ isAuthenticated: state.auth.isAuthenticated });
 
-/*<NavLink target="/employ" text="Employ" icon=<FaFileContract size="40px" /> />
-<NavLink target="/hub" text="Hub" icon=<FaSpinner size="40px" /> />*/
-
-export default Nav;
+export default connect(mapStateToProps)(Nav);

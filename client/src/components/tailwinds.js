@@ -7,6 +7,7 @@
 // background
 // hover & focus effects
 
+export const navLinkClasses = "relative flex items-center justify-center cursor-pointer link "
 
 export const formClasses =
   "flex flex-col mb-3 justify-items-center " +

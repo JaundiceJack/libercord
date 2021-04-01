@@ -5,6 +5,8 @@ import {
   DELETE_ASSET,
   LOADING_ASSETS
 } from './types.js';
+import { tokenConfig } from './authActions';
+import { returnErrors } from './errorActions';
 
 export const getAssets = () => dispatch => {
   dispatch(setAssetsLoading());
@@ -13,22 +15,24 @@ export const getAssets = () => dispatch => {
     type: GET_ASSETS,
     payload: res.data
   }))
+  .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
 }
 
-export const addAsset = asset => dispatch => {
+export const addAsset = asset => (dispatch, getState) => {
   axios
-    .post('/api/assets', asset)
+    .post('/api/assets', asset, tokenConfig(getState))
     .then(res =>
       dispatch({
         type: ADD_ASSET,
         payload: res.data
       })
     )
+    .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
 }
 
-export const deleteAsset = id => dispatch => {
+export const deleteAsset = id => (dispatch, getState) => {
   axios
-  .delete(`/api/assets/${id}`)
+  .delete(`/api/assets/${id}`, tokenConfig(getState))
   .then(res =>
     dispatch({
       type: DELETE_ASSET,

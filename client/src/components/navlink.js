@@ -1,11 +1,12 @@
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {Link} from 'react-router-dom';
+// Import router stuff
+import { Link } from 'react-router-dom';
+// Import style presets
+import { navLinkClasses } from './tailwinds';
 
-const linkClasses = "relative flex items-center justify-center cursor-pointer link "
-
-const NavLink = ({target, text, icon, className}) => {
+// Set up a nav link that routes to the target with the provided text and icon
+const NavLink = ({target, text, icon}) => {
   return (
-    <Link className={className ? linkClasses + className : linkClasses} to={target}>
+    <Link className={navLinkClasses} to={target}>
       <p className="ref ml-2 absolute text-lg text-gray-300 no-underline hover:no-underline">{text}</p>
       <p className="icon absolute text-gray-300">{icon}</p>
     </Link>

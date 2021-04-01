@@ -1,38 +1,33 @@
-import Nav from './components/nav';
-import Manage from './components/manage/manage';
-import Money from './components/edu/money';
-import Login from './components/account/login';
-import CreateAccount from './components/account/create';
-import Footer from './components/footer';
-import {Provider} from 'react-redux';
-import store from './store';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+// Import basic react stuff
 import React, { Component } from 'react';
+// Import state stuff
+import store from './store';
+import {Provider} from 'react-redux';
+// Import routing stuff
+import { BrowserRouter } from 'react-router-dom';
+// Import server actions
 import { loadUser } from './actions/authActions';
+// Import components
+import Nav    from './components/nav';
+import Routes from './components/routes';
 
 class App extends Component {
-  // TODO: move this to manage so it's not checking on the homepage
   // Load the user when the app loads
-  componentDidMount() { store.dispatch(loadUser()); }
+  componentDidMount() {
+    store.dispatch(loadUser());
+  }
+
   render() {
     return (
+      // Get the state from the store and provide it to the rest of the app
       <Provider store={store}>
+        {/*Connect nav links to their routes via Browser Router*/}
         <BrowserRouter>
-          <div className="App">
-            <div className="py-0 sm:py-12 bg-gray-800 min-h-screen">
-              <main className="md:w-5/6 sm:w-full h-full flex flex-col md:flex-row rounded mx-auto bg-gradient-to-br from-black via-black to-gray-900" style={{"border-top-left-radius": "40px"}}>
-                <Nav />
-                <div className="p-2 flex flex-col w-full">
-                  <Switch>
-                    <Route exact path="/login" component={Login} />
-                    <Route exact path="/create" component={CreateAccount} />
-                    <Route exact path="/manage" component={Manage} />
-                    <Route exact path="/" component={Money} />
-                  </Switch>
-                  <Footer />
-                </div>
-              </main>
-            </div>
+          <div className="py-0 sm:py-12 bg-gray-800 min-h-screen">
+            <main className="md:w-5/6 sm:w-full h-full flex flex-col md:flex-row rounded mx-auto bg-gradient-to-br from-black via-black to-gray-900" style={{"border-top-left-radius": "40px"}}>
+              <Nav />
+              <Routes />
+            </main>
           </div>
         </BrowserRouter>
       </Provider>
