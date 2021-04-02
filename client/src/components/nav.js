@@ -16,7 +16,7 @@ class Nav extends Component {
   static propTypes = { isAuthenticated: PropTypes.bool };
   render() {
     return (
-      <nav className="flex-grow flex flex-row md:flex-col bg-black rounded-bl" style={{"border-top-left-radius": "40px"}}>
+      <nav className="flex flex-row md:flex-col bg-black rounded-bl" style={{"border-top-left-radius": "40px"}}>
         <Logo />
         <NavLink target="/" text="Crypto" icon=<FaBitcoin size="40px" /> />
         {/*If not logged in, show the account creation and login buttons*/}

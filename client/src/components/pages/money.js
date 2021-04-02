@@ -2,14 +2,16 @@
 import InfoCard from './infocard.js';
 // Import main image
 import hero from '../../images/money.jpg';
+// Import style presets
+import { sectionClasses } from '../tailwinds';
 
 const Money = () => {
   return (
     <div className="grid grid-cols-2 gap-4 p-6">
-      <div className="col-span-1 mb-10">
+      <div className="col-span-2 sm:col-span-1 mb-10">
         <img className="rounded-lg border-solid border-4 border-gray-800" src={hero} alt="Bitcoin & Gold"></img>
       </div>
-      <div className="col-span-1 mb-10">
+      <div className="col-span-2 sm:col-span-1 mb-10">
         <h1 className="text-3xl text-gray-50 text-center mb-4">What is money?</h1>
         <p className="text-white text-left mx-3">When you think of the word money,
         do images of green paper come to mind, or is it a vault of gold coins?

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 
-import { formClasses, labelClasses, submitClasses, inputClasses, selectClasses } from '../../tailwinds';
+import { tableFormClasses, labelClasses, submitClasses, inputClasses, selectClasses } from '../../tailwinds';
 
 class AddIncome extends Component {
   // Make a state to hold the income in creation
@@ -31,7 +31,7 @@ class AddIncome extends Component {
 
   render() {
     return (
-      <form onSubmit={this.onSubmit} className={formClasses}>
+      <form onSubmit={this.onSubmit} className={tableFormClasses}>
         <div className="mb-1 grid justify-items-stretch">
           <label className={labelClasses} for="cat">Category:</label>
           <div className="relative inline-flex">

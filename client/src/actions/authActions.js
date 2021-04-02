@@ -1,5 +1,3 @@
-// Import router stuff
-import { Redirect } from 'react-router-dom';
 // Import action types
 import {
   USER_LOADED,
@@ -74,13 +72,8 @@ export const logout = ()  => {
 // Get a config object with the json web token
 export const tokenConfig = getState => {
   const token = getState().auth.token;
-  const config = { headers: {"Content-Type": "application/json"} };
-  if (token) config.headers['x-auth-token'] = token;
+  console.log(token);
+  const config = { headers: {"Content-type": "application/json"} };
+  if (token) config.headers["x-auth-token"] = token;
   return config;
-}
-
-// Reroute to the home page
-const reRoute = () => {
-  return "pewp";
-  //this.props.history.push("/");
 }

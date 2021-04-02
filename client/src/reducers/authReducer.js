@@ -10,7 +10,7 @@ REGISTER_FAIL
 } from '../actions/types'
 
 const initialState = {
-  token: localStorage.getItem('token'),
+  token: window.localStorage.getItem('token'),
   isAuthenticated: null,
   isLoading: false,
   user: null,
@@ -32,7 +32,7 @@ export default (state = initialState, action) => {
       };
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
-      localStorage.setItem('token', action.payload.token);
+      window.localStorage.setItem('token', action.payload.token);
       return {
         ...state,
         ...action.payload,
@@ -43,7 +43,7 @@ export default (state = initialState, action) => {
     case LOGOUT_SUCCESS:
     case AUTH_ERROR:
     case REGISTER_FAIL:
-      localStorage.removeItem('token');
+      window.localStorage.removeItem('token');
       return {
         ...state,
         token: null,

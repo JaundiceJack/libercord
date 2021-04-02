@@ -8,7 +8,7 @@ import { Redirect } from 'react-router-dom';
 // Import server actions
 import { login } from '../../actions/authActions';
 // Import style presets
-import { formClasses, labelClasses, submitClasses, inputClasses } from '../tailwinds';
+import { accountFormClasses, labelClasses, submitClasses, inputClasses } from '../tailwinds';
 
 // Map the redux state to the component properties
 const mapStateToProps = (state) => ({
@@ -43,7 +43,7 @@ class Login extends Component {
   render () {
     return (
       <section className="mt-6 flex flex-col items-center mb-6">
-        <form className={formClasses + "w-full sm:w-1/2"} onSubmit={this.onSubmit}>
+        <form className={accountFormClasses + "w-full sm:w-1/2"} onSubmit={this.onSubmit}>
           <div className="w-full bg-gray-900 p-4 rounded-t-md border-b border-green-900">
             <h2 className="font-bold font-medium text-sm text-blue-200 text-center">
               Login

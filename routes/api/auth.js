@@ -31,7 +31,8 @@ router.post('/', (req, res) => {
         (err, token) => {
           if (err) throw err;
           // Resond with the user
-          return res.json({ user: { id: user.id, name: user.name, email: user.email }})
+          return res.json({ user: { id: user.id, name: user.name, email: user.email },
+                            token: token})
         }
       )
     })

@@ -1,13 +1,14 @@
-import { GiCheckMark } from 'react-icons/gi';
-
-// Connect redux to manage the state
-import { connect } from 'react-redux';
-import { addAsset } from '../../../actions/assetActions.js';
-import PropTypes from 'prop-types';
-
+// Import basic react stuff
 import React, { Component } from 'react';
-
-import { formClasses, labelClasses, submitClasses, inputClasses, selectClasses } from '../../tailwinds';
+// Import state stuff
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+// Import server actions
+import { addAsset } from '../../../actions/assetActions.js';
+// Import style presets
+import { tableFormClasses, labelClasses, submitClasses, inputClasses, selectClasses } from '../../tailwinds';
+// Import icons
+import { GiCheckMark } from 'react-icons/gi';
 
 class AddAsset extends Component {
   // Make a state to hold the asset in creation
@@ -16,6 +17,9 @@ class AddAsset extends Component {
   // Prevent default submission and create the new asset
   onSubmit = (e) => {
     e.preventDefault();
+    // Validate entries
+
+    // Create the new asset
     const newAsset = {
       name:     this.state.name,
       category: this.state.category,
@@ -32,7 +36,7 @@ class AddAsset extends Component {
 
   render() {
     return (
-      <form onSubmit={this.onSubmit} className={formClasses}>
+      <form onSubmit={this.onSubmit} className={tableFormClasses}>
         <div className="mb-1 grid justify-items-stretch">
           <label className={labelClasses} for="name">Name:</label>
           <input id="name"

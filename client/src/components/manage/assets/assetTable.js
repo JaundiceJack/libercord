@@ -1,9 +1,12 @@
-import Table from '../table.js';
+// Import basic react stuff
 import React, { Component } from 'react';
-// Connect redux to manage the state
+// Import state stuff
 import { connect } from 'react-redux';
-import { getAssets, deleteAsset } from '../../../actions/assetActions.js';
 import PropTypes from 'prop-types';
+// Import server actions
+import { getAssets, deleteAsset } from '../../../actions/assetActions.js';
+// Import the table
+import Table from '../table';
 
 // Define table columns
 const columns = [
@@ -13,9 +16,20 @@ const columns = [
   { title: "Value",    field: "value",    type: 'currency', defaultSort: 'desc' },
 ]
 
+// Map the redux state to the component properties
+const mapStateToProps = (state) => ({
+  asset: state.asset
+})
+
 class AssetTable extends Component {
   // Check for asset retrieval
   componentDidMount(){ this.props.getAssets(); };
+  // Define prop types
+  static propTypes = {
+    getAssets: PropTypes.func.isRequired,
+    deleteAsset: PropTypes.func,
+    asset: PropTypes.object.isRequired
+  }
   // Delete the selected asset from the state/server
   onDelete = assetID => { this.props.deleteAsset(assetID); };
 
@@ -27,18 +41,4 @@ class AssetTable extends Component {
   };
 };
 
-// Define prop-types
-AssetTable.propTypes = {
-  getAssets: PropTypes.func.isRequired,
-  deleteAsset: PropTypes.func,
-  asset: PropTypes.object.isRequired
-}
-
-// Map the redux state to the component properties
-const mapStateToProps = (state) => ({
-  asset: state.asset
-})
-
-export default connect(mapStateToProps,
-   { getAssets, deleteAsset })
-   (AssetTable);
+export default connect(mapStateToProps, { getAssets, deleteAsset })(AssetTable);

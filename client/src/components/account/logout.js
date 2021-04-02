@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import server actions
 import { logout } from '../../actions/authActions';
-// Import style presets
-import { formClasses, labelClasses, submitClasses, inputClasses } from '../tailwinds';
 // Import icons
 import { RiLogoutCircleLine } from 'react-icons/ri'
 

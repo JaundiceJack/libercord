@@ -1,8 +1,8 @@
 
 const Employ = () => {
   return (
-    <div className="flex flex-row items-center justify-items-center">
-      <h2> HIRE ME! </h2>
+    <div className="flex flex-row items-center w-full p-12">
+      <h2 className="text-gray-200 mx-auto"> HIRE ME! </h2>
     </div>
   );
 };
