@@ -10,7 +10,7 @@ const initialState = {
   loading: false
 }
 
-export default (state = initialState, action) => {
+const assetReducer = (state = initialState, action) => {
   switch(action.type) {
     case GET_ASSETS:
       return {
@@ -36,4 +36,6 @@ export default (state = initialState, action) => {
     default:
       return state;
   }
-}
+};
+
+export default assetReducer;

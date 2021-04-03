@@ -1,4 +1,4 @@
-import InfoCard from './infocard.js';
+import InfoCard from './infocard';
 import hero from '../images/crypto.jpg';
 
 const Reasons = () => {

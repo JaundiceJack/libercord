@@ -4,15 +4,25 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import server actions
-import { addAsset } from '../../../actions/assetActions.js';
+import { addAsset } from '../../../actions/assetActions';
 // Import style presets
 import { tableFormClasses, labelClasses, submitClasses, inputClasses, selectClasses } from '../../tailwinds';
 // Import icons
 import { GiCheckMark } from 'react-icons/gi';
 
+// Map the redux state to the component properties
+const mapStateToProps = (state) => ({
+  asset: state.asset
+})
+
 class AddAsset extends Component {
   // Make a state to hold the asset in creation
   state = { name: "", category: "Cryptocurrency", amount: "", interest: ""};
+  // Define prop types
+  static propTypes = {
+    addAsset: PropTypes.func,
+    asset: PropTypes.object.isRequired
+  }
   categories = ["Cryptocurrency", "Precious Metals", "Stocks", "Real Estate"];
   // Prevent default submission and create the new asset
   onSubmit = (e) => {
@@ -66,7 +76,7 @@ class AddAsset extends Component {
                  name="amount" type="number" min="0"
                  onChange={this.onChange}/>
         </div>
-        <div className="mb-1 grid justify-items-stretch">
+        <div className="mb-4 grid justify-items-stretch">
           <label className={labelClasses} for="interest">Interest (If Applicable):</label>
           <input className={inputClasses}
                  name="interest" type="number" min="0"
@@ -81,17 +91,4 @@ class AddAsset extends Component {
   }
 };
 
-
-AddAsset.propTypes = {
-  addAsset: PropTypes.func,
-  asset: PropTypes.object.isRequired
-}
-
-// Map the redux state to the component properties
-const mapStateToProps = (state) => ({
-  asset: state.asset
-})
-
-export default connect(mapStateToProps,
-   { addAsset })
-   (AddAsset);
+export default connect(mapStateToProps, { addAsset })(AddAsset);

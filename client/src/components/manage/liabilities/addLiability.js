@@ -1,27 +1,42 @@
-import { GiCheckMark } from 'react-icons/gi';
-
-// Connect redux to manage the state
-import { connect } from 'react-redux';
-import { addLiability } from '../../../actions/liabilityActions.js';
-import PropTypes from 'prop-types';
-
+// Import basic react stuff
 import React, { Component } from 'react';
-
+// Import state stuff
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+// Import server actions
+import { addLiability } from '../../../actions/liabilityActions';
+// Import style presets
 import { tableFormClasses, labelClasses, submitClasses, inputClasses, selectClasses } from '../../tailwinds';
+// Import icons
+import { GiCheckMark } from 'react-icons/gi';
+// Import a helper function for date inputs
+import { currentDate } from '../../helpers';
+
+// Map the redux state to the component properties
+const mapStateToProps = (state) => ({
+  liability: state.liability
+})
 
 class AddLiability extends Component {
   // Make a state to hold the liability in creation
-  state = { name: "", category: "Mortgage", value: 0, interest: 0, date: Date.now};
-  categories = ["Mortgage", "Student Loan"];
+  state = { name: "", category: "Student Loan", value: null, date: currentDate()};
+  // Define prop types
+  static propTypes = {
+    addLiability: PropTypes.func,
+    liability: PropTypes.object.isRequired
+  }
+  categories = ["Student Loan", "Mortgage", "Tax"];
   // Prevent default submission and create the new liability
   onSubmit = (e) => {
     e.preventDefault();
+    // Validate entries
+
+    // Create a new liability
     const newLiability = {
       name:     this.state.name,
       category: this.state.category,
-      value:   this.state.value,
-      interest: this.state.interest,
-      date: this.state.date
+      value:    this.state.value,
+      date:     this.state.date
     }
     // Send the new liability to the server/state to be added
     this.props.addLiability(newLiability);
@@ -35,11 +50,9 @@ class AddLiability extends Component {
     return (
       <form onSubmit={this.onSubmit} className={tableFormClasses}>
         <div className="mb-1 grid justify-items-stretch">
-          <label className={labelClasses} for="name">Name:</label>
-          <input id="name"
-                 className={inputClasses}
-                 name="name" type="text" placeholder="Gold, Tesla, S&P, etc."
-                 onChange={this.onChange}/>
+          <label className={labelClasses} for="value">Name:</label>
+          <input id="name" className={inputClasses}
+                 name="name" type="text" onChange={this.onChange}/>
         </div>
         <div className="mb-1 grid justify-items-stretch">
           <label className={labelClasses} for="cat">Category:</label>
@@ -58,15 +71,15 @@ class AddLiability extends Component {
           </div>
         </div>
         <div className="mb-1 grid justify-items-stretch">
-          <label className={labelClasses} for="amount">Amount:</label>
-          <input id="amount" className={inputClasses}
-                 name="amount" type="number" min="0"
+          <label className={labelClasses} for="value">Total Value:</label>
+          <input id="value" className={inputClasses} step="0.01"
+                 name="value" type="number" min="0" value={this.state.value}
                  onChange={this.onChange}/>
         </div>
-        <div className="mb-1 grid justify-items-stretch">
-          <label className={labelClasses} for="interest">Interest (If Applicable):</label>
+        <div className="mb-4 grid justify-items-stretch">
+          <label className={labelClasses} for="date">Date:</label>
           <input className={inputClasses}
-                 name="interest" type="number" min="0"
+                 name="date" type="date" value={this.state.date}
                  onChange={this.onChange}/>
         </div>
         <button type="submit" className={submitClasses}>
@@ -78,17 +91,4 @@ class AddLiability extends Component {
   }
 };
 
-
-AddLiability.propTypes = {
-  addLiability: PropTypes.func,
-  liability: PropTypes.object.isRequired
-}
-
-// Map the redux state to the component properties
-const mapStateToProps = (state) => ({
-  liability: state.liability
-})
-
-export default connect(mapStateToProps,
-   { addLiability })
-   (AddLiability);
+export default connect(mapStateToProps, { addLiability })(AddLiability);

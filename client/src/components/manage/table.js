@@ -1,80 +1,63 @@
-// Import Material Table Icons/Functions
-import { forwardRef } from 'react';
-import MaterialTable from 'material-table';
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
-// Connect Material Table icon functions
-const tableIcons = {
-  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-  DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-  PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-  SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-};
+// Import basic react stuff
+import React, { Component } from 'react';
+// Import components from react virtualized
+import { Column, Table, AutoSizer } from 'react-virtualized';
+import 'react-virtualized/styles.css'; // only needs to be imported once
+// Import style presets
+import { tableRowClasses, tableHeaderClasses } from '../tailwinds'
+// Import a helper function for date display
+import { formatDate } from '../helpers';
 
-const Table = ({ data, columns, onDelete }) => {
-  return (
-    <div className="w-full rounded-md p-0 sm:p-3 bg-gradient-to-br from-gray-700 to-gray-500 ring-2 ring-gray-500">
-      <MaterialTable
-        title=""
-        icons={tableIcons}
-        columns={columns}
-        data={data}
-        actions={[{
-          icon: Clear,
-          tooltip: 'Remove',
-          onClick: (event, row) => { onDelete(row._id) }
-        }]}
-        options={{
-          actionsColumnIndex: 5,
-          rowStyle: rowData => ({
-            backgroundColor: "#FFF"
-          }),
-          headerStyle: {
-            backgroundColor: '#ABC',
-            color: '#222',
-            fontWeight: 'bold'
-          },
-          exportButton: true,
-          padding: 'dense',
-          search: data.length > 5 ? true : false,
-          searchFieldAlignment: 'left',
-        }}
-        localization={{
-          header: {
-              actions: 'Edit'
-          },
-          body: {
-              emptyDataSourceMessage: 'No records to display'
-          }
-        }} />
-    </div>
-  )
+export default class DataTable extends Component {
+  render() {
+    return (
+      <div>
+        <AutoSizer>
+          {({width, height}) => (
+            <Table
+              width={width}
+              height={window.innerHeight}
+              headerHeight={40}
+              headerClassName={"pt-2"}
+              rowHeight={30}
+              rowClassName={({index}) => {
+                // Apply different styles to the header row
+                return index === -1 ?
+                "bg-gray-800 rounded-t-md text-blue-100 border-b border-green-600" :
+                "bg-gray-300 border-b border-gray-400"}
+              }
+              onRowMouseOver={({ event, index, rowData }) => {
+                console.log(rowData);
+              }}
+              onRowRightClick={({ event, index, rowData }) => {
+                console.log(rowData);
+              }}
+              rowCount={this.props.data.length}
+              rowRenderer={({ index, rowData, className, style, columns }) => {
+                // Use a custom renderer to give the rows the item's id
+                const item = this.props.data[index];
+                return (
+                  <div className={className}
+                       key={item.id}
+                       role="row"
+                       style={style}>
+                    {columns}
+                  </div>
+                );
+              }}
+              rowGetter={({index}) => this.props.data[index]}>
+                {this.props.cols.map(col => {
+                  // Format the date columns
+                  return (col.field !== 'date' ?
+                  <Column label={col.title} dataKey={col.field} width={width} /> :
+                  <Column label={col.title} dataKey={col.field} width={width}
+                    cellRenderer={({cellData}) => {return formatDate(cellData)}}/>
+                )
+              })}
+            </Table>
+          )}
+        </AutoSizer>
+      </div>
+    )
+  }
 };
-
-export default Table;

@@ -1,4 +1,3 @@
-
 // Import action types
 import {
   GET_ASSETS,
@@ -17,11 +16,13 @@ export const getAssets= () => (dispatch, getState) => {
   dispatch(setAssetsLoading());
   // Get the user id
   const user = getState().auth.user;
-  const user_id = user ? user.id : "BadRequest";
-  // Create an authorization token and get the assets
-  axios.get('/api/assets/' + user_id, tokenConfig(getState))
-  .then(res => dispatch({ type: GET_ASSETS, payload: res.data }))
-  .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
+  if (user) {
+    // Create an authorization token and get the assets
+    axios.get('/api/assets/' + user.id, tokenConfig(getState))
+    .then(res => dispatch({ type: GET_ASSETS, payload: res.data }))
+    .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
+  }
+  else console.log("User not in client memory.");
 }
 
 // Create a new asset from the user entries

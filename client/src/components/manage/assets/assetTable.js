@@ -4,16 +4,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import server actions
-import { getAssets, deleteAsset } from '../../../actions/assetActions.js';
-// Import the table
-import Table from '../table';
+import { getAssets, deleteAsset } from '../../../actions/assetActions';
+// Import style presets
+import { tableContainerClasses} from '../../tailwinds';
+import DataTable from '../table';
 
 // Define table columns
 const columns = [
   { title: "Asset",    field: "name", },
-  { title: "Category", field: "category", hidden: false },
+  { title: "Category", field: "category" },
   { title: "Owned",    field: "amount" },
-  { title: "Value",    field: "value",    type: 'currency', defaultSort: 'desc' },
+  { title: "Value",    field: "value" },
 ]
 
 // Map the redux state to the component properties
@@ -36,7 +37,9 @@ class AssetTable extends Component {
   render () {
     const { assets } = this.props.asset;
     return (
-      <Table data={assets} columns={columns} onDelete={this.onDelete}/>
+      <div className={tableContainerClasses}>
+        <DataTable data={assets} cols={columns}/>
+      </div>
     )
   };
 };

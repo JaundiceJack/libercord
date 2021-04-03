@@ -72,7 +72,6 @@ export const logout = ()  => {
 // Get a config object with the json web token
 export const tokenConfig = getState => {
   const token = getState().auth.token;
-  console.log(token);
   const config = { headers: {"Content-type": "application/json"} };
   if (token) config.headers["x-auth-token"] = token;
   return config;

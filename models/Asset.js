@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Asset Schema
 const AssetSchema = new Schema({
   user_id: {
     type: mongoose.Schema.Types.ObjectId,

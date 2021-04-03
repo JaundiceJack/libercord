@@ -52,7 +52,7 @@ export const summaryClasses =
   "bg-gradient-to-br from-black to-gray-700 ";
 
 export const tableFormClasses =
-  "flex flex-col mb-3 justify-items-center " +
+  "flex flex-col pt-6 mb-3 justify-items-center " +
   "rounded-md ";
 
 export const tableFormContainerClasses =
@@ -63,13 +63,13 @@ export const tableFormContainerClasses =
 export const tableContainerClasses =
   "w-full min-h-screen " +
   "rounded-md ring-2 ring-gray-500 " +
-  "bg-gray-300 ";
+  "bg-gradient-to-br from-gray-700 to-gray-500 ";
 
 export const tableHeaderClasses =
   "text-left";
 
 export const tableRowClasses =
-  "bg-gray-500";
+  "bg-gray-200";
 
 export const tableFooterClasses =
   "h-5 rounded-b-md bg-gray-900 "

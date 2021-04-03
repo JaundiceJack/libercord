@@ -1,2 +1,4 @@
 # Don't publish db passwords/webtoken keys
 config
+# Don't fill up my github
+node_modules

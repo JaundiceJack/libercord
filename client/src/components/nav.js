@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import nav icons
-import { FaBalanceScale, FaFileContract, FaBitcoin } from 'react-icons/fa';
+import { FaBalanceScale, FaFileContract, FaHome } from 'react-icons/fa';
 import { RiLoginCircleLine, RiAccountPinCircleLine } from 'react-icons/ri';
 // Import components
 import NavLink from './navlink';
@@ -18,7 +18,7 @@ class Nav extends Component {
     return (
       <nav className="flex flex-row md:flex-col bg-black rounded-bl" style={{"border-top-left-radius": "40px"}}>
         <Logo />
-        <NavLink target="/" text="Crypto" icon=<FaBitcoin size="40px" /> />
+        <NavLink target="/" text="Home" icon=<FaHome size="40px" /> />
         {/*If not logged in, show the account creation and login buttons*/}
         {!this.props.isAuthenticated &&
           <NavLink target="/login" text="Login" icon=<RiLoginCircleLine size="40px" /> />}

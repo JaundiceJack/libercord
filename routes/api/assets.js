@@ -28,7 +28,8 @@ router.post('/', auth, (req, res) => {
 
   // Save the asset and return it to the client
   newAsset.save()
-  .then(asset => res.json(asset));
+  .then(asset => res.json(asset))
+  .catch(err => res.status(400).json({msg: "Failed to add new asset."}));
 });
 
 // Route:  DELETE api/assets

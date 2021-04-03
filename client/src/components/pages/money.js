@@ -1,9 +1,7 @@
 // Import components
-import InfoCard from './infocard.js';
+import InfoCard from './infocard';
 // Import main image
 import hero from '../../images/money.jpg';
-// Import style presets
-import { sectionClasses } from '../tailwinds';
 
 const Money = () => {
   return (

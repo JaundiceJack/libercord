@@ -10,7 +10,7 @@ const initialState = {
   loading: false
 }
 
-export default (state = initialState, action) => {
+const incomeReducer = (state = initialState, action) => {
   switch(action.type) {
     case GET_INCOMES:
       return {
@@ -36,4 +36,6 @@ export default (state = initialState, action) => {
     default:
       return state;
   }
-}
+};
+
+export default incomeReducer;

@@ -45,7 +45,7 @@ class AssetOptions extends Component {
         <div className="flex flex-col ml-0 mt-2 sm:mt-6 p-2">
           <button onClick={this.onAdd}
                   className={this.state.adding ?
-                    buttonClasses+" border-red-500 text-red-500 " :
+                    buttonClasses+" border-red-500 text-red-500 mb-8" :
                     buttonClasses+" border-green-500 text-blue-100 "}>
                   {this.state.adding ? "Cancel" : "New Asset"}
           </button>

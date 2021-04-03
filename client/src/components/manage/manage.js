@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 // Import the section selection
 import ManageNav from './manageNav';
+// Import the summary page
+import Summary from './summary/summary';
 // Import options
 import AssetOptions from './assets/assetOptions';
 import IncomeOptions from './income/incomeOptions';
@@ -25,7 +27,7 @@ const mapStateToProps = (state) => ({
 })
 
 class Manage extends Component {
-  state = { section: 'assets' };
+  state = { section: 'summary' };
   static propTypes = { isAuthenticated: PropTypes.bool }
   // Switch to the clicked section of manage (summary/expenses/income/assets/liabilities)
   changeSection = nextSection => { this.setState({section: nextSection}); }
@@ -36,10 +38,33 @@ class Manage extends Component {
         {this.props.isAuthenticated ?
           <section className="pt-2 flex flex-col mb-6">
             <ManageNav currentSection={this.state.section} changeSection={this.changeSection} />
+            {this.state.section === 'summary' &&
+            <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
+              <Summary />
+            </div>
+            }
+            {this.state.section === 'expenses' &&
+              <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
+                <ExpenseOptions />
+                <ExpenseTable />
+              </div>
+            }
+            {this.state.section === 'income' &&
+              <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
+                <IncomeOptions />
+                <IncomeTable />
+              </div>
+            }
             {this.state.section === 'assets' &&
               <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
                 <AssetOptions />
                 <AssetTable />
+              </div>
+            }
+            {this.state.section === 'liabilities' &&
+              <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
+                <LiabilityOptions />
+                <LiabilityTable />
               </div>
             }
           </section> :
@@ -51,23 +76,8 @@ class Manage extends Component {
 };
 
 /*
-{section === 'expenses' &&
-  <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
-    <ExpenseOptions />
-    <ExpenseTable />
-  </div>
-}
-{section === 'income' &&
-  <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
-    <IncomeOptions />
-    <IncomeTable />
-  </div>
-}
-{section === 'liabilities' &&
-  <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
-    <LiabilityOptions />
-    <LiabilityTable />
-  </div>
-} */
+
+
+ */
 
 export default connect(mapStateToProps)(Manage);

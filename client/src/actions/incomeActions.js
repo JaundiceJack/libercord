@@ -1,42 +1,56 @@
-import axios from 'axios';
+// Import action types
 import {
   GET_INCOMES,
   ADD_INCOME,
   DELETE_INCOME,
   LOADING_INCOMES
 } from './types.js';
+// Import axios to handle http requests
+import axios from 'axios';
+// Import token config to authorize updates and returnErrors to register errors
+import { tokenConfig } from './authActions';
+import { returnErrors } from './errorActions';
 
-export const getIncomes = () => dispatch => {
+// Return all of the user's incomes
+export const getIncomes= () => (dispatch, getState) => {
   dispatch(setIncomesLoading());
-  axios.get('/api/incomes')
-  .then(res => dispatch({
-    type: GET_INCOMES,
-    payload: res.data
-  }))
+  // Get the user id
+  const user = getState().auth.user;
+  if (user) {
+    // Create an authorization token and get the incomes
+    axios.get('/api/incomes/' + user.id, tokenConfig(getState))
+    .then(res => dispatch({ type: GET_INCOMES, payload: res.data }))
+    .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
+  }
+  else console.log("User not in client memory.");
+
 }
 
-export const addIncome = income => dispatch => {
-  axios
-    .post('/api/incomes', income)
+// Create a new income from the user entries
+export const addIncome = income => (dispatch, getState) => {
+  // Get the user id
+  const user = getState().auth.user;
+  if (user.id) {
+    // Convert the new income to JSON and add in the user's id
+    const newIncome = JSON.stringify({...income, user_id: user.id});
+    // Submit a post with the new income and the json web token
+    axios.post('/api/incomes', newIncome, tokenConfig(getState))
     .then(res =>
-      dispatch({
-        type: ADD_INCOME,
-        payload: res.data
-      })
-    )
+      // If successful, add the income to the current state
+      dispatch({ type: ADD_INCOME, payload: res.data }))
+    .catch(err =>
+      // If unsuccessful, display the errors
+      dispatch(returnErrors(err.response.data, err.response.status)));
+  }
 }
 
-export const deleteIncome = id => dispatch => {
-  axios
-  .delete(`/api/incomes/${id}`)
+// Remove the selected income
+export const deleteIncome = id => (dispatch, getState) => {
+  axios.delete(`/api/incomes/${id}`, tokenConfig(getState))
   .then(res =>
-    dispatch({
-      type: DELETE_INCOME,
-      payload: id
-    })
+    dispatch({ type: DELETE_INCOME, payload: id })
   )
 }
 
-export const setIncomesLoading = () => {
-  return { type: LOADING_INCOMES }
-}
+// Set the incomes to loading for spinner animations & etc.
+export const setIncomesLoading = () => { return { type: LOADING_INCOMES } }

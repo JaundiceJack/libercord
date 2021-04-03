@@ -1,25 +1,41 @@
-import { GiCheckMark } from 'react-icons/gi';
-
-// Connect redux to manage the state
-import { connect } from 'react-redux';
-import { addIncome } from '../../../actions/incomeActions.js';
-import PropTypes from 'prop-types';
-
+// Import basic react stuff
 import React, { Component } from 'react';
-
+// Import state stuff
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+// Import server actions
+import { addIncome } from '../../../actions/incomeActions';
+// Import style presets
 import { tableFormClasses, labelClasses, submitClasses, inputClasses, selectClasses } from '../../tailwinds';
+// Import icons
+import { GiCheckMark } from 'react-icons/gi';
+// Import a helper function for date inputs
+import { currentDate } from '../../helpers';
+
+// Map the redux state to the component properties
+const mapStateToProps = (state) => ({
+  income: state.income
+})
 
 class AddIncome extends Component {
   // Make a state to hold the income in creation
-  state = { category: "Job", value: 0, date: Date.now};
-  categories = ["Job", "Yard Sale", "Sold Asset", "Tax Refund"];
+  state = { category: "Grocery", value: null, date: currentDate()};
+  // Define prop types
+  static propTypes = {
+    addIncome: PropTypes.func,
+    income: PropTypes.object.isRequired
+  }
+  categories = ["Grocery", "Gas", "Rent", "Dining Out"];
   // Prevent default submission and create the new income
   onSubmit = (e) => {
     e.preventDefault();
+    // Validate entries
+
+    // Create a new income
     const newIncome = {
       category: this.state.category,
-      value:   this.state.value,
-      date: this.state.date
+      value:    this.state.value,
+      date:     this.state.date
     }
     // Send the new income to the server/state to be added
     this.props.addIncome(newIncome);
@@ -49,12 +65,12 @@ class AddIncome extends Component {
           </div>
         </div>
         <div className="mb-1 grid justify-items-stretch">
-          <label className={labelClasses} for="value">Received:</label>
+          <label className={labelClasses} for="value">Paid:</label>
           <input id="value" className={inputClasses} step="0.01"
                  name="value" type="number" min="0" value={this.state.value}
                  onChange={this.onChange}/>
         </div>
-        <div className="mb-1 grid justify-items-stretch">
+        <div className="mb-4 grid justify-items-stretch">
           <label className={labelClasses} for="date">Date:</label>
           <input className={inputClasses}
                  name="date" type="date" value={this.state.date}
@@ -69,17 +85,4 @@ class AddIncome extends Component {
   }
 };
 
-
-AddIncome.propTypes = {
-  addIncome: PropTypes.func,
-  income: PropTypes.object.isRequired
-}
-
-// Map the redux state to the component properties
-const mapStateToProps = (state) => ({
-  income: state.income
-})
-
-export default connect(mapStateToProps,
-   { addIncome })
-   (AddIncome);
+export default connect(mapStateToProps, { addIncome })(AddIncome);

@@ -1,27 +1,42 @@
-import { GiCheckMark } from 'react-icons/gi';
-
-// Connect redux to manage the state
-import { connect } from 'react-redux';
-import { addExpense } from '../../../actions/expenseActions.js';
-import PropTypes from 'prop-types';
-
+// Import basic react stuff
 import React, { Component } from 'react';
+// Import state stuff
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+// Import server actions
+import { addExpense } from '../../../actions/expenseActions';
+// Import style presets
+import { tableFormClasses, labelClasses, submitClasses, inputClasses, selectClasses } from '../../tailwinds';
+// Import icons
+import { GiCheckMark } from 'react-icons/gi';
+// Import a helper function for date inputs
+import { currentDate } from '../../helpers';
 
-import { tableFormClasses, labelClasses,
-   submitClasses, inputClasses, selectClasses } from '../../tailwinds';
+// Map the redux state to the component properties
+const mapStateToProps = (state) => ({
+  expense: state.expense
+})
 
 
 class AddExpense extends Component {
   // Make a state to hold the expense in creation
-  state = { category: "Grocery", value: 0, date: Date.now};
+  state = { category: "Grocery", value: null, date: currentDate()};
+  // Define prop types
+  static propTypes = {
+    addExpense: PropTypes.func,
+    expense: PropTypes.object.isRequired
+  }
   categories = ["Grocery", "Gas", "Rent", "Dining Out"];
   // Prevent default submission and create the new expense
   onSubmit = (e) => {
     e.preventDefault();
+    // Validate entries
+
+    // Create a new expense
     const newExpense = {
       category: this.state.category,
-      value:   this.state.value,
-      date: this.state.date
+      value:    this.state.value,
+      date:     this.state.date
     }
     // Send the new expense to the server/state to be added
     this.props.addExpense(newExpense);
@@ -56,7 +71,7 @@ class AddExpense extends Component {
                  name="value" type="number" min="0" value={this.state.value}
                  onChange={this.onChange}/>
         </div>
-        <div className="mb-1 grid justify-items-stretch">
+        <div className="mb-4 grid justify-items-stretch">
           <label className={labelClasses} for="date">Date:</label>
           <input className={inputClasses}
                  name="date" type="date" value={this.state.date}
@@ -71,17 +86,4 @@ class AddExpense extends Component {
   }
 };
 
-
-AddExpense.propTypes = {
-  addExpense: PropTypes.func,
-  expense: PropTypes.object.isRequired
-}
-
-// Map the redux state to the component properties
-const mapStateToProps = (state) => ({
-  expense: state.expense
-})
-
-export default connect(mapStateToProps,
-   { addExpense })
-   (AddExpense);
+export default connect(mapStateToProps, { addExpense })(AddExpense);
