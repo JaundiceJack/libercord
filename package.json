@@ -7,11 +7,10 @@
     "client-install": "npm install --prefix client",
     "start": "node server.js",
     "server": "nodemon server.js",
-    "client": "npm start_prod --prefix client",
-    "client_dev": "npm start_dev --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client_dev\"",
-    "prod": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku_postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build_prod -- prefix client"
+    "client_craco": "npm run start_craco --prefix client",
+    "client_react": "npm run start_react --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client_craco\"",
+    "heroku_postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build_react -- prefix client"
   },
   "author": "James McNeilan",
   "license": "ISC",
