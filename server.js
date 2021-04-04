@@ -29,6 +29,9 @@ app.use('/api/incomes', require('./routes/api/incomes'));
 app.use('/api/expenses', require('./routes/api/expenses'));
 app.use('/api/liabilities', require('./routes/api/liabilities'));
 
+// Define a route to ensure the server is functioning
+app.get('/ping', (req, res) => { return res.send('pong'); });
+
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
