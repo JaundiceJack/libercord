@@ -75,6 +75,6 @@ export const tableFooterClasses =
   "h-5 rounded-b-md bg-gray-900 "
 
 export const mainClasses =
-  "md:w-5/6 sm:w-full flex flex-col md:flex-row mx-auto " +
+  "flex-1 flex flex-col md:flex-row mx-auto " +
   "rounded " +
   "bg-gradient-to-br from-black via-black to-gray-900 ";

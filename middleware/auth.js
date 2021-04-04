@@ -1,5 +1,7 @@
-const config = require('config');
 const jwt = require('jsonwebtoken');
+
+// Grab the json web token key
+const jwtk = require('../config/keys').jwtSecret;
 
 function auth(req, res, next) {
   // Get the json web token from the request header
@@ -10,7 +12,7 @@ function auth(req, res, next) {
               .json({msg: "Please log in again or create an account."});
   try {
     // Verify the token and proceed with the next tast if authentic
-    const decoded = jwt.verify(token, config.get('jwtSecret'));
+    const decoded = jwt.verify(token, jwtk);
     req.user = decoded;
     next();
   } catch(e) {

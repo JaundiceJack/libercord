@@ -2,7 +2,6 @@
 const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
-const config = require('config')
 
 // Instance the express app
 const app = express();
@@ -11,7 +10,7 @@ const app = express();
 app.use(express.json());
 
 // Get the mongo connection key
-const db = config.get('mongoURI');
+const db = require('./config/keys').mongoURI;
 
 // Connect to MongoDB
 mongoose.connect(db, {
