@@ -1,2 +1,3 @@
-export const server = "https://libercrypt.herokuapp.com";
-//export const server = "";
+const server = "https://libercrypt.herokuapp.com";
+// const server = "";
+export default server;

@@ -2,12 +2,24 @@
 const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 // Instance the express app
 const app = express();
 
 // Body parser middleware
 app.use(express.json());
+
+// Set up cross origin resource sharing
+var whitelist = ['184.166.89.30']
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) { callback(null, true) }
+    else { callback(new Error('Not allowed by CORS')) }
+  }
+}
+app.use(cors(corsOptions));
+
 
 // Get the mongo connection key
 const db = require('./config/keys').mongoURI;
