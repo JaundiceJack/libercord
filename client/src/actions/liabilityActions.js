@@ -22,7 +22,7 @@ export const getLiabilities= () => (dispatch, getState) => {
     // Create an authorization token and get the liabilities
     axios.get(`${server}/api/liabilities/` + user.id, tokenConfig(getState))
     .then(res => dispatch({ type: GET_LIABILITIES, payload: res.data }))
-    .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
+    .catch(err => {if (err.response) dispatch(returnErrors(err.response.data, err.response.status))});
   }
   else console.log("User not in client memory.");
 }
@@ -39,9 +39,10 @@ export const addLiability = liability => (dispatch, getState) => {
     .then(res =>
       // If successful, add the liability to the current state
       dispatch({ type: ADD_LIABILITY, payload: res.data }))
-    .catch(err =>
+    .catch(err => {
       // If unsuccessful, display the errors
-      dispatch(returnErrors(err.response.data, err.response.status)));
+      if (err.response) dispatch(returnErrors(err.response.data, err.response.status));
+    })
   }
 }
 

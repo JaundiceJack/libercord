@@ -22,7 +22,7 @@ export const getExpenses= () => (dispatch, getState) => {
     // Create an authorization token and get the expenses
     axios.get(`${server}/api/expenses/` + user.id, tokenConfig(getState))
     .then(res => dispatch({ type: GET_EXPENSES, payload: res.data }))
-    .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
+    .catch(err => {if (err.response) dispatch(returnErrors(err.response.data, err.response.status))});
   }
   else console.log("User not in client memory.");
 
@@ -40,9 +40,10 @@ export const addExpense = expense => (dispatch, getState) => {
     .then(res =>
       // If successful, add the expense to the current state
       dispatch({ type: ADD_EXPENSE, payload: res.data }))
-    .catch(err =>
+    .catch(err => {
       // If unsuccessful, display the errors
-      dispatch(returnErrors(err.response.data, err.response.status)));
+      if (err.response) dispatch(returnErrors(err.response.data, err.response.status));
+    })
   }
 }
 

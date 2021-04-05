@@ -22,7 +22,7 @@ export const getAssets= () => (dispatch, getState) => {
     // Create an authorization token and get the assets
     axios.get(`${server}/api/assets/` + user.id, tokenConfig(getState))
     .then(res => dispatch({ type: GET_ASSETS, payload: res.data }))
-    .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
+    .catch(err => {if (err.response) dispatch(returnErrors(err.response.data, err.response.status))});
   }
   else console.log("User not in client memory.");
 }
@@ -39,9 +39,10 @@ export const addAsset = asset => (dispatch, getState) => {
     .then(res =>
       // If successful, add the asset to the current state
       dispatch({ type: ADD_ASSET, payload: res.data }))
-    .catch(err =>
+    .catch(err => {
       // If unsuccessful, display the errors
-      dispatch(returnErrors(err.response.data, err.response.status)));
+      if (err.response) dispatch(returnErrors(err.response.data, err.response.status));
+    })
   }
 }
 
