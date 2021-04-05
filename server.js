@@ -11,8 +11,8 @@ const app = express();
 app.use(express.json());
 
 // Set up cross origin resource sharing
-if (process.env.NODE_ENV === 'production') {
-  const whitelist = ['http://localhost:3000', 'https://dashboard.heroku.com', '184.166.89.30', 'null', null]
+if (process.env.NODE_ENV === 'dev') {
+  const whitelist = ['http://localhost:3000', 'https://dashboard.heroku.com/', "http://192.168.1.3/"]
   const corsOptions = {
     origin: (origin, callback) => {
       if (whitelist.indexOf(origin) !== -1) { callback(null, true) }
