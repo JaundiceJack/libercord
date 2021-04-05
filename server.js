@@ -11,16 +11,18 @@ const app = express();
 app.use(express.json());
 
 // Set up cross origin resource sharing
-var whitelist = ['http://localhost:3000']
-var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) { callback(null, true) }
-    else { callback(new Error('Not allowed by CORS')) }
+/*
+if (process.env.NODE_ENV === 'production') {
+  const whitelist = ['http://localhost:3000']
+  const corsOptions = {
+    origin: (origin, callback) => {
+      if (whitelist.indexOf(origin) !== -1) { callback(null, true) }
+      else { callback(new Error('Not allowed by CORS')) }
+    }
   }
+  app.use(cors(corsOptions));
 }
-app.use(cors(corsOptions));
-
-
+*/
 // Get the mongo connection key
 const db = require('./config/keys').mongoURI;
 
