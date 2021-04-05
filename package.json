@@ -2,7 +2,7 @@
   "name": "libercrypt",
   "version": "1.0.0",
   "description": "website",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "client-install": "npm install --prefix client",
     "start": "node server.js",
