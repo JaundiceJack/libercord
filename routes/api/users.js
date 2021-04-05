@@ -11,6 +11,15 @@ const User = require('../../models/User');
 // Grab the json web token key
 const jwtk = require('../../config/keys').jwtSecret;
 
+// Route: GET api/users/test
+// Desc:  get a test user's name to make sure the database connection is working
+// Access: public
+router.get('/test', (req, res) => {
+  User.findById("606a5fe740926975a8911e59")
+  .select('-password')
+  .then(user => res.json(user));
+})
+
 // Route:  POST api/users
 // Desc:   register a new user
 // Access: public

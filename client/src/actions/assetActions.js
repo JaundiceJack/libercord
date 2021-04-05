@@ -11,6 +11,9 @@ import axios from 'axios';
 import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
 
+//const server = "https://libercrypt.herokuapp.com";
+const server = "";
+
 // Return all of the user's assets
 export const getAssets= () => (dispatch, getState) => {
   dispatch(setAssetsLoading());
@@ -18,7 +21,7 @@ export const getAssets= () => (dispatch, getState) => {
   const user = getState().auth.user;
   if (user) {
     // Create an authorization token and get the assets
-    axios.get('/api/assets/' + user.id, tokenConfig(getState))
+    axios.get(`${server}/api/assets/` + user.id, tokenConfig(getState))
     .then(res => dispatch({ type: GET_ASSETS, payload: res.data }))
     .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
   }
@@ -33,7 +36,7 @@ export const addAsset = asset => (dispatch, getState) => {
     // Convert the new asset to JSON and add in the user's id
     const newAsset = JSON.stringify({...asset, user_id: user.id});
     // Submit a post with the new asset and the json web token
-    axios.post('/api/assets', newAsset, tokenConfig(getState))
+    axios.post(`${server}/api/assets`, newAsset, tokenConfig(getState))
     .then(res =>
       // If successful, add the asset to the current state
       dispatch({ type: ADD_ASSET, payload: res.data }))
@@ -45,7 +48,7 @@ export const addAsset = asset => (dispatch, getState) => {
 
 // Remove the selected asset
 export const deleteAsset = id => (dispatch, getState) => {
-  axios.delete(`/api/assets/${id}`, tokenConfig(getState))
+  axios.delete(`${server}/api/assets/${id}`, tokenConfig(getState))
   .then(res =>
     dispatch({ type: DELETE_ASSET, payload: id })
   )

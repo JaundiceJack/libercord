@@ -13,12 +13,15 @@ import axios from 'axios';
 // Import server actions: to report authorization errors
 import { returnErrors } from './errorActions';
 
+//const server = "https://libercrypt.herokuapp.com";
+const server = "";
+
 // Check the token and load the user
 export const loadUser = () => (dispatch, getState) => {
   dispatch({ type: USER_LOADING });
   // Get the json web token and authenticate the user
   const config = tokenConfig(getState);
-  axios.get('/api/auth/user', config)
+  axios.get(`${server}/api/auth/user`, config)
   .then(res => {
     // If successful, return the user data to the current state
     dispatch({ type: USER_LOADED, payload: res.data })})
@@ -35,7 +38,7 @@ export const register = ({ name, email, password }) => dispatch => {
   // Turn the entries into JSON format for sending to the server
   const body = JSON.stringify({ name, email, password });
   // Send the registry with the body and config
-  axios.post('/api/users', body, config)
+  axios.post(`${server}/api/users`, body, config)
   .then(res => {
     // If successful, return the user data to the current state
     dispatch({ type: REGISTER_SUCCESS, payload: res.data });
@@ -53,7 +56,7 @@ export const login = ({ email, password }) => dispatch => {
   // Turn the entries into JSON format for sending to the server
   const body = JSON.stringify({ email, password });
   // Send the registry with the body and config
-  axios.post('/api/auth', body, config)
+  axios.post(`${server}/api/auth`, body, config)
   .then(res => {
     // If successful, return the user data to the current state
     dispatch({ type: LOGIN_SUCCESS, payload: res.data });
