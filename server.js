@@ -12,7 +12,7 @@ app.use(express.json());
 
 // Set up cross origin resource sharing
 if (process.env.NODE_ENV === 'production') {
-  const whitelist = ['http://localhost:3000', '184.166.89.30']
+  const whitelist = ['http://localhost:3000', 'http://184.166.89.30']
   const corsOptions = {
     origin: (origin, callback) => {
       if (whitelist.indexOf(origin) !== -1) { callback(null, true) }
