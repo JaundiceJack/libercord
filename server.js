@@ -11,7 +11,6 @@ const app = express();
 app.use(express.json());
 
 // Set up cross origin resource sharing
-/*
 if (process.env.NODE_ENV === 'production') {
   const whitelist = ['http://localhost:3000']
   const corsOptions = {
@@ -22,7 +21,7 @@ if (process.env.NODE_ENV === 'production') {
   }
   app.use(cors(corsOptions));
 }
-*/
+
 // Get the mongo connection key
 const db = require('./config/keys').mongoURI;
 
