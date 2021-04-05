@@ -10,9 +10,8 @@ import axios from 'axios';
 // Import token config to authorize updates and returnErrors to register errors
 import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
-
-//const server = "https://libercrypt.herokuapp.com";
-const server = "";
+// Import the server route
+import server from './route';
 
 // Return all of the user's assets
 export const getAssets= () => (dispatch, getState) => {

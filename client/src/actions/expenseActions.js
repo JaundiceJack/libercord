@@ -10,6 +10,8 @@ import axios from 'axios';
 // Import token config to authorize updates and returnErrors to register errors
 import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
+// Import the server route
+import server from './route';
 
 // Return all of the user's expenses
 export const getExpenses= () => (dispatch, getState) => {
@@ -18,7 +20,7 @@ export const getExpenses= () => (dispatch, getState) => {
   const user = getState().auth.user;
   if (user) {
     // Create an authorization token and get the expenses
-    axios.get('/api/expenses/' + user.id, tokenConfig(getState))
+    axios.get(`${server}/api/expenses/` + user.id, tokenConfig(getState))
     .then(res => dispatch({ type: GET_EXPENSES, payload: res.data }))
     .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
   }
@@ -34,7 +36,7 @@ export const addExpense = expense => (dispatch, getState) => {
     // Convert the new expense to JSON and add in the user's id
     const newExpense = JSON.stringify({...expense, user_id: user.id});
     // Submit a post with the new expense and the json web token
-    axios.post('/api/expenses', newExpense, tokenConfig(getState))
+    axios.post(`${server}/api/expenses`, newExpense, tokenConfig(getState))
     .then(res =>
       // If successful, add the expense to the current state
       dispatch({ type: ADD_EXPENSE, payload: res.data }))
@@ -46,7 +48,7 @@ export const addExpense = expense => (dispatch, getState) => {
 
 // Remove the selected expense
 export const deleteExpense = id => (dispatch, getState) => {
-  axios.delete(`/api/expenses/${id}`, tokenConfig(getState))
+  axios.delete(`${server}/api/expenses/${id}`, tokenConfig(getState))
   .then(res =>
     dispatch({ type: DELETE_EXPENSE, payload: id })
   )

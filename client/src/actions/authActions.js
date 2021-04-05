@@ -12,9 +12,8 @@ import {
 import axios from 'axios';
 // Import server actions: to report authorization errors
 import { returnErrors } from './errorActions';
-
-//const server = "https://libercrypt.herokuapp.com";
-const server = "";
+// Import the server route
+import server from './route';
 
 // Check the token and load the user
 export const loadUser = () => (dispatch, getState) => {

@@ -10,6 +10,8 @@ import axios from 'axios';
 // Import token config to authorize updates and returnErrors to register errors
 import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
+// Import the server route
+import server from './route';
 
 // Return all of the user's incomes
 export const getIncomes= () => (dispatch, getState) => {
@@ -18,7 +20,7 @@ export const getIncomes= () => (dispatch, getState) => {
   const user = getState().auth.user;
   if (user) {
     // Create an authorization token and get the incomes
-    axios.get('/api/incomes/' + user.id, tokenConfig(getState))
+    axios.get(`${server}/api/incomes/` + user.id, tokenConfig(getState))
     .then(res => dispatch({ type: GET_INCOMES, payload: res.data }))
     .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
   }
@@ -34,7 +36,7 @@ export const addIncome = income => (dispatch, getState) => {
     // Convert the new income to JSON and add in the user's id
     const newIncome = JSON.stringify({...income, user_id: user.id});
     // Submit a post with the new income and the json web token
-    axios.post('/api/incomes', newIncome, tokenConfig(getState))
+    axios.post(`${server}/api/incomes`, newIncome, tokenConfig(getState))
     .then(res =>
       // If successful, add the income to the current state
       dispatch({ type: ADD_INCOME, payload: res.data }))
@@ -46,7 +48,7 @@ export const addIncome = income => (dispatch, getState) => {
 
 // Remove the selected income
 export const deleteIncome = id => (dispatch, getState) => {
-  axios.delete(`/api/incomes/${id}`, tokenConfig(getState))
+  axios.delete(`${server}/api/incomes/${id}`, tokenConfig(getState))
   .then(res =>
     dispatch({ type: DELETE_INCOME, payload: id })
   )
