@@ -25,8 +25,8 @@ class App extends Component {
       <Provider store={store}>
         {/*Connect nav links to their routes via Browser Router*/}
         <BrowserRouter>
-          <div className="p-0 sm:p-12 bg-gray-800 min-h-screen flex">
-            <main className={mainClasses} style={{"border-top-left-radius": "40px"}}>
+          <div className="bg-gray-800 min-h-screen flex">
+            <main className={mainClasses}>
               <Nav />
               <Routes />
             </main>

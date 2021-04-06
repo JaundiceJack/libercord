@@ -16,9 +16,8 @@ class Nav extends Component {
   static propTypes = { isAuthenticated: PropTypes.bool };
   render() {
     return (
-      <nav className="flex flex-row md:flex-col bg-black rounded-bl" style={{"border-top-left-radius": "40px"}}>
+      <nav className="flex flex-row md:flex-col bg-black rounded-bl sticky top-0 sm:h-screen z-50 rounded-b-lg sm:rounded-none">
         <Logo />
-        <NavLink target="/" text="Home" icon=<FaHome size="40px" /> />
         {/*If not logged in, show the account creation and login buttons*/}
         {!this.props.isAuthenticated &&
           <NavLink target="/login" text="Login" icon=<RiLoginCircleLine size="40px" /> />}

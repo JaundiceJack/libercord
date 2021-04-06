@@ -16,6 +16,17 @@ const mapStateToProps = (state) => ({
   error: state.error
 })
 
+const cardContainerClasses =
+  "rounded-xl border-l border-gray-700 " +
+  "bg-gradient-to-br from-gray-900 to-black  ";
+
+const headerTextClasses =
+  "bg-clip-text text-transparent font-semibold text-2xl text-center " +
+  "bg-gradient-to-b from-gray-100 to-blue-400 ";
+
+const hrClasses =
+  "h-px w-full bg-gradient-to-r from-transparent via-yellow-600 to-transparent";
+
 class Login extends Component {
   // Initialize the component's state for each form field
   state = { email: "", password: "" };
@@ -43,12 +54,13 @@ class Login extends Component {
   render () {
     return (
       <section className="mt-6 flex flex-col items-center mb-6">
-        <form className={accountFormClasses + "w-full sm:w-1/2"} onSubmit={this.onSubmit}>
-          <div className="w-full bg-gray-900 p-4 rounded-t-md border-b border-green-900">
-            <h2 className="font-bold font-medium text-sm text-blue-200 text-center">
+        <form className={cardContainerClasses + "w-full sm:w-1/2"} onSubmit={this.onSubmit}>
+          <div className="rounded-t-lg p-2 shadow-2xl">
+            <h2 className={headerTextClasses}>
               Login
             </h2>
           </div>
+          <div className={hrClasses}></div>
           <div className="p-4">
             <div className="mb-1 grid justify-items-stretch">
               <label className={labelClasses} for="email">Email:</label>
