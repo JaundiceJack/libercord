@@ -10,7 +10,7 @@ import { BiTimer } from 'react-icons/bi';
 
 const Home = () => {
   return (
-    <div className="grid grid-cols-2 gap-4 p-2">
+    <div className="grid grid-cols-2 gap-4 p-0 sm:p-2">
       {/* Introductory Image */}
       <div className="col-span-2 relative">
         <img className="rounded-lg" src={hero} alt="Bitcoin & Gold"></img>

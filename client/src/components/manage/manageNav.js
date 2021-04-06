@@ -2,7 +2,7 @@ import ManageNavButton from './manageNavButton';
 
 const ManageNav = ({currentSection, changeSection}) => {
   return (
-    <div className="ml-1 sm:ml-10 flex items-baseline space-x-1 sm:space-x-4">
+    <div className="mx-auto sm:ml-10 flex flex-col sm:flex-row w-1/2 sm:w-full">
       <ManageNavButton text="Summary" value="summary" changeSection={changeSection} extraClasses={currentSection === 'summary' ? "border-green-400" : ""} />
       <ManageNavButton text="Expenses" value="expenses" changeSection={changeSection} extraClasses={currentSection === 'expenses' ? "border-green-400" : ""} />
       <ManageNavButton text="Income" value="income" changeSection={changeSection} extraClasses={currentSection === 'income' ? "border-green-400" : ""} />
