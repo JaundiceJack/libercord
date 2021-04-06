@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import store from './store';
 import {Provider} from 'react-redux';
 // Import routing stuff
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 // Import server actions
 import { loadUser } from './actions/authActions';
 // Import components
@@ -24,14 +24,14 @@ class App extends Component {
       // Get the state from the store and provide it to the rest of the app
       <Provider store={store}>
         {/*Connect nav links to their routes via Browser Router*/}
-        <BrowserRouter>
+        <HashRouter>
           <div className="p-0 sm:p-12 bg-gray-800 min-h-screen flex">
             <main className={mainClasses} style={{"border-top-left-radius": "40px"}}>
               <Nav />
               <Routes />
             </main>
           </div>
-        </BrowserRouter>
+        </HashRouter>
       </Provider>
     );
   }
