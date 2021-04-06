@@ -1,6 +1,7 @@
 {
   "name": "client",
   "version": "0.1.0",
+  "main": "src/App.js",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.1.1",
