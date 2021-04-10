@@ -10,6 +10,7 @@ import { getAssets } from '../../../actions/assetActions';
 import { getLiabilities } from '../../../actions/liabilityActions';
 // Import components
 import SummaryCard from './summaryCard';
+import ExpenseCard from '../expenses/expenseCard';
 
 function getTotal(items) {
   return Intl.NumberFormat().format(
@@ -58,7 +59,7 @@ class Summary extends Component {
                   text={"$"+ getTotal(incomes)} />
         <SummaryCard header="Assets Total"
                   text={"$"+ getTotal(assets)} />
-        <SummaryCard header="Expenses Total"
+        <ExpenseCard header="Expenses Total"
                   text={"$"+ getTotal(expenses)} />
         <SummaryCard header="Liabilities Total"
                   text={"$"+ getTotal(liabilities)} />

@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 
 // Set up cross origin resource sharing
-if (process.env.NODE_ENV === 'dev') {
+if (process.env.NODE_ENV === 'production') {
   const whitelist = [];
   const corsOptions = {
     origin: (origin, callback) => {
@@ -26,13 +26,10 @@ if (process.env.NODE_ENV === 'dev') {
 const db = require('./config/keys').mongoURI;
 
 // Connect to MongoDB
-mongoose.connect(db, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true
-  })
-  .then(() => console.log("MongoDB Connected!"))
-  .catch(err => console.log(err));
+mongoose
+.connect(db, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true})
+.then(() => console.log("MongoDB Connected!"))
+.catch(err => console.log(err));
 
 // Define Routes
 app.use('/api/auth', require('./routes/api/auth'));
@@ -41,7 +38,6 @@ app.use('/api/assets', require('./routes/api/assets'));
 app.use('/api/incomes', require('./routes/api/incomes'));
 app.use('/api/expenses', require('./routes/api/expenses'));
 app.use('/api/liabilities', require('./routes/api/liabilities'));
-
 // Define a route to ensure the server is functioning
 app.get('/ping', (req, res) => { return res.send('pong'); });
 

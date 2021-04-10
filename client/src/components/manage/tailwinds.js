@@ -17,14 +17,6 @@ export const accountFormClasses =
 export const labelClasses =
   "font-bold font-medium text-sm text-blue-200 ";
 
-export const submitClasses =
-  "flex flex-row items-center justify-center p-4 w-full " +
-  "font-bold font-medium text-sm text-green-500 " +
-  "rounded-xl border-b-2 border-green-400 cursor-pointer " +
-  "bg-gradient-to-br from-gray-900 to-gray-700 " +
-  "hover:text-green-400 hover:border-blue-400 " +
-  "hover:bg-gradient-to-tl hover:from-gray-700 hover:to-gray-900 ";
-
 export const inputClasses =
   "my-1 p-2 w-full " +
   "text-gray-600  " +
@@ -78,3 +70,11 @@ export const mainClasses =
   "md:w-5/6 sm:w-full flex flex-col md:flex-row mx-auto " +
   "rounded " +
   "bg-gradient-to-br from-black via-black to-gray-900 ";
+
+export const submitClasses =
+  "flex flex-row items-center justify-center p-4 w-full " +
+  "font-bold font-medium text-sm text-green-500 " +
+  "rounded-xl border-t-2 border-orange-400 cursor-pointer " +
+  "bg-gradient-to-br from-gray-900 to-gray-700 " +
+  "hover:text-green-400 hover:border-blue-400 " +
+  "hover:bg-gradient-to-tl hover:from-gray-700 hover:to-gray-900 ";
