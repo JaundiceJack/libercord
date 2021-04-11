@@ -9,6 +9,23 @@ import { tableRowClasses, tableHeaderClasses } from '../tailwinds'
 import { formatDate } from '../helpers';
 
 export default class DataTable extends Component {
+  renderRow = ({ index, rowData, className, style, columns }) => {
+    // Use a custom renderer to give the rows the item's id
+    const item = this.props.data[index];
+    return (
+      <div className={className}
+           key={item.id}
+           role="row"
+           style={style}>
+        {columns}
+      </div>
+    );
+  }
+
+  renderHeader = () => {
+
+  }
+
   render() {
     return (
       <div>
@@ -23,8 +40,8 @@ export default class DataTable extends Component {
               rowClassName={({index}) => {
                 // Apply different styles to the header row
                 return index === -1 ?
-                "bg-gray-800 rounded-t-md text-blue-100 border-b border-green-600" :
-                "bg-gray-300 border-b border-gray-400"}
+                tableHeaderClasses :
+                tableRowClasses}
               }
               onRowMouseOver={({ event, index, rowData }) => {
                 console.log(rowData);
@@ -33,24 +50,13 @@ export default class DataTable extends Component {
                 console.log(rowData);
               }}
               rowCount={this.props.data.length}
-              rowRenderer={({ index, rowData, className, style, columns }) => {
-                // Use a custom renderer to give the rows the item's id
-                const item = this.props.data[index];
-                return (
-                  <div className={className}
-                       key={item.id}
-                       role="row"
-                       style={style}>
-                    {columns}
-                  </div>
-                );
-              }}
+              rowRenderer={this.renderRow}
               rowGetter={({index}) => this.props.data[index]}>
                 {this.props.cols.map(col => {
                   // Format the date columns
-                  return (col.field !== 'date' ?
-                  <Column label={col.title} dataKey={col.field} width={width} /> :
-                  <Column label={col.title} dataKey={col.field} width={width}
+                  return col.view && (col.name !== 'date' ?
+                  <Column label={col.text} dataKey={col.name} width={width} /> :
+                  <Column label={col.text} dataKey={col.name} width={width}
                     cellRenderer={({cellData}) => {return formatDate(cellData)}}/>
                 )
               })}

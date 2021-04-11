@@ -3,7 +3,8 @@ import {
   GET_EXPENSES,
   ADD_EXPENSE,
   DELETE_EXPENSE,
-  LOADING_EXPENSES
+  LOADING_EXPENSES,
+  UPDATE_EXPENSE_COL
 } from './types.js';
 // Import axios to handle http requests
 import axios from 'axios';
@@ -13,8 +14,13 @@ import { returnErrors } from './errorActions';
 // Import the server route
 import server from './route';
 
+// Show or hide a column when the selector is clicked
+export const updateExpenseCol = clicked => dispatch => {
+  return dispatch({type: UPDATE_EXPENSE_COL, payload: clicked});
+}
+
 // Return all of the user's expenses
-export const getExpenses= () => (dispatch, getState) => {
+export const getExpenses = () => (dispatch, getState) => {
   dispatch(setExpensesLoading());
   // Get the user id
   const user = getState().auth.user;

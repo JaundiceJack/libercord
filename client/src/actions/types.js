@@ -2,18 +2,23 @@ export const GET_ASSETS           = 'GET_ASSETS';
 export const ADD_ASSET            = 'ADD_ASSET';
 export const DELETE_ASSET         = 'DELETE_ASSET';
 export const LOADING_ASSETS       = 'LOADING_ASSETS';
+
 export const GET_EXPENSES         = 'GET_EXPENSES';
 export const ADD_EXPENSE          = 'ADD_EXPENSE';
 export const DELETE_EXPENSE       = 'DELETE_EXPENSE';
 export const LOADING_EXPENSES     = 'LOADING_EXPENSES';
+export const UPDATE_EXPENSE_COL   = 'UPDATE_EXPENSE_COL';
+
 export const GET_INCOMES          = 'GET_INCOMES';
 export const ADD_INCOME           = 'ADD_INCOME';
 export const DELETE_INCOME        = 'DELETE_INCOME';
 export const LOADING_INCOMES      = 'LOADING_INCOMES';
+
 export const GET_LIABILITIES      = 'GET_LIABILITIES';
 export const ADD_LIABILITY        = 'ADD_LIABILITY';
 export const DELETE_LIABILITY     = 'DELETE_LIABILITY';
 export const LOADING_LIABILITIES  = 'LOADING_LIABILITIES';
+
 export const USER_LOADING         = "USER_LOADING";
 export const USER_LOADED          = "USER_LOADED";
 export const AUTH_ERROR           = "AUTH_ERROR";

@@ -44,7 +44,7 @@ class Manage extends Component {
             </div>
             }
             {this.state.section === 'expenses' &&
-              <div className="flex flex-col sm:flex-row items-start mt-6 sm:px-6">
+              <div className="grid grid-cols-5 gap-4 mt-6 sm:px-6">
                 <ExpenseOptions />
                 <ExpenseTable />
               </div>

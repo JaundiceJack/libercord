@@ -7,8 +7,17 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 // Import server actions
 import { register } from '../../actions/authActions';
+// Import components
+import TextEntry from '../inputs/textEntry';
 // Import style presets
-import { accountFormClasses, labelClasses, submitClasses, inputClasses } from '../tailwinds';
+import {
+  accountFormClasses,
+  labelClasses,
+  submitClasses,
+  inputClasses,
+  cardContainerClasses,
+  headerTextClasses,
+  hrCenterClasses } from '../tailwinds';
 
 // Map the redux state to the component properties
 const mapStateToProps = (state) => ({
@@ -16,20 +25,9 @@ const mapStateToProps = (state) => ({
   error: state.error
 })
 
-const cardContainerClasses =
-  "rounded-xl border-l border-gray-700 " +
-  "bg-gradient-to-br from-gray-900 to-black  ";
-
-const headerTextClasses =
-  "bg-clip-text text-transparent font-semibold text-2xl text-center " +
-  "bg-gradient-to-b from-gray-100 to-blue-400 ";
-
-const hrClasses =
-  "h-px w-full bg-gradient-to-r from-transparent via-yellow-600 to-transparent";
-
 class CreateAccount extends Component {
   // Initialize the component's state for each form field
-  state = { name: "", email: "", password: "", confPassword: "" };
+  state = { name: "", email: "", password: "", pass2: "" };
   // Define prop types
   static propTypes = {
     isAuthenticated: PropTypes.bool,
@@ -61,28 +59,13 @@ class CreateAccount extends Component {
               Create an Account
             </h2>
           </div>
-          <div className={hrClasses}></div>
+          <div className={hrCenterClasses}></div>
           <div className="p-4">
-            <div className="mb-1 grid justify-items-stretch">
-              <label className={labelClasses} for="username">Username:</label>
-              <input className={inputClasses} id="username"
-              name="name" type="text" onChange={this.onChange} />
-            </div>
-            <div className="mb-1 grid justify-items-stretch">
-              <label className={labelClasses} for="email">Email:</label>
-              <input className={inputClasses} id="email"
-              name="email" type="email" onChange={this.onChange} />
-            </div>
-            <div className="mb-1 grid justify-items-stretch">
-              <label className={labelClasses} for="password">Password:</label>
-              <input className={inputClasses} id="password"
-              name="password" type="password" onChange={this.onChange} />
-            </div>
-            <div className="mb-4 grid justify-items-stretch">
-              <label className={labelClasses} for="confPassword">Confirm Password:</label>
-              <input className={inputClasses} id="confPassword"
-              name="confPassword" type="password" onChange={this.onChange} />
-            </div>
+            <TextEntry id="name"     text="Username" onChange={this.onChange} />
+            <TextEntry id="email"    text="Email"    onChange={this.onChange} type="email" />
+            <TextEntry id="password" text="Password" onChange={this.onChange} type="password" />
+            <TextEntry id="pass2"    text="Confirm Password"
+              onChange={this.onChange} type="password" />
             <button className={submitClasses} type="submit">
               <p className="">Create</p>
             </button>

@@ -11,11 +11,12 @@ export function currentDate() {
 
 export function formatDate(rawDate) {
   const date = new Date(rawDate)
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   let day = date.getDate(),
-      month = date.getMonth() + 1,
+      month = months[date.getMonth()],
       year = date.getFullYear();
   month = (month < 10 ? "0" : "") + month;
   day   = (day < 10 ? "0" : "") + day;
 
-  return month + " / " + day + " / " + year;
+  return month + " - " + day + " - " + year;
 }

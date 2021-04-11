@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 // Import server actions
 import { addLiability } from '../../../actions/liabilityActions';
 // Import style presets
-import { tableFormClasses, labelClasses, submitClasses, inputClasses, selectClasses } from '../../tailwinds';
+import { labelClasses, submitClasses, inputClasses, selectClasses } from '../../tailwinds';
 // Import icons
 import { GiCheckMark } from 'react-icons/gi';
 // Import a helper function for date inputs
@@ -48,7 +48,7 @@ class AddLiability extends Component {
 
   render() {
     return (
-      <form onSubmit={this.onSubmit} className={tableFormClasses}>
+      <form onSubmit={this.onSubmit} className="">
         <div className="mb-1 grid justify-items-stretch">
           <label className={labelClasses} for="value">Name:</label>
           <input id="name" className={inputClasses}

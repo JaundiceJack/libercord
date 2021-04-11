@@ -10,14 +10,21 @@ const ExpenseSchema = new Schema({
     type: String,
     required: true
   },
-  date: {
-    type: Date,
-    default: Date.now
+  location: {
+    type: String
+  },
+  name: {
+    type: String
   },
   value: {
     type: Number,
     required: true
+  },
+  date: {
+    type: Date,
+    default: Date.now
   }
+
 });
 
 module.exports = Expense = mongoose.model('expense', ExpenseSchema);

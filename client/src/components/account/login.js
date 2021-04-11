@@ -7,25 +7,23 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 // Import server actions
 import { login } from '../../actions/authActions';
+// Import components
+import TextEntry from '../inputs/textEntry';
 // Import style presets
-import { accountFormClasses, labelClasses, submitClasses, inputClasses } from '../tailwinds';
+import {
+  accountFormClasses,
+  labelClasses,
+  submitClasses,
+  inputClasses,
+  cardContainerClasses,
+  headerTextClasses,
+  hrCenterClasses } from '../tailwinds';
 
 // Map the redux state to the component properties
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.error
 })
-
-const cardContainerClasses =
-  "rounded-xl border-l border-gray-700 " +
-  "bg-gradient-to-br from-gray-900 to-black  ";
-
-const headerTextClasses =
-  "bg-clip-text text-transparent font-semibold text-2xl text-center " +
-  "bg-gradient-to-b from-gray-100 to-blue-400 ";
-
-const hrClasses =
-  "h-px w-full bg-gradient-to-r from-transparent via-yellow-600 to-transparent";
 
 class Login extends Component {
   // Initialize the component's state for each form field
@@ -60,19 +58,17 @@ class Login extends Component {
               Login
             </h2>
           </div>
-          <div className={hrClasses}></div>
+          <div className={hrCenterClasses}></div>
           <div className="p-4">
-            <div className="mb-1 grid justify-items-stretch">
-              <label className={labelClasses} for="email">Email:</label>
-              <input className={inputClasses} id="email"
-              name="email" type="email" onChange={this.onChange} />
-            </div>
-            <div className="mb-4 grid justify-items-stretch">
-              <label className={labelClasses} for="password">Password:</label>
-              <input className={inputClasses} id="password"
-              name="password" type="password" onChange={this.onChange} />
-            </div>
-            <button className={submitClasses} type="submit">
+            <TextEntry id="email"
+                       text="Email"
+                       type="email"
+                       onChange={this.onChange} />
+            <TextEntry id="password"
+                       text="Password"
+                       type="password"
+                       onChange={this.onChange} />
+            <button className={submitClasses+"mt-6"} type="submit">
               <p className="">Login</p>
             </button>
           </div>

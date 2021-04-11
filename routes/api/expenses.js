@@ -21,6 +21,8 @@ router.post('/', auth, (req, res) => {
   const newExpense = new Expense({
     user_id:  req.body.user_id,
     category: req.body.category,
+    location: req.body.location,
+    name:     req.body.name,
     date:     req.body.date,
     value:    req.body.value
   });

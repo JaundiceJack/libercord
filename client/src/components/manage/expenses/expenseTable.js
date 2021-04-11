@@ -9,13 +9,6 @@ import { getExpenses, deleteExpense } from '../../../actions/expenseActions';
 import { tableContainerClasses} from '../../tailwinds';
 import DataTable from '../table';
 
-// Define table columns
-const columns = [
-  { title: "Expense", field: "category" },
-  { title: "Paid",    field: "value" },
-  { title: "Date",    field: "date" }
-]
-
 // Map the redux state to the component properties
 const mapStateToProps = (state) => ({
   expense: state.expense
@@ -35,9 +28,13 @@ class ExpenseTable extends Component {
 
   render () {
     const { expenses } = this.props.expense;
+    const { columns } = this.props.expense;
     return (
-      <div className={tableContainerClasses}>
-        <DataTable data={expenses} cols={columns}/>
+      <div className={tableContainerClasses + "col-span-5 sm:col-span-4"}>
+        <DataTable
+          data={expenses.sort((a, b) =>
+            { return (new Date(a.date)).getTime() - (new Date(b.date)).getTime() })}
+          cols={columns}/>
       </div>
     )
   };

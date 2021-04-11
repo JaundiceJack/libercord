@@ -11,19 +11,8 @@ import { IoChevronBackCircle, IoChevronForwardCircle } from "react-icons/io5";
 import { isSameMonth, isSameYear } from 'date-fns';
 // Import components
 import MonthTotal from '../summary/monthTotal';
-
-
-const cardContainerClasses =
-  "col-span-2 xl:col-span-1 mb-2" +
-  " rounded-xl border-l border-gray-700 " +
-  "bg-gradient-to-br from-gray-900 to-black ";
-
-const headerTextClasses =
-  "bg-clip-text text-transparent font-semibold text-2xl mr-2 " +
-  "bg-gradient-to-b from-gray-100 to-blue-400 ";
-
-const hrClasses =
-  "h-px w-full bg-gradient-to-r from-yellow-600 to-transparent";
+// Import style presets
+import { cardContainerClasses, headerTextClasses, hrLeftClasses } from '../../tailwinds';
 
 // Map the redux state to the component properties
 const mapStateToProps = (state) => ({
@@ -83,7 +72,7 @@ class ExpenseCard extends Component {
   render() {
     const { expenses } = this.props.expense;
     return (
-      <div className={cardContainerClasses}>
+      <div className={cardContainerClasses+"col-span-2 sm:col-span-1"}>
         <div className="flex flex-row px-2 pt-2 pb-1 justify-center sm:justify-start">
           <button onClick={this.decrementYear} className="text-blue-300 mx-2" >
             <IoChevronBackCircle size="30px" /></button>
@@ -91,7 +80,7 @@ class ExpenseCard extends Component {
           <button onClick={this.incrementYear} className="text-blue-300 mr-2">
             <IoChevronForwardCircle size="30px" /></button>
         </div>
-        <div className={hrClasses}></div>
+        <div className={hrLeftClasses}></div>
         <div className="rounded-b-md p-4">
           <div className="w-full sm:w-1/2">
             <MonthTotal month="January" total={this.monthlyTotal(this.state.year, 0)} />
