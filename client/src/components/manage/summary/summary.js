@@ -10,6 +10,7 @@ import { getAssets } from '../../../actions/assetActions';
 import { getLiabilities } from '../../../actions/liabilityActions';
 // Import components
 import SummaryCard from './summaryCard';
+import IncomeCard from '../income/incomeCard';
 import ExpenseCard from '../expenses/expenseCard';
 
 function getTotal(items) {
@@ -57,7 +58,7 @@ class Summary extends Component {
       <div className="grid grid-cols-2 gap-4 p-6 w-full bg-gradient-to-br from-black via-gray-900 to-gray-800 rounded-md ">
         <ExpenseCard header="Expenses Total"
                   text={"$"+ getTotal(expenses)} />
-        <SummaryCard header={"Income Total"}
+        <IncomeCard header={"Income Total"}
                   text={"$"+ getTotal(incomes)} />
 
       </div>

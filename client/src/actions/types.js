@@ -14,8 +14,12 @@ export const SORT_EXPENSE         = 'SORT_EXPENSE';
 
 export const GET_INCOMES          = 'GET_INCOMES';
 export const ADD_INCOME           = 'ADD_INCOME';
+export const SELECT_INCOME        = 'SELECT_INCOME';
+export const EDIT_INCOME          = 'EDIT_INCOME';
 export const DELETE_INCOME        = 'DELETE_INCOME';
 export const LOADING_INCOMES      = 'LOADING_INCOMES';
+export const UPDATE_INCOME_COL    = 'UPDATE_INCOME_COL';
+export const SORT_INCOME          = 'SORT_INCOME';
 
 export const GET_LIABILITIES      = 'GET_LIABILITIES';
 export const ADD_LIABILITY        = 'ADD_LIABILITY';

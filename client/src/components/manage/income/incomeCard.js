@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import server actions
-import { getExpenses } from '../../../actions/expenseActions';
+import { getIncomes } from '../../../actions/incomeActions';
 // Import Icons
 import { IoChevronBackCircle, IoChevronForwardCircle } from "react-icons/io5";
 // Import date functions to parse data
@@ -16,16 +16,16 @@ import { cardContainerClasses, headerTextClasses, hrLeftClasses } from '../../ta
 
 // Map the redux state to the component properties
 const mapStateToProps = (state) => ({
-  expense: state.expense
+  income: state.income
 })
 
-class ExpenseCard extends Component {
-  // Check for expense retrieval
-  componentDidMount(){ this.props.getExpenses(); };
+class IncomeCard extends Component {
+  // Check for income retrieval
+  componentDidMount(){ this.props.getIncomes(); };
   // Define prop types
   static propTypes = {
-    getExpenses: PropTypes.func.isRequired,
-    expense: PropTypes.object.isRequired
+    getIncomes: PropTypes.func.isRequired,
+    income: PropTypes.object.isRequired
   }
   // Create a component state to store the displayed year
   state = {year: 2021}
@@ -33,14 +33,14 @@ class ExpenseCard extends Component {
   incrementYear = () => { this.setState({year: this.state.year + 1 })};
   decrementYear = () => { this.setState({year: this.state.year - 1 })};
 
-  // Get the expenses total for each given month when they load
+  // Get the incomes total for each given month when they load
   monthlyTotal = (year, month) => {
-    if (!this.props.expense.loading) {
-      const { expenses } = this.props.expense
-      const formatted = expenses.map((exp) =>
+    if (!this.props.income.loading) {
+      const { incomes } = this.props.income
+      const formatted = incomes.map((exp) =>
         { return {date: new Date(exp.date), value: exp.value}; });
       const compareDate = new Date(year, month);
-      // Get the expenses that occured on the given month
+      // Get the incomes that occured on the given month
       const expInMonth = formatted.filter((exp) =>
         { return isSameMonth(compareDate, exp.date); });
       const total = expInMonth
@@ -51,11 +51,11 @@ class ExpenseCard extends Component {
     }
   }
 
-  // Get the expenses total for the year once they load
+  // Get the incomes total for the year once they load
   yearlyTotal = () => {
-    if (!this.props.expense.loading) {
-      const { expenses } = this.props.expense
-      const formatted = expenses.map((exp) =>
+    if (!this.props.income.loading) {
+      const { incomes } = this.props.income
+      const formatted = incomes.map((exp) =>
         { return {date: new Date(exp.date), value: exp.value}; });
       const compareDate = new Date(this.state.year, 0);
       const expInMonth = formatted.filter((exp) =>
@@ -69,13 +69,13 @@ class ExpenseCard extends Component {
 
 
   render() {
-    const { expenses } = this.props.expense;
+    const { incomes } = this.props.income;
     return (
       <div className={cardContainerClasses+"col-span-2 sm:col-span-1"}>
         <div className="flex flex-row px-2 pt-2 pb-1 justify-center sm:justify-start">
           <button onClick={this.decrementYear} className="text-blue-300 mx-2" >
             <IoChevronBackCircle size="30px" /></button>
-          <h2 className={headerTextClasses}>{this.state.year} Expenses</h2>
+          <h2 className={headerTextClasses}>{this.state.year} Income</h2>
           <button onClick={this.incrementYear} className="text-blue-300 mr-2">
             <IoChevronForwardCircle size="30px" /></button>
         </div>
@@ -96,7 +96,7 @@ class ExpenseCard extends Component {
             <MonthTotal month="December" total={this.monthlyTotal(this.state.year, 11)} />
             <div className="grid grid-cols-2 gap-3 mt-2">
               <p className="text-right text-blue-200 font-bold text-xl">
-                {this.state.year} Spending:</p>
+                {this.state.year} Income:</p>
               <p className="text-blue-200 font-bold text-xl">{this.yearlyTotal() || "$0.00"}</p>
             </div>
           </div>
@@ -108,4 +108,4 @@ class ExpenseCard extends Component {
   }
 };
 
-export default connect(mapStateToProps, { getExpenses })(ExpenseCard);
+export default connect(mapStateToProps, { getIncomes })(IncomeCard);

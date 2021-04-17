@@ -2,8 +2,12 @@
 import {
   GET_INCOMES,
   ADD_INCOME,
+  SELECT_INCOME,
+  EDIT_INCOME,
   DELETE_INCOME,
-  LOADING_INCOMES
+  LOADING_INCOMES,
+  UPDATE_INCOME_COL,
+  SORT_INCOME
 } from './types.js';
 // Import axios to handle http requests
 import axios from 'axios';
@@ -12,6 +16,34 @@ import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
 // Import the server route
 import server from './route';
+
+// Show or hide a column when the selector is clicked
+export const updateIncomeCol = clicked => dispatch => {
+  return dispatch({ type: UPDATE_INCOME_COL, payload: clicked });
+}
+
+// Change the selected index when the table is sorted
+// TODO: instead of deselecting it, move it to the current position of the selected one
+export const sortedIncomes = () => {
+  return { type: SORT_INCOME };
+}
+
+// Store the selected income id to locate it later
+export const selectIncome = (income, index) => dispatch => {
+  return dispatch({ type: SELECT_INCOME, payload: {income, index} });
+}
+
+// Edit the selected income with new entries
+export const editIncome = income => (dispatch, getState) => {
+  // Convert the edited income to JSON
+  const edits = JSON.stringify({ ...income });
+  // Submit a post with the edited income and the json web token
+  axios.post(`${server}/api/incomes/${income._id}`, edits, tokenConfig(getState))
+  .catch(err => console.log(err))
+  .then(res => dispatch({ type: EDIT_INCOME, payload: res.data }))
+  .catch(err => { if (err.response) {
+     dispatch(returnErrors(err.response.data, err.response.status)); }})
+}
 
 // Return all of the user's incomes
 export const getIncomes= () => (dispatch, getState) => {

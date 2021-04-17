@@ -22,13 +22,9 @@ class ExpenseTable extends Component {
 
   // Update the table with any new or deleted expenses
   componentWillReceiveProps(nextProps) {
-    const thisLength   = this.props.expense.expenses.length;
-    const nextLength   = nextProps.expense.expenses.length;
-    // Update the stored list if the oh fuck, the
-    // if i just do it this way, it wont update when any props are updated
-    // so i need to do a deep compare
-    // 
-    if ( thisLength !== nextLength ) {
+    const thisExpenses = JSON.stringify(this.props.expense.expenses);
+    const nextExpenses = JSON.stringify(nextProps.expense.expenses);
+    if ( thisExpenses !== nextExpenses ) {
       const { expenses } = nextProps.expense;
       const nextList = expenses.sort(this.sortList(this.state.sortBy));
       this.setState({sortedList: nextList});

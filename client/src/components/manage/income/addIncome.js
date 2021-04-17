@@ -5,8 +5,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import server actions
 import { addIncome } from '../../../actions/incomeActions';
+// Import components
+import CurrencyEntry from '../../inputs/currencyEntry';
+import SelectEntry from '../../inputs/selectEntry';
+import DateEntry from '../../inputs/dateEntry';
+import OptionalTextEntry from '../../inputs/optionalTextEntry';
 // Import style presets
-import { labelClasses, submitClasses, inputClasses, selectClasses } from '../../tailwinds';
+import { labelClasses, submitClasses, inputClasses, selectClasses, buttonClasses } from '../../tailwinds';
 // Import icons
 import { GiCheckMark } from 'react-icons/gi';
 // Import a helper function for date inputs
@@ -19,13 +24,18 @@ const mapStateToProps = (state) => ({
 
 class AddIncome extends Component {
   // Make a state to hold the income in creation
-  state = { category: "Grocery", value: null, date: currentDate()};
+  state = { category: "Grocery",
+            source: "",
+            value: null,
+            date: currentDate(),
+            addSource: false,
+          };
   // Define prop types
   static propTypes = {
     addIncome: PropTypes.func,
     income: PropTypes.object.isRequired
   }
-  categories = ["Grocery", "Gas", "Rent", "Dining Out"];
+  categories = ["Job", "Stimulus", "Lucky Find", "Windfall"];
   // Prevent default submission and create the new income
   onSubmit = (e) => {
     e.preventDefault();
@@ -34,8 +44,9 @@ class AddIncome extends Component {
     // Create a new income
     const newIncome = {
       category: this.state.category,
+      source: this.state.source,
       value:    this.state.value,
-      date:     this.state.date
+      date:     this.state.date + ' 00:00:00'
     }
     // Send the new income to the server/state to be added
     this.props.addIncome(newIncome);
@@ -44,38 +55,36 @@ class AddIncome extends Component {
   };
   // Set the state variables to the entered values
   onChange = e => { this.setState({ [e.target.name]: e.target.value }) };
+  onAddSrc = () => { this.setState({ addSource: !this.state.addSource }) };
+  onAddName = () => { this.setState({ addName: !this.state.addName }) };
 
   render() {
     return (
-      <form onSubmit={this.onSubmit} className="">
-        <div className="mb-1 grid justify-items-stretch">
-          <label className={labelClasses} for="cat">Category:</label>
-          <div className="relative inline-flex">
-            <svg className="w-2 h-2 absolute top-0 right-0 mr-4 mt-5 pointer-events-none"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 412 232">
-              <path d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.764-9.763 25.592 0 35.355l181 181c4.88 4.882 11.279 7.323 17.677 7.323s12.796-2.441 17.678-7.322l181-181c9.763-9.764 9.763-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z" fill="#648299" fill-rule="nonzero"/>
-            </svg>
-            <select id="cat" className={selectClasses}
-                    name="category" onChange={this.onChange} value={this.state.category}>
-              {this.categories.map((option) => {
-                return <option value={option}>{option}</option>
-              })}
-            </select>
-          </div>
-        </div>
-        <div className="mb-1 grid justify-items-stretch">
-          <label className={labelClasses} for="value">Paid:</label>
-          <input id="value" className={inputClasses} step="0.01"
-                 name="value" type="number" min="0" value={this.state.value}
-                 onChange={this.onChange}/>
-        </div>
-        <div className="mb-4 grid justify-items-stretch">
-          <label className={labelClasses} for="date">Date:</label>
-          <input className={inputClasses}
-                 name="date" type="date" value={this.state.date}
-                 onChange={this.onChange}/>
-        </div>
+      <form onSubmit={this.onSubmit} className="flex flex-col">
+        <div className="mb-4"></div>
+        <SelectEntry id="category"
+                     text="Type"
+                     value={this.state.category}
+                     onChange={this.onChange}
+                     options={this.categories} />
+
+
+        <CurrencyEntry id="value"
+                       text="Paid"
+                       value={this.state.value}
+                       onChange={this.onChange} />
+        <DateEntry id="date"
+                   text="Date"
+                   value={this.state.date}
+                   onChange={this.onChange} />
+       <OptionalTextEntry id="source"
+                          onText="Src"
+                          offText="Source"
+                          value={this.state.source}
+                          toggle={this.state.addSource}
+                          onToggle={this.onAddSrc}
+                          onChange={this.onChange}/>
+        <div className="mb-4"></div>
         <button type="submit" className={submitClasses}>
           <GiCheckMark />
           <p className="ml-2">Save Income</p>

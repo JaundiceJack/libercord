@@ -14,7 +14,7 @@ const initialState = {
   selectedExpense: null,
   selectedRow: null,
   columns: [
-    {name: 'value',    text: 'Paid',     view: true},
+    {name: 'value',    text: 'Spent',     view: true},
     {name: 'category', text: 'Category', view: true},
     {name: 'date',     text: 'When',     view: true},
     {name: 'location', text: 'Location', view: false},
@@ -53,7 +53,8 @@ const expenseReducer = (state = initialState, action) => {
     case UPDATE_EXPENSE_COL:
       return {
         ...state,
-        columns: state.columns.map(col => col.name === action.payload.name ? action.payload : col)
+        columns: state.columns.map(col =>
+          col.name === action.payload.name ? action.payload : col)
       }
     case SELECT_EXPENSE:
       return {
@@ -64,7 +65,8 @@ const expenseReducer = (state = initialState, action) => {
     case EDIT_EXPENSE:
       return {
         ...state,
-        expenses: [...state.expenses.filter(expense => {return expense._id !== action.payload._id}), action.payload],
+        expenses: [...state.expenses.filter(expense =>
+          {return expense._id !== action.payload._id}), action.payload],
         selectedExpense: null,
         selectedRow: null,
       }

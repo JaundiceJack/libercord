@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import server actions
-import { addExpense } from '../../../actions/expenseActions';
+import { editIncome, getIncomes } from '../../../actions/incomeActions';
 // Import components
 import CurrencyEntry from '../../inputs/currencyEntry';
 import SelectEntry from '../../inputs/selectEntry';
@@ -14,46 +14,66 @@ import OptionalTextEntry from '../../inputs/optionalTextEntry';
 import { labelClasses, submitClasses, inputClasses, selectClasses, buttonClasses } from '../../tailwinds';
 // Import icons
 import { GiCheckMark } from 'react-icons/gi';
-// Import a helper function for date inputs
-import { currentDate } from '../../helpers';
+import { inputDate } from '../../helpers';
 
 // Map the redux state to the component properties
 const mapStateToProps = (state) => ({
-  expense: state.expense
+  income: state.income
 })
 
-class AddExpense extends Component {
-  // Make a state to hold the expense in creation
-  state = { category: "Grocery",
-            location: "",
-            value: null,
-            date: currentDate(),
-            addLoc: false,
-            addName: false
-          };
+class EditIncome extends Component {
+  // Check for income retrieval
+  componentDidMount(){ this.props.getIncomes(); };
+  componentWillReceiveProps(nextProps) {
+    const {selectedIncome} = nextProps.income;
+    this.setState({
+      category: selectedIncome.category,
+      location: selectedIncome.location,
+      value:    selectedIncome.value,
+      name:     selectedIncome.name,
+      date:     inputDate(selectedIncome.date),
+      addLoc:   selectedIncome.location ? true : false,
+      addName:  selectedIncome.name ? true : false
+    })
+  }
+  // Make a state to hold the selected income's info for editing
+  state = {
+    category: this.props.income.selectedIncome.category,
+    location: this.props.income.selectedIncome.location,
+    value:    this.props.income.selectedIncome.value,
+    name:     this.props.income.selectedIncome.name,
+    date:     inputDate(this.props.income.selectedIncome.date),
+    addLoc:   this.props.income.selectedIncome.location ? true : false,
+    addName:  this.props.income.selectedIncome.name ? true : false
+  };
   // Define prop types
   static propTypes = {
-    addExpense: PropTypes.func,
-    expense: PropTypes.object.isRequired
+    getIncomes: PropTypes.func.isRequired,
+    editIncome: PropTypes.func.isRequired,
+    income: PropTypes.object.isRequired
   }
+
+  // TODO: get the categories from the state
   categories = ["Grocery", "Gas", "Rent", "Dining Out"];
-  // Prevent default submission and create the new expense
+
+  // Prevent default submission and create the new income
   onSubmit = (e) => {
     e.preventDefault();
     // Validate entries
 
-    // Create a new expense
-    const newExpense = {
+    // Create an income from the entries
+    const edits = {
+      _id:      this.props.income.selectedIncome._id,
       category: this.state.category,
       location: this.state.location,
       name:     this.state.name,
       value:    this.state.value,
       date:     this.state.date + ' 00:00:00'
     }
-    // Send the new expense to the server/state to be added
-    this.props.addExpense(newExpense);
+    // Send the new income to the server/state to be added
+    this.props.editIncome(edits);
     // Hide the form on submission
-    this.props.toggleAdd();
+    this.props.toggleEdit();
   };
   // Set the state variables to the entered values
   onChange = e => { this.setState({ [e.target.name]: e.target.value }) };
@@ -69,8 +89,6 @@ class AddExpense extends Component {
                      value={this.state.category}
                      onChange={this.onChange}
                      options={this.categories} />
-
-
         <CurrencyEntry id="value"
                        text="Paid"
                        value={this.state.value}
@@ -87,20 +105,20 @@ class AddExpense extends Component {
                           onToggle={this.onAddLoc}
                           onChange={this.onChange}/>
        <OptionalTextEntry id="name"
-                         onText="Name"
-                         offText="Item Name"
-                         value={this.state.name}
-                         toggle={this.state.addName}
-                         onToggle={this.onAddName}
-                         onChange={this.onChange}/>
+                          onText="Name"
+                          offText="Item Name"
+                          value={this.state.name}
+                          toggle={this.state.addName}
+                          onToggle={this.onAddName}
+                          onChange={this.onChange}/>
         <div className="mb-4"></div>
         <button type="submit" className={submitClasses}>
           <GiCheckMark />
-          <p className="ml-2">Save Expense</p>
+          <p className="ml-2">Save Changes</p>
         </button>
       </form>
     );
   }
 };
 
-export default connect(mapStateToProps, { addExpense })(AddExpense);
+export default connect(mapStateToProps, { editIncome, getIncomes })(EditIncome);

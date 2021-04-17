@@ -31,6 +31,30 @@ router.post('/', auth, (req, res) => {
   .catch(err => res.status(400).json({msg: "Failed to add new income."}));
 });
 
+
+// Route: POST api/incomes/_id
+// Desc:  edit an income
+// Access: private
+router.post('/:id', auth, (req, res) => {
+  // Find the selected income
+  Income.findById(req.params.id)
+  .then(income => {
+    // validate the edited entries
+
+    // set the new income properties
+    income.category = req.body.category;
+    income.source = req.body.source;
+    income.date     = req.body.date;
+    income.value    = req.body.value;
+    // save the edited income
+    income.save()
+    .then(inc => res.json(inc))
+    .catch(err => res.status(404).json({msg: 'Unable to save edited income.'}));
+  })
+  .catch(err => res.status(404).json({msg: 'Unable to edit income.'}))
+})
+
+
 // Route:  DELETE api/incomes
 // Desc:   delete an income
 // Access: private
