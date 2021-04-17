@@ -55,9 +55,11 @@ export const tableContainerClasses =
   " rounded-xl border-l border-gray-600 " +
   " bg-gray-300 ";
 export const tableHeaderClasses =
-  " bg-gray-800 rounded-t-xl text-blue-100 "
+  " bg-gradient-to-br from-gray-700 to-gray-900 rounded-t-xl text-blue-100 "
 export const tableRowClasses =
-  " bg-gray-300 border-b border-gray-400 hover:bg-gray-400 hover:rounded-xl ";
+  " bg-gray-300 border-b border-gray-400 hover:bg-gray-400 ";
+  export const tableSelectedClasses =
+    " bg-yellow-300 border-l-8 border-yellow-500 ";
 export const tableFooterClasses =
   " h-5 rounded-b-md bg-gray-900 "
 

@@ -2,9 +2,12 @@
 import {
   GET_EXPENSES,
   ADD_EXPENSE,
+  SELECT_EXPENSE,
+  EDIT_EXPENSE,
   DELETE_EXPENSE,
   LOADING_EXPENSES,
-  UPDATE_EXPENSE_COL
+  UPDATE_EXPENSE_COL,
+  SORT_EXPENSE
 } from './types.js';
 // Import axios to handle http requests
 import axios from 'axios';
@@ -16,7 +19,30 @@ import server from './route';
 
 // Show or hide a column when the selector is clicked
 export const updateExpenseCol = clicked => dispatch => {
-  return dispatch({type: UPDATE_EXPENSE_COL, payload: clicked});
+  return dispatch({ type: UPDATE_EXPENSE_COL, payload: clicked });
+}
+
+// Change the selected index when the table is sorted
+// TODO: instead of deselecting it, move it to the current position of the selected one
+export const sortedExpenses = () => {
+  return { type: SORT_EXPENSE };
+}
+
+// Store the selected expense id to locate it later
+export const selectExpense = (expense, index) => dispatch => {
+  return dispatch({ type: SELECT_EXPENSE, payload: {expense, index} });
+}
+
+// Edit the selected expense with new entries
+export const editExpense = expense => (dispatch, getState) => {
+  // Convert the edited expense to JSON
+  const edits = JSON.stringify({ ...expense });
+  // Submit a post with the edited expense and the json web token
+  axios.post(`${server}/api/expenses/${expense._id}`, edits, tokenConfig(getState))
+  .catch(err => console.log(err))
+  .then(res => dispatch({ type: EDIT_EXPENSE, payload: res.data }))
+  .catch(err => { if (err.response) {
+     dispatch(returnErrors(err.response.data, err.response.status)); }})
 }
 
 // Return all of the user's expenses

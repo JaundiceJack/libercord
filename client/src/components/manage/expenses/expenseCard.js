@@ -58,7 +58,6 @@ class ExpenseCard extends Component {
       const formatted = expenses.map((exp) =>
         { return {date: new Date(exp.date), value: exp.value}; });
       const compareDate = new Date(this.state.year, 0);
-      console.log(compareDate);
       const expInMonth = formatted.filter((exp) =>
         { return isSameYear(compareDate, exp.date); });
       const total = expInMonth

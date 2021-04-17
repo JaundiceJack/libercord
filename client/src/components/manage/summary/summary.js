@@ -55,18 +55,21 @@ class Summary extends Component {
     const { incomes } = this.props.income;
     return (
       <div className="grid grid-cols-2 gap-4 p-6 w-full bg-gradient-to-br from-black via-gray-900 to-gray-800 rounded-md ">
-        <SummaryCard header={"Income Total"}
-                  text={"$"+ getTotal(incomes)} />
-        <SummaryCard header="Assets Total"
-                  text={"$"+ getTotal(assets)} />
         <ExpenseCard header="Expenses Total"
                   text={"$"+ getTotal(expenses)} />
-        <SummaryCard header="Liabilities Total"
-                  text={"$"+ getTotal(liabilities)} />
+        <SummaryCard header={"Income Total"}
+                  text={"$"+ getTotal(incomes)} />
+
       </div>
     )
   }
 };
+
+//<SummaryCard header="Assets Total"
+//          text={"$"+ getTotal(assets)} />
+
+//<SummaryCard header="Liabilities Total"
+//          text={"$"+ getTotal(liabilities)} />
 
 export default connect(mapStateToProps, {
   getIncomes,

@@ -5,9 +5,12 @@ export const LOADING_ASSETS       = 'LOADING_ASSETS';
 
 export const GET_EXPENSES         = 'GET_EXPENSES';
 export const ADD_EXPENSE          = 'ADD_EXPENSE';
+export const SELECT_EXPENSE       = 'SELECT_EXPENSE';
+export const EDIT_EXPENSE         = 'EDIT_EXPENSE';
 export const DELETE_EXPENSE       = 'DELETE_EXPENSE';
 export const LOADING_EXPENSES     = 'LOADING_EXPENSES';
 export const UPDATE_EXPENSE_COL   = 'UPDATE_EXPENSE_COL';
+export const SORT_EXPENSE         = 'SORT_EXPENSE';
 
 export const GET_INCOMES          = 'GET_INCOMES';
 export const ADD_INCOME           = 'ADD_INCOME';

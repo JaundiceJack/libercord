@@ -16,6 +16,7 @@ const OptionalTextEntry = ({onText, offText, id, value, toggle, onToggle, onChan
                inputClasses+"p-2 col-span-3 rounded-l-none" :
                inputClasses}
              name={id}
+             value={value}
              type="text"
              placeholder={offText}
              onChange={onChange}/>}

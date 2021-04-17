@@ -9,6 +9,18 @@ export function currentDate() {
   return  year + "-" + month + "-" + day;
 }
 
+// Convert the given date to one that will fit in a 'date' input
+export function inputDate(rawDate) {
+  const date = new Date(rawDate);
+  let day = date.getDate(),
+      month = date.getMonth() + 1,
+      year = date.getFullYear();
+  month = (month < 10 ? "0" : "") + month;
+  day   = (day < 10 ? "0" : "") + day;
+
+  return  year + "-" + month + "-" + day;
+}
+
 export function formatDate(rawDate) {
   const date = new Date(rawDate)
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -18,5 +30,5 @@ export function formatDate(rawDate) {
   month = (month < 10 ? "0" : "") + month;
   day   = (day < 10 ? "0" : "") + day;
 
-  return month + " - " + day + " - " + year;
+  return month + " - " + day;
 }
