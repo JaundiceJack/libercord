@@ -21,6 +21,7 @@ router.post('/', auth, (req, res) => {
   const newIncome = new Income({
     user_id:  req.body.user_id,
     category: req.body.category,
+    source:   req.body.source,
     date:     req.body.date,
     value:    req.body.value
   });

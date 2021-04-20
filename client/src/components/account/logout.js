@@ -1,38 +1,32 @@
-// Import basic react stuff
-import React, { Component } from 'react';
-// Import state stuff
-import { connect } from 'react-redux';
+// Import basics
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+// Import icons
+import { RiLogoutCircleLine } from 'react-icons/ri';
 // Import server actions
 import { logout } from '../../actions/authActions';
-// Import icons
-import { RiLogoutCircleLine } from 'react-icons/ri'
+// Import style presets
+import { navLinkClasses, navIconClasses, navTextClasses } from '../tailwinds';
 
-class Logout extends Component {
-  state = {};
-  // Define prop types
-  static propTypes = {
-    logout: PropTypes.func.isRequired
-  }
-  // Logout when clicked and redirect to the home page
-  onLogout = (e) => {
-    e.preventDefault();
-    this.props.logout();
-  }
+const Logout = () => {
+  // Dispatch the logout action if the button is clicked
+  const dispatch = useDispatch();
+  const onLogout = () => { dispatch(logout()); }
 
-  render () {
-    return (
-      <div onClick={this.onLogout}
-           className="relative flex items-center justify-center cursor-pointer link">
-        <p className="ref ml-2 absolute text-lg text-gray-300 no-underline hover:no-underline">
-          Logout
-        </p>
-        <p className="icon absolute text-gray-300">
-          <RiLogoutCircleLine size="40px" />
-        </p>
-      </div>
-    );
-  }
+  return (
+    <div onClick={onLogout} className={navLinkClasses}>
+      <p className={navTextClasses}>
+        Logout
+      </p>
+      <p className={navIconClasses}>
+        <RiLogoutCircleLine size="40px" />
+      </p>
+    </div>
+  );
 };
 
-export default connect(null, { logout })(Logout);
+// Set proptypes and export
+Logout.propTypes = {
+  logout: PropTypes.func.isRequired
+}
+export default Logout;

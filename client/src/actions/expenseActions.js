@@ -30,7 +30,7 @@ export const sortedExpenses = () => {
 
 // Store the selected expense id to locate it later
 export const selectExpense = (expense, index) => dispatch => {
-  return dispatch({ type: SELECT_EXPENSE, payload: {expense, index} });
+  dispatch({ type: SELECT_EXPENSE, payload: {expense, index} });
 }
 
 // Edit the selected expense with new entries

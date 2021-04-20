@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { getLiabilities, deleteLiability } from '../../../actions/liabilityActions';
 // Import style presets
 import { tableContainerClasses} from '../../tailwinds';
-import DataTable from '../table';
+import TableInst from '../tableInst';
 
 // Define table columns
 const columns = [
@@ -37,7 +37,7 @@ class LiabilityTable extends Component {
     const { liabilities } = this.props.liability;
     return (
       <div className={tableContainerClasses}>
-        <DataTable data={liabilities} cols={columns}/>
+        <TableInst data={liabilities} cols={columns}/>
       </div>
     )
   };

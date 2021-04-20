@@ -13,8 +13,9 @@ const initialState = {
   incomes: [],
   selectedIncome: null,
   selectedRow: null,
+  categories: ["Job", "Stimulus", "Lucky Find", "Windfall"],
   columns: [
-    {name: 'value',    text: 'Paid',     view: true},
+    {name: 'value',    text: 'Received',     view: true},
     {name: 'category', text: 'Category', view: true},
     {name: 'date',     text: 'When',     view: true},
     {name: 'source', text: 'Source', view: false},
@@ -59,7 +60,7 @@ const incomeReducer = (state = initialState, action) => {
         return {
           ...state,
           selectedIncome: action.payload.income,
-          selectedRow: action.payload.index
+          selectedRow:    action.payload.index
         }
       case EDIT_INCOME:
         return {

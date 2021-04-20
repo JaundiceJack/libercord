@@ -1,42 +1,76 @@
-// Import basic react stuff
-import React, { Component } from 'react';
-// Import state stuff
-import { connect } from 'react-redux';
+// Import basics
+import React, { useState, useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import nav icons
 import { FaBalanceScale, FaFileContract, FaHome } from 'react-icons/fa';
 import { RiLoginCircleLine, RiAccountPinCircleLine } from 'react-icons/ri';
 // Import components
-import NavLink from './navlink';
-import Logout from './account/logout'
-import Logo from './logo';
+import NavLink        from './navlink';
+import Logo           from './logo';
+import Logout         from './account/logout'
+// Import style presets
+import { navClasses } from './tailwinds';
+// Import actions
+import { changePage } from '../actions/authActions';
 
-class Nav extends Component {
-  // Define proptypes taken from the state
-  static propTypes = { isAuthenticated: PropTypes.bool };
-  render() {
-    return (
-      <nav className="flex flex-row md:flex-col bg-black rounded-bl sticky top-0 sm:h-screen z-50 rounded-b-lg sm:rounded-none">
-        <Logo />
-        {/*If not logged in, show the account creation and login buttons*/}
-        {!this.props.isAuthenticated &&
-          <NavLink target="/login" text="Login" icon=<RiLoginCircleLine size="40px" /> />}
-        {!this.props.isAuthenticated &&
-          <NavLink  target="/create" text="Sign Up" icon=<RiAccountPinCircleLine size="40px" /> />}
-        {/* If logged in, show the app and logout buttons*/}
-        {this.props.isAuthenticated &&
-          <Logout />}
-        {this.props.isAuthenticated &&
-          <NavLink target="/manage" text="Manage" icon=<FaBalanceScale size="40px" /> />}
-        <div className="flex-grow"></div>
-        <NavLink target="/employ" text="Employ" icon=<FaFileContract size="40px" /> />
-      </nav>
-    );
+// So, to get the left indicators to highlight like the manage ones,
+// i need to make a state boolean and check the current page against it
+
+const Nav = () => {
+  // Check for user authentication each 1000ms
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const updateTimer = useRef(null);
+  const setUpdate = () => {
+    updateTimer.current = setTimeout(() => { updateTimer.current = null }, 1000);
   }
+  useEffect(() => {
+    !updateTimer.current && setUpdate() }, [isAuthenticated]);
+  useEffect(() => { return () => {
+    updateTimer.current && clearTimeout(updateTimer.current) } }, []);
+
+  // Get the active page to highlight
+  const page = useSelector(state => state.auth.currentPage);
+
+  // Change the highlighted page icon
+  const dispatch = useDispatch();
+  const changeActive = nextPage => { dispatch(changePage(nextPage)) }
+
+  return (
+    <nav className={navClasses}>
+      <Logo onClick={() => changeActive('home')}/>
+
+      {/*If not logged in, show the account creation and login buttons*/}
+      {!isAuthenticated &&
+        <NavLink target="/login" text="Login"
+          icon=<RiLoginCircleLine size="40px" />
+          extraClasses={page === 'login' && "border-green-600"}
+          onClick={() => changeActive('login')}/>}
+      {!isAuthenticated &&
+        <NavLink  target="/create" text="Sign Up"
+          icon=<RiAccountPinCircleLine size="40px" />
+          extraClasses={page === 'create' && "border-green-600"}
+          onClick={() => changeActive('create')} />}
+
+      {/* If logged in, show the app and logout buttons*/}
+      {isAuthenticated &&
+        <Logout />}
+      {isAuthenticated &&
+        <NavLink target="/manage" text="Manage"
+          icon=<FaBalanceScale size="40px" />
+          extraClasses={page === 'manage' && "border-green-600"}
+          onClick={() => changeActive('manage')} />}
+        <div className="flex-grow"></div>
+        <NavLink target="/employ" text="Employ"
+          icon=<FaFileContract size="40px" />
+          extraClasses={page === 'employ' && "border-green-600"}
+          onClick={() => changeActive('employ')} />
+    </nav>
+  );
 };
 
-// Map the redux state to the component properties
-const mapStateToProps = (state) =>
-  ({ isAuthenticated: state.auth.isAuthenticated });
-
-export default connect(mapStateToProps)(Nav);
+// Set prop types and export
+Nav.propTypes = {
+  isAuthenticated: PropTypes.bool
+}
+export default Nav;

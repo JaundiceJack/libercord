@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { getAssets, deleteAsset } from '../../../actions/assetActions';
 // Import style presets
 import { tableContainerClasses} from '../../tailwinds';
-import DataTable from '../table';
+import TableInst from '../tableInst';
 
 // Define table columns
 const columns = [
@@ -38,7 +38,7 @@ class AssetTable extends Component {
     const { assets } = this.props.asset;
     return (
       <div className={tableContainerClasses}>
-        <DataTable data={assets} cols={columns}/>
+        <TableInst data={assets} cols={columns}/>
       </div>
     )
   };

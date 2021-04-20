@@ -1,45 +1,42 @@
-// Import basic react stuff
-import React, { Component } from 'react';
-// Import state stuff
-import { connect } from 'react-redux';
+// Import basics
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-// Import server actions
-import { getExpenses, updateExpenseCol } from '../../../actions/expenseActions';
 // Import components
-import CheckboxEntry from '../../inputs/checkboxEntry';
+import CheckboxEntry        from '../../inputs/checkboxEntry';
+// Import style presets
+import { fancyText }        from '../../tailwinds';
+// Import server actions
+import { updateExpenseCol } from '../../../actions/expenseActions';
 
-// Map the redux state to the component properties
-const mapStateToProps = (state) => ({ expense: state.expense })
+const ExpenseColumnSelection = () => {
+  // Make a dispatch to access redux actions
+  const dispatch = useDispatch();
+  // Get the selectable columns from the store
+  const columns = useSelector(state => state.expense.columns);
 
-class ColSelect extends Component {
-  // Check for expense retrieval
-  componentDidMount(){ this.props.getExpenses();  };
-  // Define prop types
-  static propTypes = {
-    getExpenses: PropTypes.func.isRequired,
-    updateExpenseCol: PropTypes.func.isRequired,
-    expense: PropTypes.object.isRequired
-  }
-  // change the visible columns when checked
-  onChange = e => {
+  // Change the visible columns when checked
+  const onCheck = e => {
     const col = {name: e.target.name, text: e.target.value, view: e.target.checked}
-    this.props.updateExpenseCol(col); };
+    dispatch(updateExpenseCol(col));
+  };
 
-  render() {
-    const { columns } = this.props.expense;
-    return (
-      <div className="mt-2">
-        {columns.map(col => {
-          return (
-            <CheckboxEntry id={col.name}
-                           text={col.text}
-                           checked={col.view}
-                           onChange={this.onChange} />
-          )
-        })}
-      </div>
-    );
-  }
+  return (
+    <div className="">
+      <p className={fancyText+"my-4 text-center"}>Toggle Columns:</p>
+      {columns.map(col => {
+        return (
+          <CheckboxEntry id={col.name}
+                         text={col.text}
+                         checked={col.view}
+                         onChange={onCheck} />
+        )
+      })}
+    </div>
+  );
 };
 
-export default connect(mapStateToProps, { getExpenses, updateExpenseCol })(ColSelect);
+ExpenseColumnSelection.propTypes = {
+  updateExpenseCol: PropTypes.func,
+  columns:         PropTypes.array
+}
+export default ExpenseColumnSelection;

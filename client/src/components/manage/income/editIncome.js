@@ -1,124 +1,112 @@
-// Import basic react stuff
-import React, { Component } from 'react';
-// Import state stuff
-import { connect } from 'react-redux';
+// Import basics
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import server actions
-import { editIncome, getIncomes } from '../../../actions/incomeActions';
+import { editIncome }    from '../../../actions/incomeActions';
 // Import components
-import CurrencyEntry from '../../inputs/currencyEntry';
-import SelectEntry from '../../inputs/selectEntry';
-import DateEntry from '../../inputs/dateEntry';
+import CurrencyEntry     from '../../inputs/currencyEntry';
+import SelectEntry       from '../../inputs/selectEntry';
+import DateEntry         from '../../inputs/dateEntry';
 import OptionalTextEntry from '../../inputs/optionalTextEntry';
 // Import style presets
-import { labelClasses, submitClasses, inputClasses, selectClasses, buttonClasses } from '../../tailwinds';
+import { submitClasses, fancyText } from '../../tailwinds';
 // Import icons
-import { GiCheckMark } from 'react-icons/gi';
-import { inputDate } from '../../helpers';
+import { GiCheckMark }   from 'react-icons/gi';
+// Import a date formatter
+import { inputDate }     from '../../../functions/dateFunctions';
 
-// Map the redux state to the component properties
-const mapStateToProps = (state) => ({
-  income: state.income
-})
+const EditIncome = ({ toggleEdit }) => {
+  // Make a dispatch to access redux actions
+  const dispatch = useDispatch();
+  // Get the selected income and selectable categories from the store
+  const selected   = useSelector( state => state.income.selectedIncome );
+  const categories = useSelector( state => state.income.categories );
 
-class EditIncome extends Component {
-  // Check for income retrieval
-  componentDidMount(){ this.props.getIncomes(); };
-  componentWillReceiveProps(nextProps) {
-    const {selectedIncome} = nextProps.income;
-    this.setState({
-      category: selectedIncome.category,
-      location: selectedIncome.location,
-      value:    selectedIncome.value,
-      name:     selectedIncome.name,
-      date:     inputDate(selectedIncome.date),
-      addLoc:   selectedIncome.location ? true : false,
-      addName:  selectedIncome.name ? true : false
-    })
+  // Update the entries if a new income item is selected
+  const updateTimer = useRef(null);
+  function setUpdate() {
+    const nextSelect = selected;
+    setId(nextSelect._id);
+    setCategory(nextSelect.category);
+    setValue(nextSelect.value);
+    setSource(nextSelect.source);
+    setDate(inputDate(nextSelect.date));
+    setAddSrc(nextSelect.source ? true : false);
+  	updateTimer.current = setTimeout(() => {
+      updateTimer.current = null; }, 100);
   }
-  // Make a state to hold the selected income's info for editing
-  state = {
-    category: this.props.income.selectedIncome.category,
-    location: this.props.income.selectedIncome.location,
-    value:    this.props.income.selectedIncome.value,
-    name:     this.props.income.selectedIncome.name,
-    date:     inputDate(this.props.income.selectedIncome.date),
-    addLoc:   this.props.income.selectedIncome.location ? true : false,
-    addName:  this.props.income.selectedIncome.name ? true : false
-  };
-  // Define prop types
-  static propTypes = {
-    getIncomes: PropTypes.func.isRequired,
-    editIncome: PropTypes.func.isRequired,
-    income: PropTypes.object.isRequired
-  }
+  useEffect(() => { !updateTimer.current && setUpdate() }, [selected]);
+  useEffect(() => { return () =>
+    { updateTimer.current && clearTimeout(updateTimer.current); }; }, []);
 
-  // TODO: get the categories from the state
-  categories = ["Grocery", "Gas", "Rent", "Dining Out"];
+  // Set internal component state variables
+  const [id,       setId]       = useState(selected._id);
+  const [category, setCategory] = useState(selected.category);
+  const [value,    setValue]    = useState(selected.value);
+  const [source,   setSource]   = useState(selected.source);
+  const [date,     setDate]     = useState(inputDate(selected.date));
+  const [addSrc,   setAddSrc]   = useState(selected.source ? true : false);
 
   // Prevent default submission and create the new income
-  onSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     // Validate entries
 
-    // Create an income from the entries
+    // Edit the item with the new entries
     const edits = {
-      _id:      this.props.income.selectedIncome._id,
-      category: this.state.category,
-      location: this.state.location,
-      name:     this.state.name,
-      value:    this.state.value,
-      date:     this.state.date + ' 00:00:00'
+      _id:      id,
+      category: category,
+      source:   source,
+      value:    value,
+      date:     date + ' 00:00:00'
     }
-    // Send the new income to the server/state to be added
-    this.props.editIncome(edits);
+    // Send the item to the server/state to be added
+    dispatch(editIncome(edits));
     // Hide the form on submission
-    this.props.toggleEdit();
+    toggleEdit();
   };
-  // Set the state variables to the entered values
-  onChange = e => { this.setState({ [e.target.name]: e.target.value }) };
-  onAddLoc = () => { this.setState({ addLoc: !this.state.addLoc }) };
-  onAddName = () => { this.setState({ addName: !this.state.addName }) };
 
-  render() {
-    return (
-      <form onSubmit={this.onSubmit} className="flex flex-col">
-        <div className="mb-4"></div>
-        <SelectEntry id="category"
-                     text="Type"
-                     value={this.state.category}
-                     onChange={this.onChange}
-                     options={this.categories} />
-        <CurrencyEntry id="value"
-                       text="Paid"
-                       value={this.state.value}
-                       onChange={this.onChange} />
-        <DateEntry id="date"
-                   text="Date"
-                   value={this.state.date}
-                   onChange={this.onChange} />
-       <OptionalTextEntry id="location"
-                          onText="Loc"
-                          offText="Location"
-                          value={this.state.location}
-                          toggle={this.state.addLoc}
-                          onToggle={this.onAddLoc}
-                          onChange={this.onChange}/>
-       <OptionalTextEntry id="name"
-                          onText="Name"
-                          offText="Item Name"
-                          value={this.state.name}
-                          toggle={this.state.addName}
-                          onToggle={this.onAddName}
-                          onChange={this.onChange}/>
-        <div className="mb-4"></div>
-        <button type="submit" className={submitClasses}>
-          <GiCheckMark />
-          <p className="ml-2">Save Changes</p>
-        </button>
-      </form>
-    );
-  }
+  return (
+    <form onSubmit={onSubmit} className="flex flex-col">
+      <p className={fancyText+"my-4 text-center"}>Edit Selected:</p>
+      <SelectEntry id      ="category"
+                   text    ="Type"
+                   value   ={category}
+                   onChange={e => setCategory(e.target.value)}
+                   options ={categories} />
+      <CurrencyEntry id      ="value"
+                     text    ="Paid"
+                     value   ={value}
+                     onChange={e => setValue(e.target.value)} />
+      <DateEntry id      ="date"
+                 text    ="Date"
+                 value   ={date}
+                 onChange={e => setDate(e.target.value)} />
+     <OptionalTextEntry id="source" onText="Src" offText="Source"
+                        value   ={source}
+                        toggle  ={addSrc}
+                        onToggle={() => setAddSrc(!addSrc)}
+                        onChange={e => setSource(e.target.value)} />
+      <div className="mb-4"></div>
+      <button type="submit" className={submitClasses}>
+        <GiCheckMark />
+        <p className="ml-2">Save Changes</p>
+      </button>
+    </form>
+  );
 };
 
-export default connect(mapStateToProps, { editIncome, getIncomes })(EditIncome);
+EditIncome.propTypes = {
+  toggleEdit: PropTypes.func,
+  editIncome: PropTypes.func,
+  selected:   PropTypes.object,
+  categories: PropTypes.array,
+  _id:        PropTypes.string,
+  category:   PropTypes.string,
+  source:     PropTypes.string,
+  value:      PropTypes.number,
+  date:       PropTypes.instanceOf(Date),
+  toggleEdit: PropTypes.func
+}
+export default EditIncome;

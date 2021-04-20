@@ -10,7 +10,7 @@ import { labelClasses, submitClasses, inputClasses, selectClasses } from '../../
 // Import icons
 import { GiCheckMark } from 'react-icons/gi';
 // Import a helper function for date inputs
-import { currentDate } from '../../helpers';
+import { currentDate } from '../../../functions/dateFunctions';
 
 // Map the redux state to the component properties
 const mapStateToProps = (state) => ({

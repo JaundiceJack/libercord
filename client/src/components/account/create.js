@@ -1,7 +1,6 @@
-// Import basic react stuff
-import React, { Component } from 'react';
-// Import state stuff
-import { connect } from 'react-redux';
+// Import basics
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import router stuff
 import { Redirect } from 'react-router-dom';
@@ -11,70 +10,71 @@ import { register } from '../../actions/authActions';
 import TextEntry from '../inputs/textEntry';
 // Import style presets
 import {
-  accountFormClasses,
-  labelClasses,
   submitClasses,
-  inputClasses,
   cardContainerClasses,
   headerTextClasses,
   hrCenterClasses } from '../tailwinds';
 
-// Map the redux state to the component properties
-const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  error: state.error
-})
 
-class CreateAccount extends Component {
+const CreateAccount = () => {
   // Initialize the component's state for each form field
-  state = { name: "", email: "", password: "", pass2: "" };
-  // Define prop types
-  static propTypes = {
-    isAuthenticated: PropTypes.bool,
-    error: PropTypes.object.isRequired,
-    register: PropTypes.func.isRequired
-  }
+  const [name, setName]         = useState("");
+  const [email, setEmail]       = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm]   = useState("");
+  const [typos, setTypos]       = useState([]);
+  // Get the authentication state and submission errors
+  const isAuthenticated = useSelector( state => state.auth.isAuthenticated );
+  const error           = useSelector( state => state.error );
+
   // On form submission, attempt to create a new user
-  onSubmit = e => {
+  const dispatch = useDispatch();
+  const onSubmit = e => {
     e.preventDefault();
     // Validate entries
 
+
     // Register the new user
     const newUser = {
-      name: this.state.name,
-      email: this.state.email,
-      password: this.state.password
+      name:     name,
+      email:    email,
+      password: password
     };
-    this.props.register(newUser);
+    dispatch(register(newUser));
   }
-  // Set the state variables to the entered values
-  onChange = e => { this.setState({ [e.target.name]: e.target.value }) };
 
-  render () {
-    return (
-      <section className="mt-6 flex flex-col items-center mb-6">
-        <form className={cardContainerClasses + "w-full sm:w-1/2"} onSubmit={this.onSubmit}>
-          <div className="rounded-t-lg p-2 shadow-2xl">
-            <h2 className={headerTextClasses}>
-              Create an Account
-            </h2>
-          </div>
-          <div className={hrCenterClasses}></div>
-          <div className="p-4">
-            <TextEntry id="name"     text="Username" onChange={this.onChange} />
-            <TextEntry id="email"    text="Email"    onChange={this.onChange} type="email" />
-            <TextEntry id="password" text="Password" onChange={this.onChange} type="password" />
-            <TextEntry id="pass2"    text="Confirm Password"
-              onChange={this.onChange} type="password" />
-            <button className={submitClasses} type="submit">
-              <p className="">Create</p>
-            </button>
-          </div>
-        </form>
-        {this.props.isAuthenticated && <Redirect to="/manage" />}
-      </section>
-    );
-  }
+  return (
+    <section className="mt-6 flex flex-col items-center mb-6">
+      <form className={cardContainerClasses + "w-full sm:w-1/2"} onSubmit={onSubmit}>
+        <div className="rounded-t-lg p-2 shadow-2xl">
+          <h2 className={headerTextClasses+"text-center"}>
+            Create an Account
+          </h2>
+        </div>
+        <div className={hrCenterClasses}></div>
+        <div className="p-4 grid gap-2">
+          <TextEntry id="name"     text="Username"
+                     onChange={e => setName(e.target.value)} />
+          <TextEntry id="email"    text="Email"
+                     onChange={e => setEmail(e.target.value)} type="email" />
+          <TextEntry id="password" text="Password"
+                     onChange={e => setPassword(e.target.value)} type="password" />
+          <TextEntry id="confirm"  text="Confirm Password"
+                     onChange={e => setConfirm(e.target.value)} type="password" />
+          <button className={submitClasses+"mt-4"} type="submit">
+            <p className="">Create</p>
+          </button>
+        </div>
+      </form>
+      {isAuthenticated && <Redirect to="/manage" />}
+    </section>
+  );
 };
 
-export default connect(mapStateToProps, { register })(CreateAccount);
+// Set prop types and export
+CreateAccount.propTypes = {
+  isAuthenticated: PropTypes.bool,
+  error:           PropTypes.object.isRequired,
+  register:        PropTypes.func.isRequired
+}
+export default CreateAccount;

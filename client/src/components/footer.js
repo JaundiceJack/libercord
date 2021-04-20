@@ -1,12 +1,20 @@
+// Import style presets
+import { fancyText } from './tailwinds';
 // Import icons
 import { FaRegCopyright } from 'react-icons/fa';
 
 const Footer = () => {
+  const footerClasses = "flex flex-row items-center justify-center";
+
   return (
-    <footer className="flex flex-col items-center justify-center \
-     bg-clip-text text-transparent bg-gradient-to-b from-blue-200 to-blue-500">
-      <p className="text-center ">James McNeilan</p>
-      <p className="text-right flex flex-row items-center"><FaRegCopyright className="text-blue-400"/> 2021</p>
+    <footer className={fancyText + footerClasses}>
+      <p className="text-center ">
+        James McNeilan
+      </p>
+      <p className="text-right flex flex-row items-center">
+        <FaRegCopyright className="text-blue-400 mx-2 "/>
+        2021
+      </p>
     </footer>
   );
 };

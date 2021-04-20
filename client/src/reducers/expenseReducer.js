@@ -8,11 +8,12 @@ import {
   UPDATE_EXPENSE_COL,
   SORT_EXPENSE,
 } from '../actions/types.js';
+import { SortDirection } from 'react-virtualized';
 
 const initialState = {
   expenses: [],
-  selectedExpense: null,
-  selectedRow: null,
+  loading: false,
+  categories: ["Grocery", "Gas", "Rent", "Dining Out"],
   columns: [
     {name: 'value',    text: 'Spent',     view: true},
     {name: 'category', text: 'Category', view: true},
@@ -20,7 +21,10 @@ const initialState = {
     {name: 'location', text: 'Location', view: false},
     {name: 'name',     text: 'Item',     view: false}
   ],
-  loading: false
+  sortBy: 'date',
+  selectedRow: null,
+  sortDirection: SortDirection.DESC,
+  selectedExpense: null,
 }
 
 const expenseReducer = (state = initialState, action) => {
@@ -73,7 +77,9 @@ const expenseReducer = (state = initialState, action) => {
     case SORT_EXPENSE:
       return {
         ...state,
-        selectedRow: null
+        selectedRow: null,
+        sortDirection: state.sortDirection === SortDirection.DESC ?
+          SortDirection.ASC : SortDirection.DESC
       }
     default:
       return state;

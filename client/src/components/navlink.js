@@ -1,14 +1,14 @@
 // Import router stuff
 import { Link } from 'react-router-dom';
 // Import style presets
-import { navLinkClasses } from './tailwinds';
+import { navLinkClasses, navIconClasses, navTextClasses } from './tailwinds';
 
 // Set up a nav link that routes to the target with the provided text and icon
-const NavLink = ({target, text, icon}) => {
+const NavLink = ({ target, text, icon, extraClasses, onClick }) => {
   return (
-    <Link className={navLinkClasses} to={target}>
-      <p className="ref ml-0 sm:ml-2 absolute text-lg text-gray-300 no-underline hover:no-underline">{text}</p>
-      <p className="icon absolute text-gray-300">{icon}</p>
+    <Link className={navLinkClasses+extraClasses} to={target} onClick={onClick}>
+      <p className={navTextClasses}>{text}</p>
+      <p className={navIconClasses}>{icon}</p>
     </Link>
   );
 };

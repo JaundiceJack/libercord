@@ -1,42 +1,34 @@
-// Import basic react stuff
-import React, { Component } from 'react';
-// Import state stuff
-import { connect } from 'react-redux';
+// Import basics
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-// Import server actions
-import { getExpenses } from '../../../actions/expenseActions';
 // Import Icons
 import { IoChevronBackCircle, IoChevronForwardCircle } from "react-icons/io5";
 // Import date functions to parse data
 import { isSameMonth, isSameYear } from 'date-fns';
 // Import components
-import MonthTotal from '../summary/monthTotal';
+import MonthTotal        from '../summary/monthTotal';
 // Import style presets
-import { cardContainerClasses, headerTextClasses, hrLeftClasses } from '../../tailwinds';
+import { cardContainerClasses,
+         headerTextClasses,
+         hrLeftClasses } from '../../tailwinds';
+// Import server actions
+import { getExpenses }   from '../../../actions/expenseActions';
 
-// Map the redux state to the component properties
-const mapStateToProps = (state) => ({
-  expense: state.expense
-})
+const ExpenseCard = () => {
+  // Retrieve the user's list of expenses from the server
+  const expenses = useSelector( state => state.expense.expenses );
+  const loading = useSelector( state => state.expense.loading );
 
-class ExpenseCard extends Component {
-  // Check for expense retrieval
-  componentDidMount(){ this.props.getExpenses(); };
-  // Define prop types
-  static propTypes = {
-    getExpenses: PropTypes.func.isRequired,
-    expense: PropTypes.object.isRequired
-  }
+  // TODO: I guess if the user incremented or decremented to exceed int or double vals, they could break it
   // Create a component state to store the displayed year
-  state = {year: 2021}
-
-  incrementYear = () => { this.setState({year: this.state.year + 1 })};
-  decrementYear = () => { this.setState({year: this.state.year - 1 })};
+  const [year, setYear] = useState(2021);
+  const incrementYear = () => { setYear(year + 1) };
+  const decrementYear = () => { setYear(year - 1) };
 
   // Get the expenses total for each given month when they load
-  monthlyTotal = (year, month) => {
-    if (!this.props.expense.loading) {
-      const { expenses } = this.props.expense
+  const monthlyTotal = (year, month) => {
+    if (!loading) {
       const formatted = expenses.map((exp) =>
         { return {date: new Date(exp.date), value: exp.value}; });
       const compareDate = new Date(year, month);
@@ -52,12 +44,11 @@ class ExpenseCard extends Component {
   }
 
   // Get the expenses total for the year once they load
-  yearlyTotal = () => {
-    if (!this.props.expense.loading) {
-      const { expenses } = this.props.expense
+  const yearlyTotal = () => {
+    if (!loading) {
       const formatted = expenses.map((exp) =>
         { return {date: new Date(exp.date), value: exp.value}; });
-      const compareDate = new Date(this.state.year, 0);
+      const compareDate = new Date(year, 0);
       const expInMonth = formatted.filter((exp) =>
         { return isSameYear(compareDate, exp.date); });
       const total = expInMonth
@@ -67,45 +58,45 @@ class ExpenseCard extends Component {
     }
   }
 
-
-  render() {
-    const { expenses } = this.props.expense;
-    return (
-      <div className={cardContainerClasses+"col-span-2 sm:col-span-1"}>
-        <div className="flex flex-row px-2 pt-2 pb-1 justify-center sm:justify-start">
-          <button onClick={this.decrementYear} className="text-blue-300 mx-2" >
-            <IoChevronBackCircle size="30px" /></button>
-          <h2 className={headerTextClasses}>{this.state.year} Expenses</h2>
-          <button onClick={this.incrementYear} className="text-blue-300 mr-2">
-            <IoChevronForwardCircle size="30px" /></button>
-        </div>
-        <div className={hrLeftClasses}></div>
-        <div className="rounded-b-md p-4">
-          <div className="w-full sm:w-3/5">
-            <MonthTotal month="January" total={this.monthlyTotal(this.state.year, 0)} />
-            <MonthTotal month="February" total={this.monthlyTotal(this.state.year, 1)} />
-            <MonthTotal month="March" total={this.monthlyTotal(this.state.year, 2)} />
-            <MonthTotal month="April" total={this.monthlyTotal(this.state.year, 3)} />
-            <MonthTotal month="May" total={this.monthlyTotal(this.state.year, 4)} />
-            <MonthTotal month="June" total={this.monthlyTotal(this.state.year, 5)} />
-            <MonthTotal month="July" total={this.monthlyTotal(this.state.year, 6)} />
-            <MonthTotal month="August" total={this.monthlyTotal(this.state.year, 7)} />
-            <MonthTotal month="September" total={this.monthlyTotal(this.state.year, 8)} />
-            <MonthTotal month="October" total={this.monthlyTotal(this.state.year, 9)} />
-            <MonthTotal month="November" total={this.monthlyTotal(this.state.year, 10)} />
-            <MonthTotal month="December" total={this.monthlyTotal(this.state.year, 11)} />
-            <div className="grid grid-cols-2 gap-3 mt-2">
-              <p className="text-right text-blue-200 font-bold text-xl">
-                {this.state.year} Spending:</p>
-              <p className="text-blue-200 font-bold text-xl">{this.yearlyTotal() || "$0.00"}</p>
-            </div>
-          </div>
-          <div className="col-span-1">
+  return (
+    <div className={cardContainerClasses+"col-span-2 sm:col-span-1"}>
+      <div className="flex flex-row px-2 pt-2 pb-1 justify-center sm:justify-start">
+        <button onClick={decrementYear} className="text-blue-300 mx-2" >
+          <IoChevronBackCircle size="30px" />
+        </button>
+        <h2 className={headerTextClasses}>{year} Expense</h2>
+        <button onClick={incrementYear} className="text-blue-300 mr-2">
+          <IoChevronForwardCircle size="30px" />
+        </button>
+      </div>
+      <div className={hrLeftClasses}></div>
+      <div className="rounded-b-md p-4">
+        <div className="w-full sm:w-3/5">
+          <MonthTotal month="January"   total={monthlyTotal(year, 0)} />
+          <MonthTotal month="February"  total={monthlyTotal(year, 1)} />
+          <MonthTotal month="March"     total={monthlyTotal(year, 2)} />
+          <MonthTotal month="April"     total={monthlyTotal(year, 3)} />
+          <MonthTotal month="May"       total={monthlyTotal(year, 4)} />
+          <MonthTotal month="June"      total={monthlyTotal(year, 5)} />
+          <MonthTotal month="July"      total={monthlyTotal(year, 6)} />
+          <MonthTotal month="August"    total={monthlyTotal(year, 7)} />
+          <MonthTotal month="September" total={monthlyTotal(year, 8)} />
+          <MonthTotal month="October"   total={monthlyTotal(year, 9)} />
+          <MonthTotal month="November"  total={monthlyTotal(year, 10)} />
+          <MonthTotal month="December"  total={monthlyTotal(year, 11)} />
+          <div className="grid grid-cols-2 gap-3 mt-2">
+            <p className="text-right text-blue-200 font-bold text-xl">
+              {year} Expense:</p>
+            <p className="text-blue-200 font-bold text-xl">{yearlyTotal() || "$0.00"}</p>
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 };
 
-export default connect(mapStateToProps, { getExpenses })(ExpenseCard);
+ExpenseCard.propTypes = {
+  expenses: PropTypes.array,
+  loading: PropTypes.bool
+}
+export default ExpenseCard;

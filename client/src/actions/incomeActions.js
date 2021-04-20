@@ -30,7 +30,7 @@ export const sortedIncomes = () => {
 
 // Store the selected income id to locate it later
 export const selectIncome = (income, index) => dispatch => {
-  return dispatch({ type: SELECT_INCOME, payload: {income, index} });
+  dispatch({ type: SELECT_INCOME, payload: {income, index} });
 }
 
 // Edit the selected income with new entries
@@ -46,7 +46,7 @@ export const editIncome = income => (dispatch, getState) => {
 }
 
 // Return all of the user's incomes
-export const getIncomes= () => (dispatch, getState) => {
+export const getIncomes = () => (dispatch, getState) => {
   dispatch(setIncomesLoading());
   // Get the user id
   const user = getState().auth.user;

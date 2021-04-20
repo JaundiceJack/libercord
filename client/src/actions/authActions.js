@@ -7,13 +7,20 @@ import {
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
-  REGISTER_FAIL } from './types';
+  REGISTER_FAIL,
+  CHANGE_PAGE
+} from './types';
 // Import axios to handle http requests
 import axios from 'axios';
 // Import server actions: to report authorization errors
 import { returnErrors } from './errorActions';
 // Import the server route
 import server from './route';
+
+// When routed to a new page, update the current one in the state
+export const changePage = nextPage => dispatch => {
+    dispatch({ type: CHANGE_PAGE, payload: nextPage });
+}
 
 // Check the token and load the user
 export const loadUser = () => (dispatch, getState) => {

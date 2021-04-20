@@ -1,47 +1,37 @@
-// Import basic react stuff
-import React, { Component } from 'react';
-// Import state stuff
-import { connect } from 'react-redux';
+// Import basics
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-// Import server actions
-import { deleteIncome, getIncomes } from '../../../actions/incomeActions';
 // Import style presets
 import { buttonClasses } from '../../tailwinds';
+// Import server actions
+import { deleteIncome }  from '../../../actions/incomeActions';
 
-// Map the redux state to the component properties
-const mapStateToProps = (state) => ({
-  income: state.income
-})
-
-class DeleteIncome extends Component {
-  // Check for income retrieval
-  componentDidMount(){ this.props.getIncomes();  };
-  // Define prop types
-  static propTypes = {
-    getIncomes: PropTypes.func.isRequired,
-    deleteIncome: PropTypes.func,
-    income: PropTypes.object.isRequired
-  }
-
-  // Prevent default submission and create the new income
-  onDelete = (e) => {
+const DeleteIncome = ({toggleDelete}) => {
+  // Make a dispatch to access the redux actions
+  const dispatch = useDispatch();
+  // Get the selected item's ID from the store
+  const selectedId = useSelector(state => state.income.selectedIncome._id)
+  // Delete the item once confirmed
+  const onDelete = (e) => {
     e.preventDefault();
-    // TODO: if no income is selected, indicate
-    this.props.deleteIncome(this.props.income.selectedIncome._id);
+    dispatch(deleteIncome(selectedId));
     // Hide the form on submission
-    this.props.toggleDelete();
+    toggleDelete();
   };
 
+  return (
+    <button type="button"
+            onClick={onDelete}
+            className={buttonClasses+"mt-6 border-red-500 text-red-100"}>
+      Delete Income
+    </button>
+  );
 
-  render() {
-    return (
-      <button type="button"
-              onClick={this.onDelete}
-              className={buttonClasses+"mt-6 border-red-500 text-red-100"}>
-        Delete Income
-      </button>
-    );
-  }
 };
 
-export default connect(mapStateToProps, { getIncomes, deleteIncome })(DeleteIncome);
+DeleteIncome.propTypes = {
+  deleteIncome: PropTypes.func,
+  selectedId:   PropTypes.string,
+  toggleDelete: PropTypes.func
+}
+export default DeleteIncome;

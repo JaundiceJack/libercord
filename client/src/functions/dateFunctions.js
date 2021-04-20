@@ -21,6 +21,8 @@ export function inputDate(rawDate) {
   return  year + "-" + month + "-" + day;
 }
 
+// Return the given date in a short presentable format
+// TODO: replace this with the twitter-date-format
 export function formatDate(rawDate) {
   const date = new Date(rawDate)
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

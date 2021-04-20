@@ -7,8 +7,7 @@
 // background
 // hover & focus effects
 
-export const navLinkClasses =
-  " relative flex items-center justify-center cursor-pointer link ";
+
 
 export const accountFormClasses =
   " flex flex-col mb-3 justify-items-center " +
@@ -22,7 +21,9 @@ export const submitClasses =
   " hover:text-green-400 hover:border-blue-400 " +
   " hover:bg-gradient-to-tl hover:from-gray-700 hover:to-gray-900 ";
 
-
+export const fancyText =
+  " bg-clip-text text-transparent font-semibold " +
+  " bg-gradient-to-b from-gray-100 to-blue-400 ";
 
 
 
@@ -36,6 +37,23 @@ export const mainClasses =
   " flex-1 flex flex-col md:flex-row mx-auto " +
   " rounded " +
   " bg-gradient-to-br from-black via-black to-gray-900 ";
+
+// Nav Classes
+export const navClasses =
+  " flex flex-row md:flex-col sticky top-0 sm:h-screen z-50 " +
+  " bg-black rounded-bl rounded-b-lg sm:rounded-none "
+export const navLinkClasses =
+  " relative flex group items-center justify-center " +
+  " border-t-4 sm:border-t-0 border-l-0 sm:border-l-4 border-black hover:border-blue-400 " +
+  " h-16 w-20 cursor-pointer ";
+export const navIconClasses =
+  " absolute opacity-1 group-hover:opacity-0 text-gray-300 " +
+  " transition delay-150 duration-300 ease-in-out ";
+export const navTextClasses =
+  " absolute opacity-0 group-hover:opacity-100 ml-0 sm:ml-2 " +
+  " text-gray-300 text-lg no-underline hover:no-underline " +
+  " transition delay-75 duration-300 ease-in-out ";
+
 
 // Card Classes
 export const cardContainerClasses =
@@ -70,9 +88,9 @@ export const tableFormContainerClasses =
   " bg-gradient-to-br from-gray-700 to-gray-500 ";
 export const labelClasses =
   " px-3 py-2 " +
-  " font-bold font-medium text-sm text-gray-900 " +
+  " font-bold font-medium text-sm text-blue-100 " +
   " rounded-l-xl " +
-  " bg-gradient-to-br from-gray-100 to-gray-200 ";
+  " bg-gradient-to-b from-gray-700 via-gray-800 to-gray-700 ";
 export const inputClasses =
   " text-gray-600  " +
   " rounded-xl " +

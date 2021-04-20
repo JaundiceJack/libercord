@@ -6,7 +6,8 @@ LOGIN_SUCCESS,
 LOGIN_FAIL,
 LOGOUT_SUCCESS,
 REGISTER_SUCCESS,
-REGISTER_FAIL
+REGISTER_FAIL,
+CHANGE_PAGE
 } from '../actions/types'
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   isAuthenticated: null,
   isLoading: false,
   user: null,
+  currentPage: 'home'
 }
 
 const authReducer = (state = initialState, action) => {
@@ -37,7 +39,8 @@ const authReducer = (state = initialState, action) => {
         ...state,
         ...action.payload,
         isAuthenticated: true,
-        isLoading: false
+        isLoading: false,
+        currentPage: 'manage'
       };
     case LOGIN_FAIL:
     case LOGOUT_SUCCESS:
@@ -49,8 +52,14 @@ const authReducer = (state = initialState, action) => {
         token: null,
         user: null,
         isAuthenticated: false,
-        isLoading: false
+        isLoading: false,
+        currentPage: 'home'
       };
+    case CHANGE_PAGE:
+      return {
+        ...state,
+        currentPage: action.payload
+      }
     default:
       return state;
   }
