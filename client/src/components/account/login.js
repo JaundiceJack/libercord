@@ -16,6 +16,7 @@ const Login = () => {
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
   const isAuthenticated         = useSelector( state => state.auth.isAuthenticated );
+  const error                   = useSelector( state => state.errror );
 
   // On form submission, attempt to log in
   const dispatch = useDispatch();

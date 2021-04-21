@@ -63,7 +63,7 @@ const IncomeOptions = ( ) => {
                        toggle={editing}        onToggle={onEdit}
                        extraClasses={!editing && "mt-4"}  />
         }
-        {editing && <EditIncome /> }
+        {editing && <EditIncome toggleEdit={onEdit}/> }
 
         {/* Delete Selected Income */}
         {!adding && !editCols && !editing &&

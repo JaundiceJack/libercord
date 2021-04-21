@@ -6,6 +6,18 @@ const auth = require('../../middleware/auth');
 // Import the Asset Model
 const Asset = require('../../models/Asset');
 
+//1. Import coingecko-api
+//const CoinGecko = require('coingecko-api');
+
+//2. Initiate the CoinGecko API Client
+//const CoinGeckoClient = new CoinGecko();
+
+//3. Make calls
+//var func = async() => {
+//  let data = await CoinGeckoClient.ping();
+//};
+
+
 // Route:  GET api/assets
 // Desc:   get all of the user's assets
 // Access: private

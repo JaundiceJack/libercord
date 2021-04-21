@@ -65,7 +65,7 @@ const ExpenseOptions = ( ) => {
                        toggle={editing}        onToggle={onEdit}
                        extraClasses={!editing && "mt-4"} />
         }
-        {editing && <EditExpense /> }
+        {editing && <EditExpense toggleEdit={onEdit}/> }
 
         {/* Delete Selected Expense */}
         {!adding && !editCols && !editing &&
