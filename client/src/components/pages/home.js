@@ -12,6 +12,8 @@ const Home = () => {
   const introTextClasses = " font-libre " +
   " bg-clip-text text-transparent bg-gradient-to-b from-gray-100 to-blue-400 "
 
+  //
+
   return (
     <div className="grid grid-cols-2 gap-4 p-0 sm:p-2">
       {/* Introductory Image */}
