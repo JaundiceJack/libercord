@@ -76,7 +76,7 @@ const TableInst = ({
                     disableSort={false}
                     headerRenderer={({ dataKey, sortBy, sortDirection }) => {
                       return (
-                        <div className="flex flex-row cursor-pointer select-none">
+                        <div className="flex flex-row cursor-pointer select-none font-jose">
                           {col.text}
                           {sortBy === dataKey && <SortIndicator sortDirection={sortDirection} />}
                         </div>

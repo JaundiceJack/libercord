@@ -1,6 +1,6 @@
 import { labelClasses, inputClasses } from '../tailwinds';
 
-const CurrencyEntry = ({text, id, value, onChange}) => {
+const CurrencyEntry = ({text, id, value, onChange, required = false}) => {
   return (
     <div className="flex flex-row my-2">
       <label className={labelClasses+"self-center"} for={id}>{text}:</label>
@@ -11,7 +11,8 @@ const CurrencyEntry = ({text, id, value, onChange}) => {
              min="0"
              step="0.01"
              value={value}
-             onChange={onChange}/>
+             onChange={onChange}
+             required={required}/>
     </div>
   )
 }

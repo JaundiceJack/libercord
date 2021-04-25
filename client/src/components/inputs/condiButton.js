@@ -13,7 +13,7 @@ const CondiButton = ({
               buttonClasses + onClasses :
               buttonClasses + offClasses }
             onClick={onToggle}>
-      {toggle ? onText : offText}
+      <p className="font-jose">{toggle ? onText : offText}</p>
     </button>
   )
 }

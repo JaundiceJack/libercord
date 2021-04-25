@@ -33,7 +33,7 @@ export const loadUser = () => (dispatch, getState) => {
     dispatch({ type: USER_LOADED, payload: res.data })})
   .catch(err => {
     // If unsuccessful, put the errors in the current state
-    if (err.response) dispatch(returnErrors(err.response.data, err.response.status));
+    dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: AUTH_ERROR }) });
 }
 
@@ -50,7 +50,7 @@ export const register = ({ name, email, password }) => dispatch => {
     dispatch({ type: REGISTER_SUCCESS, payload: res.data });
   }).catch(err => {
     // If unsuccessful, put the errors in the current state
-    if (err.response) dispatch(returnErrors(err.response.data, err.response.status, 'REGISTER_FAIL'));
+    dispatch(returnErrors(err.response.data, err.response.status, 'REGISTER_FAIL'));
     dispatch({ type: REGISTER_FAIL });
   });
 }
@@ -68,7 +68,7 @@ export const login = ({ email, password }) => dispatch => {
     dispatch({ type: LOGIN_SUCCESS, payload: res.data });
   }).catch(err => {
     // If unsuccessful, put the errors in the current state
-    if (err.response) dispatch(returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL'));
+    dispatch(returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL'));
     dispatch({ type: LOGIN_FAIL });
   });
 }

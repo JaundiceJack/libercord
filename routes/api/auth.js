@@ -23,11 +23,11 @@ router.post('/', (req, res) => {
   // Check for the user by email
   User.findOne({ email })
   .then(user => {
-    if(!user) return res.status(400).json({msg: "User not found."});
+    if(!user) return res.status(401).json({msg: "Incorrect email or password."});
     // Compare the entered password to the stored one
     bcrypt.compare(password, user.password)
     .then(isMatch => {
-      if (!isMatch) return res.status(400).json({msg: "Incorrect password."});
+      if (!isMatch) return res.status(401).json({msg: "Incorrect email or password."});
       // Sign a web token for continued access
       jwt.sign({id: user.id}, jwtk, {expiresIn: 3600},
         (err, token) => {

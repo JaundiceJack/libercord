@@ -5,8 +5,6 @@ import store from './store';
 import {Provider} from 'react-redux';
 // Import routing stuff
 import { BrowserRouter } from 'react-router-dom';
-// Import server actions
-import { loadUser } from './actions/authActions';
 // Import components
 import Nav    from './components/nav';
 import Routes from './components/routes';
@@ -14,11 +12,6 @@ import Routes from './components/routes';
 import { mainClasses } from './components/tailwinds';
 
 class App extends Component {
-  // Load the user when the app loads
-  componentDidMount() {
-    store.dispatch(loadUser());
-  }
-
   render() {
     return (
       // Get the state from the store and provide it to the rest of the app

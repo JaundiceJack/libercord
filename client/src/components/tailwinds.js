@@ -13,16 +13,10 @@ export const accountFormClasses =
   " flex flex-col mb-3 justify-items-center " +
   " rounded-md bg-gradient-to-bl from-gray-900 to-gray-700 ";
 
-export const submitClasses =
-  " flex flex-row items-center justify-center p-4 w-full " +
-  " font-bold font-medium text-sm text-green-500 " +
-  " rounded-xl border-l border-green-400 cursor-pointer " +
-  " bg-gradient-to-br from-gray-900 to-gray-700 " +
-  " hover:text-green-400 hover:border-blue-400 " +
-  " hover:bg-gradient-to-tl hover:from-gray-700 hover:to-gray-900 ";
+
 
 export const fancyText =
-  " bg-clip-text text-transparent font-semibold " +
+  " bg-clip-text text-transparent font-semibold font-jose " +
   " bg-gradient-to-b from-gray-100 to-blue-400 ";
 
 
@@ -48,7 +42,7 @@ export const navLinkClasses =
   " h-16 w-20 cursor-pointer ";
 export const navIconClasses =
   " absolute opacity-1 group-hover:opacity-0 text-gray-300 " +
-  " transition delay-150 duration-300 ease-in-out ";
+  " transition duration-300 ease-in-out ";
 export const navTextClasses =
   " absolute opacity-0 group-hover:opacity-100 ml-0 sm:ml-2 " +
   " text-gray-300 text-lg no-underline hover:no-underline " +
@@ -60,7 +54,7 @@ export const cardContainerClasses =
   " rounded-xl border-l border-gray-700 " +
   " bg-gradient-to-br from-gray-900 to-black ";
 export const headerTextClasses =
-  " bg-clip-text text-transparent font-semibold text-2xl " +
+  " bg-clip-text text-transparent font-semibold text-2xl font-jose " +
   " bg-gradient-to-b from-gray-100 to-blue-400 ";
 export const hrLeftClasses =
   " h-px w-full bg-gradient-to-r from-yellow-600 to-transparent ";
@@ -107,3 +101,17 @@ export const buttonClasses =
   " bg-gradient-to-br from-black to-gray-700 " +
   " hover:bg-gradient-to-tl hover:from-gray-700 hover:to-black " +
   " focus:outline-none ";
+export const submitClasses =
+  " flex flex-row items-center justify-center p-4 w-full " +
+  " font-bold font-jose text-sm text-green-500 " +
+  " rounded-xl border-l border-green-400 cursor-pointer " +
+  " bg-gradient-to-br from-gray-900 to-gray-700 " +
+  " hover:text-green-400 hover:border-blue-400 " +
+  " hover:bg-gradient-to-tl hover:from-gray-700 hover:to-gray-900 focus:outline-none ";
+
+export const errorMsgClasses =
+  " px-3 py-2 mb-2 " +
+  " font-semibold text-white " +
+  " rounded-xl border-l border-gray-500 " +
+  " bg-gradient-to-tl from-red-900 to-gray-900  " +
+  " fadeError  "

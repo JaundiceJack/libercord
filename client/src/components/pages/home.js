@@ -9,18 +9,19 @@ import { IoSpeedometerOutline } from 'react-icons/io5';
 import { BiTimer } from 'react-icons/bi';
 
 const Home = () => {
+  const introTextClasses = " font-libre " +
+  " bg-clip-text text-transparent bg-gradient-to-b from-gray-100 to-blue-400 "
+
   return (
     <div className="grid grid-cols-2 gap-4 p-0 sm:p-2">
       {/* Introductory Image */}
       <div className="col-span-2 relative">
         <img className="rounded-lg" src={hero} alt="Bitcoin & Gold"></img>
         <div className="sm:absolute sm:top-5 mb-2 sm:mb-0 mt-4 sm:mt-0 pl-6 flex flex-col text-center sm:text-left">
-          <span className="mb-1 text-5xl font-serif font-extrabold bg-clip-text text-transparent \
-           bg-gradient-to-b from-gray-100 to-blue-400">
+          <span className={introTextClasses+"text-5xl font-extrabold mb-2"}>
             LiberCrypt
           </span>
-          <span className="text-2xl font-serif font-bold bg-clip-text text-transparent \
-           bg-gradient-to-b from-gray-100 to-blue-400">
+          <span className={introTextClasses+"text-2xl font-bold"}>
             Liberty through finance.
           </span>
         </div>

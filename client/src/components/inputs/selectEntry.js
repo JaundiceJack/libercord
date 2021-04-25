@@ -1,6 +1,6 @@
 import { selectClasses, labelClasses, inputClasses } from '../tailwinds';
 
-const SelectEntry = ({text, id, value, onChange, options}) => {
+const SelectEntry = ({text, id, value, onChange, options, required = false}) => {
   return (
     <div className="flex flex-row my-2">
       <label className={labelClasses+"self-center"} for={id}>{text}:</label>
@@ -20,7 +20,8 @@ const SelectEntry = ({text, id, value, onChange, options}) => {
                 name={id}
                 className={selectClasses+"rounded-l-none"}
                 value={value}
-                onChange={onChange}>
+                onChange={onChange}
+                required={required}>
           {options.map((option) => {
             return <option value={option}>{option}</option>
           })}

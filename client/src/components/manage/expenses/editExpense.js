@@ -11,66 +11,90 @@ import DateEntry         from '../../inputs/dateEntry';
 import OptionalTextEntry from '../../inputs/optionalTextEntry';
 // Import style presets
 import { submitClasses,
-         fancyText }     from '../../tailwinds';
+         fancyText,
+         errorMsgClasses}from '../../tailwinds';
 // Import server actions
 import { editExpense }   from '../../../actions/expenseActions';
 // Import a date formatter
 import { inputDate }     from '../../../functions/dateFunctions';
 
 const EditExpense = ({ toggleEdit }) => {
-  // Make a dispatch to access redux actions
-  const dispatch = useDispatch();
   // Get the selected expense and selectable categories from the store
   const selected   = useSelector( state => state.expense.selectedExpense );
   const categories = useSelector( state => state.expense.categories );
+  // Set internal component state variables
+  const [id,         setId]         = useState(selected._id);
+  const [category,   setCategory]   = useState(selected.category);
+  const [value,      setValue]      = useState(selected.value);
+  const [name,       setName]       = useState(selected.name);
+  const [location,   setLocation]   = useState(selected.location);
+  const [date,       setDate]       = useState(inputDate(selected.date));
+  const [addName,    setAddName]    = useState(selected.name     ? true : false);
+  const [addLoc,     setAddLoc]     = useState(selected.location ? true : false);
+  const [badEntries, setBadEntries] = useState([]);
 
-  // Update the entries if a new expense item is selected
+  // Update the entries when a new item is selected
   const updateTimer = useRef(null);
-  function setUpdate() {
-    const nextSelect = selected;
-    setId(nextSelect._id);
-    setCategory(nextSelect.category);
-    setValue(nextSelect.value);
-    setName(nextSelect.name);
-    setLocation(nextSelect.location);
-    setDate(inputDate(nextSelect.date));
-    setAddName(nextSelect.name ? true : false);
-    setAddLoc(nextSelect.location ? true : false);
+  const setUpdate   = () => {
+    setId(      selected._id);
+    setCategory(selected.category);
+    setValue(   selected.value);
+    setName(    selected.name);
+    setLocation(selected.location);
+    setDate(
+      inputDate(selected.date));
+    setAddName( selected.name ? true : false);
+    setAddLoc(  selected.location ? true : false);
   	updateTimer.current = setTimeout(() => {
       updateTimer.current = null; }, 100);
   }
+  // Clear errors after 5 seconds
+  const clearTimer = useRef(null);
+  const setClear = () => {
+    clearTimer.current = setTimeout(() => {
+      setBadEntries([]);
+      clearTimer.current = null; }, 5000);
+  }
+  // Update the selected properties on render
   useEffect(() => { !updateTimer.current && setUpdate() }, [selected]);
-  useEffect(() => { return () =>
-    { updateTimer.current && clearTimeout(updateTimer.current); }; }, []);
+  // Clear timers on unmount to prevent memory leaks
+  useEffect(() => {
+    return ()  => {
+      clearTimer.current  && clearTimeout(clearTimer.current)
+      updateTimer.current && clearTimeout(updateTimer.current)}}, []);
 
-  // Set internal component state variables
-  const [id,       setId]       = useState(selected._id);
-  const [category, setCategory] = useState(selected.category);
-  const [value,    setValue]    = useState(selected.value);
-  const [name,     setName]     = useState(selected.name);
-  const [location, setLocation] = useState(selected.location);
-  const [date,     setDate]     = useState(inputDate(selected.date));
-  const [addName,  setAddName]  = useState(selected.name ? true : false);
-  const [addLoc,   setAddLoc]   = useState(selected.location ? true : false);
-
-  // Prevent default submission and create the new expense
+  // Edit the selected expense with the new entries
+  const dispatch = useDispatch();
   const onSubmit = (e) => {
     e.preventDefault();
     // Validate entries
+    let errs = []
+    if (category === "" || category === null)
+      errs.push("Please select a category");
+    if ( typeof value === 'number' )
+      errs.push("Amount paid must be a number.");
+    if ( value === "" || value === null )
+      errs.push("Please enter an amount paid.")
+    if (date instanceof Date && !isNaN(date.valueOf()))
+      errs.push("Please enter a valid date.");
+    setBadEntries(errs);
 
     // Edit the item with the new entries
-    const edits = {
-      _id:      id,
-      category: category,
-      name:     name,
-      location: location,
-      value:    value,
-      date:     date + ' 00:00:00'
+    if (errs.length === 0 && !clearTimer.current) {
+      const edits = {
+        _id:      id,
+        category: category,
+        name:     name,
+        location: location,
+        value:    value,
+        date:     date + ' 00:00:00'
+      }
+      dispatch(editExpense(edits));
     }
-    // Send the item to the server/state to be added
-    dispatch(editExpense(edits));
+
     // Hide the form on submission
-    toggleEdit();
+    errs.length !== 0 && !clearTimer.current ?
+      setClear() : toggleEdit();
   };
 
   return (
@@ -79,13 +103,13 @@ const EditExpense = ({ toggleEdit }) => {
       <SelectEntry id="category" text="Type"
                    value   ={category}
                    onChange={e => setCategory(e.target.value)}
-                   options ={categories} />
+                   options ={categories} required={true} />
       <CurrencyEntry id="value" text="Paid"
                      value   ={value}
-                     onChange={e => setValue(e.target.value)} />
+                     onChange={e => setValue(e.target.value)} required={true} />
       <DateEntry id="date" text="Date"
                  value   ={date}
-                 onChange={e => setDate(e.target.value)} />
+                 onChange={e => setDate(e.target.value)} required={true} />
       <OptionalTextEntry id="name" onText="Name" offText ="Name"
                         value   ={name}
                         toggle  ={addName}
@@ -96,10 +120,11 @@ const EditExpense = ({ toggleEdit }) => {
                          toggle  ={addLoc}
                          onToggle={() => setAddLoc(!addLoc)}
                          onChange={e => setLocation(e.target.value)} />
+      { badEntries.map(err => <div className={errorMsgClasses}>{err}</div> )  }
       <div className="mb-4"></div>
       <button type="submit" className={submitClasses}>
         <GiCheckMark />
-        <p className="ml-2">Save Changes</p>
+        <p className="ml-2 mt-1 font-jose text-base ">Save Changes</p>
       </button>
     </form>
   );

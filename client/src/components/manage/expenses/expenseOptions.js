@@ -1,6 +1,6 @@
 // Import basics
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import icons
 import { BiColumns } from 'react-icons/bi';
@@ -13,18 +13,30 @@ import CondiButton            from '../../inputs/condiButton';
 // Import style presets
 import { buttonClasses,
          cardContainerClasses,
-         fancyText }          from '../../tailwinds';
+         fancyText,
+         errorMsgClasses }    from '../../tailwinds';
+// Import server actions
+import { clearErrors }        from '../../../actions/errorActions';
 
 const ExpenseOptions = ( ) => {
   // Get the selected row from the store
   const selectedRow = useSelector( state => state.expense.selectedRow );
-
+  const serverError = useSelector( state => state.error.msg.msg );
   // Set the internal component states
   const [adding,        setAdding]        = useState(false);
   const [editing,       setEditing]       = useState(false);
   const [deleting,      setDeleting]      = useState(false);
   const [editCols,      setEditCols]      = useState(false);
   const [editSelection, setEditSelection] = useState(false);
+
+  // Update errors from the server
+  const dispatch = useDispatch();
+  const updateTimer = useRef(null);
+  const setUpdate = () => { updateTimer.current = setTimeout(() => {
+    dispatch(clearErrors());
+    updateTimer.current = null; }, 5000);
+  }
+  useEffect(() => { !updateTimer.current && setUpdate() }, [serverError]);
 
   // When a button is clicked, set the corresponding state
   const onAdd     = () => setAdding(!adding);
@@ -59,7 +71,7 @@ const ExpenseOptions = ( ) => {
         {editCols && <ExpenseColumnSelection /> }
 
         {/* Edit Selected Expense */}
-        {!adding && !editCols && !deleting &&
+        {!adding && !editCols && !deleting && selectedRow !== null && selectedRow !== undefined &&
           <CondiButton onText="Cancel"         onColor="red"
                        offText="Edit Selected" offColor="blue"
                        toggle={editing}        onToggle={onEdit}
@@ -68,16 +80,18 @@ const ExpenseOptions = ( ) => {
         {editing && <EditExpense toggleEdit={onEdit}/> }
 
         {/* Delete Selected Expense */}
-        {!adding && !editCols && !editing &&
+        {!adding && !editCols && !editing && selectedRow !== null && selectedRow !== undefined &&
           <div>
             {deleting && <p className={fancyText+"mb-4 text-left"}>Are you sure you want to delete the selected expense?</p>}
             <CondiButton onText="Cancel"           onColor="blue"
                          offText="Delete Selected" offColor="red"
                          toggle={deleting}         onToggle={onDelete}
-                         extraClasses="w-full" />
+                         extraClasses="w-full"/>
           </div>
         }
         {deleting && <DeleteExpense toggleDelete={onDelete} /> }
+
+        { serverError && <div className={errorMsgClasses}> {serverError} </div> }
       </div>
     </div>
   );

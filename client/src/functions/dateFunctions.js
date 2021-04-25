@@ -27,10 +27,10 @@ export function formatDate(rawDate) {
   const date = new Date(rawDate)
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   let day = date.getDate(),
-      month = months[date.getMonth()],
+      month = date.getMonth()+1,
       year = date.getFullYear();
   month = (month < 10 ? "0" : "") + month;
   day   = (day < 10 ? "0" : "") + day;
 
-  return month + " - " + day;
+  return month + "/" + day + "/" + year;
 }

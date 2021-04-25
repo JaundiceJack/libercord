@@ -1,11 +1,12 @@
 // Import basics
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import router stuff
 import { Redirect } from 'react-router-dom';
 // Import server actions
 import { register } from '../../actions/authActions';
+import { clearErrors } from '../../actions/errorActions';
 // Import components
 import TextEntry from '../inputs/textEntry';
 // Import style presets
@@ -13,34 +14,58 @@ import {
   submitClasses,
   cardContainerClasses,
   headerTextClasses,
-  hrCenterClasses } from '../tailwinds';
+  hrCenterClasses, errorMsgClasses } from '../tailwinds';
 
 
 const CreateAccount = () => {
   // Initialize the component's state for each form field
-  const [name, setName]         = useState("");
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm]   = useState("");
-  const [typos, setTypos]       = useState([]);
+  const [badEntries, setBadEntries] = useState([]);
   // Get the authentication state and submission errors
   const isAuthenticated = useSelector( state => state.auth.isAuthenticated );
-  const error           = useSelector( state => state.error );
+  const errorMsg           = useSelector( state => state.error.msg.msg );
+
+  // Clear the badEntries after the timer runs out
+  const dispatch = useDispatch();
+  const updateTimer = useRef(null);
+  const setUpdate = () => { updateTimer.current = setTimeout(() => {
+    dispatch(clearErrors());
+    setBadEntries([]);
+    updateTimer.current = null; }, 5000);
+  }
+  // Update errors from the server
+  useEffect(() => { !updateTimer.current && setUpdate() }, [errorMsg]);
+  // Clear the timer on unmount
+  useEffect(() => { return () => {
+    updateTimer.current && clearTimeout(updateTimer.current); }; }, []);
 
   // On form submission, attempt to create a new user
-  const dispatch = useDispatch();
   const onSubmit = e => {
     e.preventDefault();
     // Validate entries
-
+    let errs = [];
+    if (email === "" || email === null)
+      errs.push("Please enter a valid email address.");
+    if (password === "" || password === null)
+      errs.push("Please enter a password.");
+    if (password.length > 0 && password.length < 8)
+      errs.push("Passwords must be at least 8 characters in length.");
+    if (password !== confirm)
+      errs.push("Password and password confirmation do not match.");
+    setBadEntries(errs);
 
     // Register the new user
-    const newUser = {
-      name:     name,
-      email:    email,
-      password: password
-    };
-    dispatch(register(newUser));
+    if (errs.length === 0) {
+      const newUser = {
+        email:    email,
+        password: password
+      };
+      dispatch(register(newUser));
+    }
+    // If there were entry errors, display them for 5 seconds
+    else { !updateTimer.current && setUpdate(); }
   }
 
   return (
@@ -53,14 +78,14 @@ const CreateAccount = () => {
         </div>
         <div className={hrCenterClasses}></div>
         <div className="p-4 grid gap-2">
-          <TextEntry id="name"     text="Username"
-                     onChange={e => setName(e.target.value)} />
           <TextEntry id="email"    text="Email"
                      onChange={e => setEmail(e.target.value)} type="email" />
           <TextEntry id="password" text="Password"
                      onChange={e => setPassword(e.target.value)} type="password" />
           <TextEntry id="confirm"  text="Confirm Password"
                      onChange={e => setConfirm(e.target.value)} type="password" />
+          { badEntries.map(err => <div className={errorMsgClasses}>{err}</div> )  }
+          { errorMsg && <div className={errorMsgClasses}> {errorMsg} </div> }
           <button className={submitClasses+"mt-4"} type="submit">
             <p className="">Create</p>
           </button>

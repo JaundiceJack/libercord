@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 // Import router stuff
 import { Redirect } from 'react-router-dom';
 // Import server actions
+import { loadUser }       from '../../actions/authActions';
 import { getIncomes }     from '../../actions/incomeActions';
 import { getExpenses }    from '../../actions/expenseActions';
 import { getAssets }      from '../../actions/assetActions';
@@ -30,6 +31,7 @@ const Manage = () => {
   const updateTimer = useRef(null);
   const dispatch = useDispatch();
   const setUpdate = () => {
+    dispatch(loadUser());
     dispatch(getIncomes());
     dispatch(getExpenses());
     dispatch(getAssets());
