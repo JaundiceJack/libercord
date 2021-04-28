@@ -1,15 +1,17 @@
-import { cardContainerClasses, headerTextClasses, hrCenterClasses } from '../tailwinds';
+import { cardContainerClasses, headerTextClasses, hrLeftClasses } from '../tailwinds';
 
 const FeatureCard = ({header, text, icon}) => {
   return (
-    <div className={cardContainerClasses}>
-      <div className="rounded-t-lg p-2 shadow-2xl">
+    <div className={cardContainerClasses+"h-full"}>
+      <div className="flex flex-row items-end rounded-t-lg py-2 px-4 shadow-2xl">
+        <p className=" mr-4">{icon}</p>
         <h2 className={headerTextClasses}>{header}</h2>
+
       </div>
-      <div className={hrCenterClasses}></div>
-      <div className="p-4 rounded-b-md">
-        <p className="float-left mr-4">{icon}</p>
-        <p className="text-left text-blue-100 font-bold">{text}</p>
+      <div className={hrLeftClasses}></div>
+      <div className="py-4 px-12 rounded-b-md">
+
+        <p className="text-left text-blue-100 font-jose">{text}</p>
       </div>
     </div>
   );

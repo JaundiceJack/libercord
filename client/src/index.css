@@ -2,8 +2,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
 @import url('https://fonts.googleapis.com/css?family=Libre+Baskerville');
+
 
 .font-libre { font-family: 'Libre Baskerville'; }
 .font-jose { font-family: 'Josefin Sans'; }

@@ -4,7 +4,7 @@ import { fancyText } from './tailwinds';
 import { FaRegCopyright } from 'react-icons/fa';
 
 const Footer = () => {
-  const footerClasses = "flex flex-row items-center justify-center";
+  const footerClasses = "flex flex-row pt-4 items-center justify-center";
 
   return (
     <footer className={fancyText + footerClasses}>

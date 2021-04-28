@@ -69,7 +69,7 @@ const CreateAccount = () => {
   }
 
   return (
-    <section className="mt-6 flex flex-col items-center mb-6">
+    <section className="mt-6 flex items-center justify-center mb-6 h-full">
       <form className={cardContainerClasses + "w-full sm:w-1/2"} onSubmit={onSubmit}>
         <div className="rounded-t-lg p-2 shadow-2xl">
           <h2 className={headerTextClasses+"text-center"}>

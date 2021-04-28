@@ -46,16 +46,16 @@ export const navIconClasses =
 export const navTextClasses =
   " absolute opacity-0 group-hover:opacity-100 ml-0 sm:ml-2 " +
   " text-gray-300 text-lg no-underline hover:no-underline " +
-  " transition delay-75 duration-300 ease-in-out ";
+  " transition duration-300 ease-in-out ";
 
 
 // Card Classes
 export const cardContainerClasses =
-  " rounded-xl border-l border-gray-700 " +
-  " bg-gradient-to-br from-gray-900 to-black ";
+  " rounded-xl border-l border-gray-800 " +
+  " bg-gradient-to-br from-transparent to-gray-900 ";
 export const headerTextClasses =
-  " bg-clip-text text-transparent font-semibold text-2xl font-jose " +
-  " bg-gradient-to-b from-gray-100 to-blue-400 ";
+  " font-semibold text-xl font-jose " +
+  " text-blue-200 ";
 export const hrLeftClasses =
   " h-px w-full bg-gradient-to-r from-yellow-600 to-transparent ";
 export const hrCenterClasses =
