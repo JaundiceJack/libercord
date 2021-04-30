@@ -86,7 +86,7 @@ const Manage = () => {
           }
           {/* Redirect to the homepage if the user is no longer authenticated */}
         </section> :
-        <Redirect to="/" />
+        <Redirect to="/login" />
       }
     </div>
   );

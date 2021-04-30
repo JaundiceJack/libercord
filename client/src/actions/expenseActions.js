@@ -24,8 +24,9 @@ export const getExpenses = () => (dispatch, getState) => {
   // Get the user id
   const user = getState().auth.user;
   if (user) {
+    const user_id = user.id || user._id;
     // Create an authorization token and get the expenses
-    axios.get(`${server}/api/expenses/${user.id}`, tokenConfig(getState))
+    axios.get(`${server}/api/expenses/${user_id}`, tokenConfig(getState))
     .then(res => dispatch({ type: GET_EXPENSES, payload: res.data }))
     .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
   }

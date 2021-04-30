@@ -49,9 +49,9 @@ const ExpenseCard = () => {
       const formatted = expenses.map((exp) =>
         { return {date: new Date(exp.date), value: exp.value}; });
       const compareDate = new Date(year, 0);
-      const expInMonth = formatted.filter((exp) =>
+      const expInYear = formatted.filter((exp) =>
         { return isSameYear(compareDate, exp.date); });
-      const total = expInMonth
+      const total = expInYear
             .reduce((total, datum) => datum.value + total, 0)
             .toFixed(2);
       return "$" + Intl.NumberFormat().format(total);
@@ -59,17 +59,17 @@ const ExpenseCard = () => {
   }
 
   return (
-    <div className={cardContainerClasses+"col-span-2 sm:col-span-1"}>
+    <div className={cardContainerClasses+"col-span-3 sm:col-span-1"}>
       <div className="flex flex-row px-2 pt-2 pb-1 justify-center sm:justify-start">
         <button onClick={decrementYear} className="text-blue-300 mx-2" >
           <IoChevronBackCircle size="30px" />
         </button>
-        <h2 className={headerTextClasses}>{year} Expense</h2>
-        <button onClick={incrementYear} className="text-blue-300 mr-2">
+        <h2 className={headerTextClasses}>{year} Expenses</h2>
+        <button onClick={incrementYear} className="text-blue-300 ml-2">
           <IoChevronForwardCircle size="30px" />
         </button>
       </div>
-      <div className={hrLeftClasses}></div>
+      <div className=" h-px w-full bg-gradient-to-r from-red-600 to-transparent "></div>
       <div className="rounded-b-md p-4">
         <div className="w-full sm:w-3/5">
           <MonthTotal month="January"   total={monthlyTotal(year, 0)} />
@@ -86,8 +86,8 @@ const ExpenseCard = () => {
           <MonthTotal month="December"  total={monthlyTotal(year, 11)} />
           <div className="grid grid-cols-2 gap-3 mt-2">
             <p className="text-right text-blue-200 font-bold text-xl">
-              {year} Expense:</p>
-            <p className="text-blue-200 font-bold text-xl">{yearlyTotal() || "$0.00"}</p>
+              {year} Expenses:</p>
+            <p className="text-blue-200 font-bold text-xl self-end">{yearlyTotal() || "$0.00"}</p>
           </div>
         </div>
       </div>

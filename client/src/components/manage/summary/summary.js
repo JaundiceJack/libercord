@@ -13,11 +13,12 @@ const Summary = () => {
   const assets      = useSelector( state => state.asset.assets );
   const liabilities = useSelector( state => state.liability.liabilities );
 
-  const summaryClasses = "grid grid-cols-2 gap-4 p-6 w-full rounded-md " +
+  const summaryClasses = "grid grid-cols-3 gap-4 p-6 w-full rounded-md " +
   "bg-gradient-to-br from-black via-gray-900 to-gray-800 "
 
   return (
     <div className={summaryClasses}>
+      <SummaryCard />
       <ExpenseCard />
       <IncomeCard  />
 

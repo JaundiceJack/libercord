@@ -68,7 +68,9 @@ export const login = ({ email, password }) => dispatch => {
     dispatch({ type: LOGIN_SUCCESS, payload: res.data });
   }).catch(err => {
     // If unsuccessful, put the errors in the current state
-    dispatch(returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL'));
+    err.response ?
+      dispatch(returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL'))
+      : returnErrors({msg: err}, null, 'LOGIN_FAIL');
     dispatch({ type: LOGIN_FAIL });
   });
 }

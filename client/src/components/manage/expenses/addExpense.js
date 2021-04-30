@@ -23,7 +23,7 @@ const AddExpense = ({toggleAdd}) => {
   // Get the category options and server errors from the store
   const categories = useSelector( state => state.expense.categories );
   // Define an internal state to hold entries
-  const [category,   setCategory]   = useState(categories[0]);
+  const [category,   setCategory]   = useState("Groceries");
   const [name,       setName]       = useState("");
   const [location,   setLocation]   = useState("");
   const [value,      setValue]      = useState(null);

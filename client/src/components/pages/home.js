@@ -95,8 +95,8 @@ const Home = () => {
             autoplay={{ delay: 6000 }}
             pagination={{ clickable: true }}
             scrollbar={{ draggable: true }}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}
+            onSlideChange={() => {return}}
+            onSwiper={(swiper) => {return}}
           >
             {cards.map(card => {
               return <SwiperSlide className="flex">

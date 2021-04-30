@@ -13,7 +13,20 @@ const initialState = {
   incomes: [],
   selectedIncome: null,
   selectedRow: null,
-  categories: ["Job", "Stimulus", "Lucky Find", "Windfall"],
+  categories: [
+    "Equipment Rental",
+    "Gift",
+    "Gig",
+    "Inheritance",
+    "Job/Employment",
+    "Loan Interest",
+    "Lucky Find",
+    "Real Estate Rental",
+    "Real Estate Sale Profit",
+    "Stimulus",
+    "Welfare",
+    "Other"
+  ],
   columns: [
     {name: 'value',    text: 'Received',     view: true},
     {name: 'category', text: 'Category', view: true},
