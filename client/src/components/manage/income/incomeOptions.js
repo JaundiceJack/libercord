@@ -89,7 +89,9 @@ const IncomeOptions = ( ) => {
                          extraClasses="w-full"/>
           </div>
         }
-        {deleting && <DeleteIncome toggleDelete={onDelete} /> }
+        {deleting && <DeleteIncome toggleDelete={() => {
+          selectedRow !== null && selectedRow !== undefined && setDeleting(!deleting)
+        }}/> }
 
         { serverError && <div className={errorMsgClasses}> {serverError} </div> }
       </div>

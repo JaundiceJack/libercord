@@ -38,8 +38,9 @@ export const addIncome = income => (dispatch, getState) => {
   // Get the user id
   const user = getState().auth.user;
   if (user) {
+    const user_id = user.id || user._id;
     // Convert the new income to JSON and add in the user's id
-    const newIncome = JSON.stringify({...income, user_id: user.id});
+    const newIncome = JSON.stringify({...income, user_id: user_id});
     // Submit a post with the new income and the json web token
     axios.post(`${server}/api/incomes`, newIncome, tokenConfig(getState))
     .then(res => dispatch({ type: ADD_INCOME, payload: res.data }))

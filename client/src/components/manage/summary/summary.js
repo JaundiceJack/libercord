@@ -3,8 +3,21 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import components
 import SummaryCard from './summaryCard';
-import IncomeCard  from '../income/incomeCard';
-import ExpenseCard from '../expenses/expenseCard';
+import IncomeCard  from './incomeCard';
+import ExpenseCard from './expenseCard';
+
+
+// TODO: I'm passing some toggle functions in by reference,
+// that creates a huge memory leak, so I need to pass them in as arrow functions
+// like () => setValue(!value) instead of just toggleVal
+
+// So for the charts, what exactly do i want?
+// I'd like a chart next to the income and expenses at least,
+// I'd like the months and year total to be clickable,
+// and on click, show the distribution for that month via pie chart,
+// for the savings summary though, I'd like a line chart,
+// with three lines, income/expenses/total-savings
+
 
 const Summary = () => {
   // Get the item lists from the store

@@ -9,7 +9,9 @@ import { IoChevronBackCircle, IoChevronForwardCircle } from "react-icons/io5";
 // Import date functions to parse data
 import { isSameMonth, isSameYear } from 'date-fns';
 // Import components
-import MonthTotal from '../summary/monthTotal';
+import MonthTotal from './monthTotal';
+import YearTotal from './yearTotal';
+import SavingsChart from './lineChart';
 // Import style presets
 import { cardContainerClasses, headerTextClasses, hrLeftClasses } from '../../tailwinds';
 
@@ -21,46 +23,34 @@ const SummaryCard = () => {
   const loading = useSelector( state => state.income.loading );
 
   // Create a component state to store the displayed year
-  const [year, setYear] = useState(2021);
+  const [year, setYear]         = useState(2021);
+  const [selected, setSelected] = useState("year");
+  const [balance, setBalance]   = useState(4000);
+
   const incrementYear = () => { setYear(year + 1) };
   const decrementYear = () => { setYear(year - 1) };
 
   // Get the total savings for each given month when they load
-  const monthlySavings = (year, month) => {
+  const monthlySavings = (month) => {
     if (!loading) {
-      const formattedIncomes = incomes.map((inc) =>
-        { return {date: new Date(inc.date), value: inc.value}; });
-      const formattedExpenses = expenses.map((exp) =>
-        { return {date: new Date(exp.date), value: exp.value}; });
-      const compareDate = new Date(year, month);
-
-      const incInMonth = formattedIncomes.filter((inc) =>
-        { return isSameMonth(compareDate, inc.date); });
-      const expInMonth = formattedExpenses.filter((exp) =>
-        { return isSameMonth(compareDate, exp.date); });
+      const incInMonth = incByTime(month, isSameMonth);
+      const expInMonth = expByTime(month, isSameMonth);
       const totalIncome = incInMonth
             .reduce((total, datum) => datum.value + total, 0)
             .toFixed(2);
       const totalExpenses = expInMonth
             .reduce((total, datum) => datum.value + total, 0)
             .toFixed(2);
-      // Return the total in $0.00 format
-      return "$" + Intl.NumberFormat().format(totalIncome - totalExpenses);
+      // Return the total
+      return (totalIncome - totalExpenses);
     }
   }
 
   // Get the incomes total for the year once they load
   const yearlySavings = () => {
     if (!loading) {
-      const formattedIncomes = incomes.map((inc) =>
-        { return {date: new Date(inc.date), value: inc.value}; });
-      const formattedExpenses = expenses.map((exp) =>
-        { return {date: new Date(exp.date), value: exp.value}; });
-      const compareDate = new Date(year, 0);
-      const incInYear = formattedIncomes.filter((inc) =>
-        { return isSameYear(compareDate, inc.date); });
-      const expInYear = formattedExpenses.filter((exp) =>
-        { return isSameYear(compareDate, exp.date); });
+      const incInYear = incByTime(0, isSameYear);
+      const expInYear = expByTime(0, isSameYear);
       const totalIncome = incInYear
             .reduce((total, datum) => datum.value + total, 0)
             .toFixed(2);
@@ -68,41 +58,165 @@ const SummaryCard = () => {
             .reduce((total, datum) => datum.value + total, 0)
             .toFixed(2);
       const yearTotal = totalIncome - totalExpenses
-      return "$" + Intl.NumberFormat().format(yearTotal);
+      return Intl.NumberFormat().format(yearTotal);
     }
   }
 
+  // Get the total expenses for each month or year when they load
+  const totalExpByTime = (month, compareFunction) => {
+    if (!loading) {
+      const expIn = expByTime(month, compareFunction);
+      const total = expIn
+            .reduce((total, datum) => datum.value + total, 0)
+            .toFixed(2);
+      return total;
+    }
+  }
+
+  // Get the total incomes for each month or year when they load
+  const totalIncByTime = (month, compareFunction) => {
+    if (!loading) {
+      const incIn = incByTime(month, compareFunction);
+      const total = incIn
+            .reduce((total, datum) => datum.value + total, 0)
+            .toFixed(2);
+      return total;
+    }
+  }
+
+  // Get a list of expenses' values and dates that occured in the given month or year
+  const expByTime = (month, compareFunction) => {
+    const formatted = expenses.map((item) =>
+      { return { date: new Date(item.date),
+                 value: item.value,
+                 category: item.category };
+      }
+    );
+    const compareDate = new Date(year, month);
+    return formatted.filter((item) =>
+      { return compareFunction(compareDate, item.date); });
+  }
+
+  // Get a list of incomes' values and dates that occured in the given month or year
+  const incByTime = (month, compareFunction) => {
+    const formatted = incomes.map((item) =>
+      { return { date: new Date(item.date),
+                 value: item.value,
+                 category: item.category };
+      }
+    );
+    const compareDate = new Date(year, month);
+    return formatted.filter((item) =>
+      { return compareFunction(compareDate, item.date); });
+  }
+
+
+  // Compose the data for the line graph
+  // i need an array of 12 objects, one for each month, with the name of the month,
+  // the value of the savings, the value of the income, and expeses
+  const composeData = () => {
+    const mths = ["Jan",  "Feb", "Mar",  "Apr", "May", "June",
+                  "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+    return mths.map((mnth) => {
+      return {
+        month: mnth,
+        savings:  balance + monthlySavings(mths.indexOf(mnth)),
+        expenses: totalExpByTime(mths.indexOf(mnth), isSameMonth),
+        income:   totalIncByTime(mths.indexOf(mnth), isSameMonth)
+      }
+    });
+  }
+
+  // So, i think i combined two separate concepts, savings per month,
+  // and balance per month, in the current report, i'd like to do the balance
+  // per month. to get that, there should be a starting balance,
+  // and each month's savings total will make a monthly balance based on the previous
+  // we've made a fuck-ton today tho, and head pretty tired, so we do later
+
+
   return (
-    <div className={cardContainerClasses+"col-span-3 sm:col-span-1"}>
+    <div className={cardContainerClasses+"col-span-3 sm:col-span-1 sm:row-span-2"}>
       <div className="flex flex-row px-2 pt-2 pb-1 justify-center sm:justify-start">
-        <button onClick={decrementYear} className="text-blue-300 mx-2" >
+        <button onClick={decrementYear} className="text-yellow-200 mx-2" >
           <IoChevronBackCircle size="30px" />
         </button>
-        <h2 className={headerTextClasses}>{year} Savings</h2>
-        <button onClick={incrementYear} className="text-blue-300 ml-2">
+        <h2 className="font-jose text-xl text-yellow-200">{year} Savings</h2>
+        <button onClick={incrementYear} className="text-yellow-200 ml-2">
           <IoChevronForwardCircle size="30px" />
         </button>
       </div>
       <div className={hrLeftClasses}></div>
-      <div className="rounded-b-md p-4">
-        <div className="w-full sm:w-3/5">
-          <MonthTotal month="January"   total={monthlySavings(year, 0)} />
-          <MonthTotal month="February"  total={monthlySavings(year, 1)} />
-          <MonthTotal month="March"     total={monthlySavings(year, 2)} />
-          <MonthTotal month="April"     total={monthlySavings(year, 3)} />
-          <MonthTotal month="May"       total={monthlySavings(year, 4)} />
-          <MonthTotal month="June"      total={monthlySavings(year, 5)} />
-          <MonthTotal month="July"      total={monthlySavings(year, 6)} />
-          <MonthTotal month="August"    total={monthlySavings(year, 7)} />
-          <MonthTotal month="September" total={monthlySavings(year, 8)} />
-          <MonthTotal month="October"   total={monthlySavings(year, 9)} />
-          <MonthTotal month="November"  total={monthlySavings(year, 10)} />
-          <MonthTotal month="December"  total={monthlySavings(year, 11)} />
-          <div className="grid grid-cols-2 gap-3 mt-2">
-            <p className="text-right text-blue-200 font-bold text-xl">
-              {year} Savings:</p>
-            <p className="text-blue-200 font-bold text-xl self-end">{yearlySavings() || "$0.00"}</p>
-          </div>
+      <div className="p-4 flex flex-col">
+        <div className="flex flex-col sm:w-48">
+          <MonthTotal month="Jan"
+                      total={monthlySavings(0) || "$0.00"}
+                      onClick={() => { setSelected("jan"); }}
+                      isActive={selected === "jan"} />
+
+          <MonthTotal month="Feb"
+                      total={monthlySavings(1) || "$0.00"}
+                      onClick={() => { setSelected("feb"); }}
+                      isActive={selected === "feb"} />
+
+          <MonthTotal month="Mar"
+                      total={monthlySavings(2) || "$0.00"}
+                      onClick={() => { setSelected("mar"); }}
+                      isActive={selected === "mar"} />
+
+          <MonthTotal month="Apr"
+                      total={monthlySavings(3) || "$0.00"}
+                      onClick={() => { setSelected("apr"); }}
+                      isActive={selected === "apr"} />
+
+          <MonthTotal month="May"
+                      total={monthlySavings(4) || "$0.00"}
+                      onClick={() => { setSelected("may"); }}
+                      isActive={selected === "may"} />
+
+          <MonthTotal month="June"
+                      total={monthlySavings(5) || "$0.00"}
+                      onClick={() => { setSelected("june"); }}
+                      isActive={selected === "june"} />
+
+          <MonthTotal month="July"
+                      total={monthlySavings(6) || "$0.00"}
+                      onClick={() => { setSelected("july"); }}
+                      isActive={selected === "july"} />
+
+          <MonthTotal month="Aug"
+                      total={monthlySavings(7) || "$0.00"}
+                      onClick={() => { setSelected("aug"); }}
+                      isActive={selected === "aug"} />
+
+          <MonthTotal month="Sept"
+                      total={monthlySavings(8) || "$0.00"}
+                      onClick={() => { setSelected("sept"); }}
+                      isActive={selected === "sept"} />
+
+          <MonthTotal month="Oct"
+                      total={monthlySavings(9) || "$0.00"}
+                      onClick={() => { setSelected("oct"); }}
+                      isActive={selected === "oct"} />
+
+          <MonthTotal month="Nov"
+                      total={monthlySavings(10) || "$0.00"}
+                      onClick={() => { setSelected("nov"); }}
+                      isActive={selected === "nov"} />
+
+          <MonthTotal month="Dec"
+                      total={monthlySavings(11) || "$0.00"}
+                      onClick={() => { setSelected("dec"); }}
+                      isActive={selected === "dec"} />
+
+          <YearTotal  total={yearlySavings() || "$0.00"}
+                      onClick={() => { setSelected("year"); }}
+                      isActive={selected === "year"} />
+        </div>
+
+        {/* Show expenses by category for the selected time in a pie chart */}
+        <div className="w-full">
+          <h2 className="mt-6 sm:mt-2 font-jose text-xl font-bold text-center text-blue-200">Savings Report:</h2>
+          <SavingsChart data={composeData()} />
         </div>
       </div>
     </div>

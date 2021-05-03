@@ -38,8 +38,9 @@ export const addExpense = expense => (dispatch, getState) => {
   // Get the user id
   const user = getState().auth.user;
   if (user) {
+    const user_id = user.id || user._id;
     // Convert the new expense to JSON and add in the user's id
-    const newExpense = JSON.stringify({...expense, user_id: user.id});
+    const newExpense = JSON.stringify({...expense, user_id: user_id});
     // Submit a post with the new expense and the json web token
     axios.post(`${server}/api/expenses`, newExpense, tokenConfig(getState))
     .then(res => dispatch({ type: ADD_EXPENSE, payload: res.data }))
