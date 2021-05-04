@@ -9,6 +9,7 @@ import { register } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 // Import components
 import TextEntry from '../inputs/textEntry';
+import CurrencyEntry from '../inputs/currencyEntry';
 // Import style presets
 import {
   submitClasses,
@@ -22,6 +23,7 @@ const CreateAccount = () => {
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm]   = useState("");
+  const [balance, setBalance]   = useState(0);
   const [badEntries, setBadEntries] = useState([]);
   // Get the authentication state and submission errors
   const isAuthenticated = useSelector( state => state.auth.isAuthenticated );
@@ -60,7 +62,8 @@ const CreateAccount = () => {
     if (errs.length === 0) {
       const newUser = {
         email:    email,
-        password: password
+        password: password,
+        startingBalance: balance
       };
       dispatch(register(newUser));
     }
@@ -84,6 +87,9 @@ const CreateAccount = () => {
                      onChange={e => setPassword(e.target.value)} type="password" />
           <TextEntry id="confirm"  text="Confirm Password"
                      onChange={e => setConfirm(e.target.value)} type="password" />
+          <CurrencyEntry id="startingBalance" text="Starting Balance"
+                         value   ={balance}
+                         onChange={e => setBalance(e.target.value)} required={true} />
           { badEntries.map(err => <div className={errorMsgClasses}>{err}</div> )  }
           { errorMsg && <div className={errorMsgClasses}> {errorMsg} </div> }
           <button className={submitClasses+"mt-4"} type="submit">

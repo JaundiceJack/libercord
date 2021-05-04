@@ -16,7 +16,7 @@ import SavingsChart from './lineChart';
 import { cardContainerClasses, headerTextClasses, hrLeftClasses } from '../../tailwinds';
 
 
-const SummaryCard = () => {
+const SavingsCard = () => {
   // Retrieve the user's finances from the store
   const incomes = useSelector( state => state.income.incomes );
   const expenses = useSelector( state => state.expense.expenses );
@@ -159,24 +159,96 @@ const SummaryCard = () => {
 
 
   return (
-    <div className={cardContainerClasses+"col-span-3 sm:col-span-1 sm:sticky sm:top-4"}>
-      <div className="flex flex-row px-2 pt-2 pb-1 justify-center">
-        <h2 className="font-jose text-xl text-blue-300">Your Finances</h2>
+    <div className={cardContainerClasses+"col-span-3 sm:col-span-2"}>
+      <div className="flex flex-row px-2 pt-2 pb-1 justify-center sm:justify-start">
+        <button onClick={decrementYear} className="text-yellow-200 mx-2" >
+          <IoChevronBackCircle size="30px" />
+        </button>
+        <h2 className="font-jose text-xl text-yellow-200">{year} Savings</h2>
+        <button onClick={incrementYear} className="text-yellow-200 ml-2">
+          <IoChevronForwardCircle size="30px" />
+        </button>
       </div>
-      <div className=" h-px w-full bg-gradient-to-r from-transparent via-blue-300 to-transparent"></div>
-      <div className="p-4 grid grid-cols-2 gap-4">
-        <div className="col-span-2 mb-6 p-4 border-l border-gray-700 rounded-xl grid grid-cols-2 gap-2 bg-gradient-to-br from-gray-900 to-transparent">
-          <p className="text-blue-200 font-jose font-bold text-right text-lg">Current Balance:</p>
-          <p className="text-blue-200 font-jose font-bold text-lg self-end">$500.50</p>
+      <div className={hrLeftClasses}></div>
+      <div className="p-4 flex flex-col sm:flex-row">
+        <div className="flex flex-col sm:w-48">
+          <MonthTotal month="Jan"
+                      total={monthlySavings(0) || "$0.00"}
+                      onClick={() => { setSelected("jan"); }}
+                      isActive={selected === "jan"} />
+
+          <MonthTotal month="Feb"
+                      total={monthlySavings(1) || "$0.00"}
+                      onClick={() => { setSelected("feb"); }}
+                      isActive={selected === "feb"} />
+
+          <MonthTotal month="Mar"
+                      total={monthlySavings(2) || "$0.00"}
+                      onClick={() => { setSelected("mar"); }}
+                      isActive={selected === "mar"} />
+
+          <MonthTotal month="Apr"
+                      total={monthlySavings(3) || "$0.00"}
+                      onClick={() => { setSelected("apr"); }}
+                      isActive={selected === "apr"} />
+
+          <MonthTotal month="May"
+                      total={monthlySavings(4) || "$0.00"}
+                      onClick={() => { setSelected("may"); }}
+                      isActive={selected === "may"} />
+
+          <MonthTotal month="June"
+                      total={monthlySavings(5) || "$0.00"}
+                      onClick={() => { setSelected("june"); }}
+                      isActive={selected === "june"} />
+
+          <MonthTotal month="July"
+                      total={monthlySavings(6) || "$0.00"}
+                      onClick={() => { setSelected("july"); }}
+                      isActive={selected === "july"} />
+
+          <MonthTotal month="Aug"
+                      total={monthlySavings(7) || "$0.00"}
+                      onClick={() => { setSelected("aug"); }}
+                      isActive={selected === "aug"} />
+
+          <MonthTotal month="Sept"
+                      total={monthlySavings(8) || "$0.00"}
+                      onClick={() => { setSelected("sept"); }}
+                      isActive={selected === "sept"} />
+
+          <MonthTotal month="Oct"
+                      total={monthlySavings(9) || "$0.00"}
+                      onClick={() => { setSelected("oct"); }}
+                      isActive={selected === "oct"} />
+
+          <MonthTotal month="Nov"
+                      total={monthlySavings(10) || "$0.00"}
+                      onClick={() => { setSelected("nov"); }}
+                      isActive={selected === "nov"} />
+
+          <MonthTotal month="Dec"
+                      total={monthlySavings(11) || "$0.00"}
+                      onClick={() => { setSelected("dec"); }}
+                      isActive={selected === "dec"} />
+
+          <YearTotal  total={yearlySavings() || "$0.00"}
+                      onClick={() => { setSelected("year"); }}
+                      isActive={selected === "year"} />
         </div>
 
+        {/* Show expenses by category for the selected time in a pie chart */}
+        <div className="w-full">
+          <h2 className="mt-6 sm:mt-2 font-jose text-xl font-bold text-center text-blue-200">Savings Report:</h2>
+          <SavingsChart data={composeData()} />
+        </div>
       </div>
     </div>
   );
 };
 
-SummaryCard.propTypes = {
+SavingsCard.propTypes = {
   incomes: PropTypes.array,
   loading: PropTypes.bool
 }
-export default SummaryCard;
+export default SavingsCard;

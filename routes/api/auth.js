@@ -47,7 +47,8 @@ router.post('/', (req, res) => {
 router.get('/user', auth, (req, res) => {
   User.findById(req.user.id)
   .select('-password')
-  .then(user => res.json(user));
+  .then(user => res.json(user))
+  .catch(err => res.status(404).json({msg: "User not found."}));
 })
 
 module.exports = router;

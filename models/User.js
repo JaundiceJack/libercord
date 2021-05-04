@@ -14,6 +14,10 @@ const UserSchema = new Schema({
   signUpDate: {
     type: Date,
     default: Date.now
+  },
+  startingBalance: {
+    type: Number,
+    default: 0
   }
 })
 

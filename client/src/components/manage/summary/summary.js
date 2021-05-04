@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import components
 import SummaryCard from './summaryCard';
+import SavingsCard from './savingsCard';
 import IncomeCard  from './incomeCard';
 import ExpenseCard from './expenseCard';
 
@@ -32,6 +33,7 @@ const Summary = () => {
   return (
     <div className={summaryClasses}>
       <SummaryCard />
+      <SavingsCard />
       <ExpenseCard />
       <IncomeCard  />
 

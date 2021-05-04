@@ -77,7 +77,7 @@ const ExpenseCard = () => {
   };
 
   return (
-    <div className={cardContainerClasses+"col-span-3 sm:col-span-2"}>
+    <div className={cardContainerClasses+"col-start-1 sm:col-start-2 col-end-4"}>
       <div className="flex flex-row px-2 pt-2 pb-1 items-end justify-center sm:justify-start">
         <button onClick={decrementYear} className="text-red-200 mx-2" >
           <IoChevronBackCircle size="30px" />
