@@ -56,6 +56,8 @@ const CreateAccount = () => {
       errs.push("Passwords must be at least 8 characters in length.");
     if (password !== confirm)
       errs.push("Password and password confirmation do not match.");
+    if (balance === "" || balance === null)
+      errs.push("Please enter a starting balance.")
     setBadEntries(errs);
 
     // Register the new user

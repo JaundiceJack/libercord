@@ -34,8 +34,8 @@ const Manage = () => {
     dispatch(loadUser());
     dispatch(getIncomes());
     dispatch(getExpenses());
-    dispatch(getAssets());
-    dispatch(getLiabilities());
+    //dispatch(getAssets());
+    //dispatch(getLiabilities());
     updateTimer.current = setTimeout(() => { updateTimer.current = null }, 1000);
   }
   useEffect(() => {

@@ -38,12 +38,12 @@ export const loadUser = () => (dispatch, getState) => {
     dispatch({ type: AUTH_ERROR }) });
 }
 
-// Attempt to create a new user with the given name, email, & password
-export const register = ({ name, email, password }) => dispatch => {
+// Attempt to create a new user with the given email, & password
+export const register = ({ email, password, startingBalance }) => dispatch => {
   // Set headers
   const config = { headers: { 'Content-Type': 'application/json' } };
   // Turn the entries into JSON format for sending to the server
-  const body = JSON.stringify({ name, email, password });
+  const body = JSON.stringify({ email, password, startingBalance });
   // Send the registry with the body and config
   axios.post(`${server}/api/users`, body, config)
   .then(res => {

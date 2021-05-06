@@ -21,6 +21,7 @@ const SummaryCard = () => {
   const incomes = useSelector( state => state.income.incomes );
   const expenses = useSelector( state => state.expense.expenses );
   const loading = useSelector( state => state.income.loading );
+  const initial = useSelector( state => state.auth.user.startingBalance );
 
   // Create a component state to store the displayed year
   const [year, setYear]         = useState(2021);
@@ -157,6 +158,13 @@ const SummaryCard = () => {
   // so, i should have a probably square box with a summary containg:
   // curent cash balance, net worth, payment reminders
 
+  // Obtain the total incomes and total expenses, return the initial balance plus the difference
+  const currentBalance = () => {
+    const totalIncome = incomes.reduce((total, income) =>  income.value + total, 0);
+    const totalExpenses = expenses.reduce((total, expense) =>  expense.value + total, 0);
+    return initial + (totalIncome - totalExpenses);
+  }
+
 
   return (
     <div className={cardContainerClasses+"col-span-3 sm:col-span-1 sm:sticky sm:top-4"}>
@@ -167,9 +175,8 @@ const SummaryCard = () => {
       <div className="p-4 grid grid-cols-2 gap-4">
         <div className="col-span-2 mb-6 p-4 border-l border-gray-700 rounded-xl grid grid-cols-2 gap-2 bg-gradient-to-br from-gray-900 to-transparent">
           <p className="text-blue-200 font-jose font-bold text-right text-lg">Current Balance:</p>
-          <p className="text-blue-200 font-jose font-bold text-lg self-end">$500.50</p>
+          <p className="text-blue-200 font-jose font-bold text-lg self-end">${currentBalance()}</p>
         </div>
-
       </div>
     </div>
   );

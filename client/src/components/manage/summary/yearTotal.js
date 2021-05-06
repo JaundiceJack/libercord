@@ -16,7 +16,7 @@ const YearTotal = ({ total, onClick, isActive }) => {
         <p>Year Total:</p>
       </div >
       <p className={totalClasses}>
-        {total || "$0.00"}
+        {"$"+total}
       </p>
     </div>
   );

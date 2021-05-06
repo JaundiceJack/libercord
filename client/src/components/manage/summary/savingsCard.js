@@ -7,7 +7,7 @@ import { getIncomes } from '../../../actions/incomeActions';
 // Import Icons
 import { IoChevronBackCircle, IoChevronForwardCircle } from "react-icons/io5";
 // Import date functions to parse data
-import { isSameMonth, isSameYear } from 'date-fns';
+import { isSameMonth, isSameYear, isBefore } from 'date-fns';
 // Import components
 import MonthTotal from './monthTotal';
 import YearTotal from './yearTotal';
@@ -21,6 +21,7 @@ const SavingsCard = () => {
   const incomes = useSelector( state => state.income.incomes );
   const expenses = useSelector( state => state.expense.expenses );
   const loading = useSelector( state => state.income.loading );
+  const initial = useSelector( state => state.auth.user.startingBalance );
 
   // Create a component state to store the displayed year
   const [year, setYear]         = useState(2021);
@@ -120,11 +121,27 @@ const SavingsCard = () => {
     return mths.map((mnth) => {
       return {
         month: mnth,
-        savings:  balance + monthlySavings(mths.indexOf(mnth)),
+        balance:  balanceByMonth(mths.indexOf(mnth)),
         expenses: totalExpByTime(mths.indexOf(mnth), isSameMonth),
         income:   totalIncByTime(mths.indexOf(mnth), isSameMonth)
       }
     });
+  }
+
+  // for the savings, i need a function that gets all the expenses and incomes before the given month and year,
+  // totals those, then i add the difference to inital,
+  //
+  const balanceByMonth = month => {
+    const compareDate = new Date(year, month);
+    const incomesBefore = incomes.filter((income) => {
+      const incDate = new Date(income.date);
+      return isBefore(incDate, compareDate) || isSameMonth(incDate, compareDate);
+    }).reduce((total, income) => income.value + total, 0);
+    const expensesBefore = expenses.filter((expense) => {
+      const expDate = new Date(expense.date);
+      return isBefore(expDate, compareDate) || isSameMonth(expDate, compareDate);
+    }).reduce((total, expense) => expense.value + total, 0);
+    return initial + (incomesBefore - expensesBefore);
   }
 
   // So, i think i combined two separate concepts, savings per month,
@@ -159,7 +176,7 @@ const SavingsCard = () => {
 
 
   return (
-    <div className={cardContainerClasses+"col-span-3 sm:col-span-2"}>
+    <div className={cardContainerClasses+"col-start-1 sm:col-start-2 col-end-4"}>
       <div className="flex flex-row px-2 pt-2 pb-1 justify-center sm:justify-start">
         <button onClick={decrementYear} className="text-yellow-200 mx-2" >
           <IoChevronBackCircle size="30px" />
@@ -173,73 +190,73 @@ const SavingsCard = () => {
       <div className="p-4 flex flex-col sm:flex-row">
         <div className="flex flex-col sm:w-48">
           <MonthTotal month="Jan"
-                      total={monthlySavings(0) || "$0.00"}
+                      total={monthlySavings(0) || "0"}
                       onClick={() => { setSelected("jan"); }}
                       isActive={selected === "jan"} />
 
           <MonthTotal month="Feb"
-                      total={monthlySavings(1) || "$0.00"}
+                      total={monthlySavings(1) || "0"}
                       onClick={() => { setSelected("feb"); }}
                       isActive={selected === "feb"} />
 
           <MonthTotal month="Mar"
-                      total={monthlySavings(2) || "$0.00"}
+                      total={monthlySavings(2) || "0"}
                       onClick={() => { setSelected("mar"); }}
                       isActive={selected === "mar"} />
 
           <MonthTotal month="Apr"
-                      total={monthlySavings(3) || "$0.00"}
+                      total={monthlySavings(3) || "0"}
                       onClick={() => { setSelected("apr"); }}
                       isActive={selected === "apr"} />
 
           <MonthTotal month="May"
-                      total={monthlySavings(4) || "$0.00"}
+                      total={monthlySavings(4) || "0"}
                       onClick={() => { setSelected("may"); }}
                       isActive={selected === "may"} />
 
           <MonthTotal month="June"
-                      total={monthlySavings(5) || "$0.00"}
+                      total={monthlySavings(5) || "0"}
                       onClick={() => { setSelected("june"); }}
                       isActive={selected === "june"} />
 
           <MonthTotal month="July"
-                      total={monthlySavings(6) || "$0.00"}
+                      total={monthlySavings(6) || "0"}
                       onClick={() => { setSelected("july"); }}
                       isActive={selected === "july"} />
 
           <MonthTotal month="Aug"
-                      total={monthlySavings(7) || "$0.00"}
+                      total={monthlySavings(7) || "0"}
                       onClick={() => { setSelected("aug"); }}
                       isActive={selected === "aug"} />
 
           <MonthTotal month="Sept"
-                      total={monthlySavings(8) || "$0.00"}
+                      total={monthlySavings(8) || "0"}
                       onClick={() => { setSelected("sept"); }}
                       isActive={selected === "sept"} />
 
           <MonthTotal month="Oct"
-                      total={monthlySavings(9) || "$0.00"}
+                      total={monthlySavings(9) || "0"}
                       onClick={() => { setSelected("oct"); }}
                       isActive={selected === "oct"} />
 
           <MonthTotal month="Nov"
-                      total={monthlySavings(10) || "$0.00"}
+                      total={monthlySavings(10) || "0"}
                       onClick={() => { setSelected("nov"); }}
                       isActive={selected === "nov"} />
 
           <MonthTotal month="Dec"
-                      total={monthlySavings(11) || "$0.00"}
+                      total={monthlySavings(11) || "0"}
                       onClick={() => { setSelected("dec"); }}
                       isActive={selected === "dec"} />
 
-          <YearTotal  total={yearlySavings() || "$0.00"}
+          <YearTotal  total={yearlySavings() || "0"}
                       onClick={() => { setSelected("year"); }}
                       isActive={selected === "year"} />
         </div>
 
         {/* Show expenses by category for the selected time in a pie chart */}
         <div className="w-full">
-          <h2 className="mt-6 sm:mt-2 font-jose text-xl font-bold text-center text-blue-200">Savings Report:</h2>
+          <h2 className="mt-6 sm:mt-2 font-jose text-xl font-bold text-center text-blue-200">{year} Balance:</h2>
           <SavingsChart data={composeData()} />
         </div>
       </div>

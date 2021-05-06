@@ -32,7 +32,7 @@ const SavingsChart = ({data}) => {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="savings"  stroke="#d50" />
+        <Line type="monotone" dataKey="balance"  stroke="#d50" />
         <Line type="monotone" dataKey="expenses" stroke="#d33" />
         <Line type="monotone" dataKey="income"   stroke="#5d5" />
       </LineChart>

@@ -14,6 +14,8 @@ const initialState = {
   selectedIncome: null,
   selectedRow: null,
   categories: [
+    "Bond Interest",
+    "Dividend",
     "Equipment Rental",
     "Gift",
     "Gig",

@@ -37,7 +37,7 @@ const ExpenseCard = () => {
       const total = expIn
             .reduce((total, datum) => datum.value + total, 0)
             .toFixed(2);
-      return "$" + Intl.NumberFormat().format(total);
+      return Intl.NumberFormat().format(total);
     }
   }
 
@@ -92,66 +92,66 @@ const ExpenseCard = () => {
         <div className="flex flex-col sm:w-48">
 
           <MonthTotal month="Jan"
-                      total={totalByTime(0, isSameMonth) || "$0.00"}
+                      total={totalByTime(0, isSameMonth) || "0"}
                       onClick={() => { setSelected("jan"); }}
                       isActive={selected === "jan"} />
 
           <MonthTotal month="Feb"
-                      total={totalByTime(1, isSameMonth) || "$0.00"}
+                      total={totalByTime(1, isSameMonth) || "0"}
                       onClick={() => { setSelected("feb"); }}
                       isActive={selected === "feb"} />
 
           <MonthTotal month="Mar"
-                      total={totalByTime(2, isSameMonth) || "$0.00"}
+                      total={totalByTime(2, isSameMonth) || "0"}
                       onClick={() => { setSelected("mar"); }}
                       isActive={selected === "mar"} />
 
           <MonthTotal month="Apr"
-                      total={totalByTime(3, isSameMonth) || "$0.00"}
+                      total={totalByTime(3, isSameMonth) || "0"}
                       onClick={() => { setSelected("apr"); }}
                       isActive={selected === "apr"} />
 
           <MonthTotal month="May"
-                      total={totalByTime(4, isSameMonth) || "$0.00"}
+                      total={totalByTime(4, isSameMonth) || "0"}
                       onClick={() => { setSelected("may"); }}
                       isActive={selected === "may"} />
 
           <MonthTotal month="June"
-                      total={totalByTime(5, isSameMonth) || "$0.00"}
+                      total={totalByTime(5, isSameMonth) || "0"}
                       onClick={() => { setSelected("june"); }}
                       isActive={selected === "june"} />
 
           <MonthTotal month="July"
-                      total={totalByTime(6, isSameMonth) || "$0.00"}
+                      total={totalByTime(6, isSameMonth) || "0"}
                       onClick={() => { setSelected("july"); }}
                       isActive={selected === "july"} />
 
           <MonthTotal month="Aug"
-                      total={totalByTime(7, isSameMonth) || "$0.00"}
+                      total={totalByTime(7, isSameMonth) || "0"}
                       onClick={() => { setSelected("aug"); }}
                       isActive={selected === "aug"} />
 
           <MonthTotal month="Sept"
-                      total={totalByTime(8, isSameMonth) || "$0.00"}
+                      total={totalByTime(8, isSameMonth) || "0"}
                       onClick={() => { setSelected("sept"); }}
                       isActive={selected === "sept"} />
 
           <MonthTotal month="Oct"
-                      total={totalByTime(9, isSameMonth) || "$0.00"}
+                      total={totalByTime(9, isSameMonth) || "0"}
                       onClick={() => { setSelected("oct"); }}
                       isActive={selected === "oct"} />
 
           <MonthTotal month="Nov"
-                      total={totalByTime(10, isSameMonth) || "$0.00"}
+                      total={totalByTime(10, isSameMonth) || "0"}
                       onClick={() => { setSelected("nov"); }}
                       isActive={selected === "nov"} />
 
           <MonthTotal month="Dec"
-                      total={totalByTime(11, isSameMonth) || "$0.00"}
+                      total={totalByTime(11, isSameMonth) || "0"}
                       onClick={() => { setSelected("dec"); }}
                       isActive={selected === "dec"} />
 
-          <YearTotal  total={totalByTime(0, isSameYear) || "$0.00"}
+          <YearTotal  total={totalByTime(0, isSameYear) || "0.00"}
                       onClick={() => { setSelected("year"); }}
                       isActive={selected === "year"} />
         </div>

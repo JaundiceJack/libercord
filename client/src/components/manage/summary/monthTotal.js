@@ -17,7 +17,7 @@ const MonthTotal = ({ month, total, onClick, isActive}) => {
         {month}:
       </p>
       <p className={totalClasses}>
-        {total || "$0.00"}
+        {"$"+total}
       </p>
     </div>
   );

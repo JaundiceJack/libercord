@@ -33,9 +33,10 @@ const Summary = () => {
   return (
     <div className={summaryClasses}>
       <SummaryCard />
-      <SavingsCard />
+
       <ExpenseCard />
       <IncomeCard  />
+      <SavingsCard />
 
     </div>
   )
