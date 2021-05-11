@@ -15,7 +15,7 @@ const CobblerChart = ({ data }) => {
 
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-    const radiusMulti = window.innerWidth < 640 ? 0.5 : 1.1;
+    const radiusMulti = window.innerWidth < 640 ? 0.1 : 1.1;
     const radius = innerRadius + (outerRadius - innerRadius) * radiusMulti;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);

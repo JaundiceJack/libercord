@@ -22,7 +22,7 @@ const AddIncome = ({toggleAdd}) => {
   // Get the category options from the store
   const categories = useSelector( state => state.income.categories );
   // Define an internal state to hold entries
-  const [category,   setCategory]   = useState("Job/Employment");
+  const [category,   setCategory]   = useState("Fulltime Job");
   const [source,     setSource]     = useState("");
   const [value,      setValue]      = useState(null);
   const [date,       setDate]       = useState(currentDate());

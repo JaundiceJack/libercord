@@ -3,22 +3,22 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import router stuff
-import { Redirect, Link } from 'react-router-dom';
-// Import server actions
-import { login, changePage } from '../../actions/authActions';
-import { clearErrors } from '../../actions/errorActions';
+import { Redirect }        from 'react-router-dom';
 // Import components
-import TextEntry from '../inputs/textEntry';
+import TextEntry           from '../inputs/textEntry';
 // Import style presets
 import { submitClasses,     cardContainerClasses,
-         headerTextClasses, hrCenterClasses, errorMsgClasses } from '../tailwinds';
+         headerTextClasses, hrCenterClasses,
+         errorMsgClasses } from '../tailwinds';
+// Import server actions
+import { clearErrors }     from '../../actions/errorActions';
+import { forgotPassword }  from '../../actions/authActions';
 
-const Login = () => {
+const Forgot = () => {
   const [email,      setEmail]      = useState("");
-  const [password,   setPassword]   = useState("");
+  const [sent,       setSent]       = useState(false);
   const [badEntries, setBadEntries] = useState([]);
   // Get the authentication state and submission errors
-  const isAuthenticated = useSelector( state => state.auth.isAuthenticated );
   const errorMsg        = useSelector( state => state.error.msg.msg );
 
   // Clear the badEntries after the timer runs out
@@ -35,74 +35,51 @@ const Login = () => {
   useEffect(() => { return () => {
     updateTimer.current && clearTimeout(updateTimer.current); }; }, []);
 
-  // On form submission, attempt to log in
+  // On form submission, dispatch a password reset email
   const onSubmit = e => {
     e.preventDefault();
     // Validate entries
     let errs = [];
     if (email === "" || email === null)
       errs.push("Please enter a valid email address.");
-    if (password === "" || password === null)
-      errs.push("Please enter a password.");
-    if (password.length > 0 && password.length < 8)
-      errs.push("Passwords must be at least 8 characters in length.");
     setBadEntries(errs);
-    // Attempt logging in
-    if (errs.length === 0) {
-      const currentUser = {
-        email:    email,
-        password: password
-      };
-      dispatch(login(currentUser));
-    }
+    // Dispatch a password reset request
+    if (errs.length === 0) { dispatch(forgotPassword(email)); setSent(true); }
     // If there were entry errors, display them for 5 seconds
     else { !updateTimer.current && setUpdate(); }
   }
-  const changeActive = nextPage => { dispatch(changePage(nextPage)) }
 
   return (
     <section className="mt-6 flex items-center justify-center mb-6 h-full">
+      {sent && <Redirect to="/login" />}
       <form className={cardContainerClasses + "w-full sm:w-1/2"} onSubmit={onSubmit}>
-        <div className="rounded-t-lg p-2 shadow-2xl grid grid-cols-3 text-center items-center">
-          <h2 className={headerTextClasses+"col-start-2 col-end-3"}>
-            Login
+        <div className="rounded-t-lg p-2 pt-5 shadow-2xl">
+          <h2 className={headerTextClasses+"text-center"}>
+            Reset Password
           </h2>
-          <Link className="col-start-3 col-end-4 text-right mr-2" to="/forgot" onClick={() => changeActive('forgot')}>
-            <p className="ml-4 font-jose text-sm text-blue-200">Forgot password?</p>
-          </Link>
         </div>
         <div className={hrCenterClasses}></div>
         <div className="p-4 grid gap-2">
+          <p className="font-jose text-blue-200 ml-4 mb-2">
+          Enter your email and a password reset link will be sent.</p>
           <TextEntry id="email"
                      text="Email"
                      type="email"
                      onChange={e => setEmail(e.target.value)} />
-          <TextEntry id="password"
-                     text="Password"
-                     type="password"
-                     onChange={e => setPassword(e.target.value)} />
           { badEntries.map(err => <div className={errorMsgClasses}> {err} </div> )  }
           { errorMsg && <div className={errorMsgClasses}> {errorMsg} </div> }
-
-
-
-
           <button className={submitClasses+"mt-4"} type="submit">
-            <p>Login</p>
+            <p>Send</p>
           </button>
         </div>
       </form>
-      {isAuthenticated && <Redirect to="/manage" />}
     </section>
   );
 
 };
 
 // Set prop types and export
-Login.propTypes = {
-  isAuthenticated: PropTypes.bool,
-  error:           PropTypes.object.isRequired,
-  changePage:      PropTypes.func,
-  login:           PropTypes.func.isRequired
+Forgot.propTypes = {
+
 }
-export default Login;
+export default Forgot;

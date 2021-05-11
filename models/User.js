@@ -18,7 +18,9 @@ const UserSchema = new Schema({
   startingBalance: {
     type: Number,
     default: 0
-  }
+  },
+  passwordResetToken: String,
+  passwordResetExpire: Date
 })
 
 module.exports = User = mongoose.model('user', UserSchema);

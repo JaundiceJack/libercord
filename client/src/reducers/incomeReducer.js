@@ -8,11 +8,11 @@ import {
   UPDATE_INCOME_COL,
   SORT_INCOME,
 } from '../actions/types.js';
+import { SortDirection } from 'react-virtualized';
 
 const initialState = {
   incomes: [],
-  selectedIncome: null,
-  selectedRow: null,
+  loading: false,
   categories: [
     "Bond Interest",
     "Dividend",
@@ -20,7 +20,8 @@ const initialState = {
     "Gift",
     "Gig",
     "Inheritance",
-    "Job/Employment",
+    "Fulltime Job",
+    "Parttime Job",
     "Loan Interest",
     "Lucky Find",
     "Real Estate Rental",
@@ -35,7 +36,11 @@ const initialState = {
     {name: 'date',     text: 'When',     view: true},
     {name: 'source', text: 'Source', view: false},
   ],
-  loading: false
+
+  sortBy: 'date',
+  selectedRow: null,
+  sortDirection: SortDirection.DESC,
+  selectedIncome: null,
 }
 
 const incomeReducer = (state = initialState, action) => {
@@ -65,31 +70,33 @@ const incomeReducer = (state = initialState, action) => {
         ...state,
         loading: true
       }
-      case UPDATE_INCOME_COL:
-        return {
-          ...state,
-          columns: state.columns.map(col =>
-            col.name === action.payload.name ? action.payload : col)
-        }
-      case SELECT_INCOME:
-        return {
-          ...state,
-          selectedIncome: action.payload.income,
-          selectedRow:    action.payload.index
-        }
-      case EDIT_INCOME:
-        return {
-          ...state,
-          incomes: [...state.incomes.filter(income =>
-            {return income._id !== action.payload._id}), action.payload],
-          selectedIncome: null,
-          selectedRow: null,
-        }
-      case SORT_INCOME:
-        return {
-          ...state,
-          selectedRow: null
-        }
+    case UPDATE_INCOME_COL:
+      return {
+        ...state,
+        columns: state.columns.map(col =>
+          col.name === action.payload.name ? action.payload : col)
+      }
+    case SELECT_INCOME:
+      return {
+        ...state,
+        selectedIncome: action.payload.income,
+        selectedRow:    action.payload.index
+      }
+    case EDIT_INCOME:
+      return {
+        ...state,
+        incomes: [...state.incomes.filter(income =>
+          {return income._id !== action.payload._id}), action.payload],
+        selectedIncome: null,
+        selectedRow: null,
+      }
+    case SORT_INCOME:
+      return {
+        ...state,
+        selectedRow: null,
+        sortDirection: state.sortDirection === SortDirection.DESC ?
+          SortDirection.ASC : SortDirection.DESC
+      }
     default:
       return state;
   }

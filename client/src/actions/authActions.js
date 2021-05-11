@@ -33,22 +33,15 @@ export const loadUser = () => (dispatch, getState) => {
     dispatch({ type: USER_LOADED, payload: res.data })})
   .catch(err => {
     // If unsuccessful, put the errors in the current state
-    console.log(err);
     dispatch(returnErrors(err.response.data, err.response.status));
     dispatch({ type: AUTH_ERROR }) });
 }
 
 // Attempt to create a new user with the given email, & password
 export const register = ({ email, password, startingBalance }) => dispatch => {
-  // Set headers
-  const config = { headers: { 'Content-Type': 'application/json' } };
-  // Turn the entries into JSON format for sending to the server
-  const body = JSON.stringify({ email, password, startingBalance });
   // Send the registry with the body and config
-  axios.post(`${server}/api/users`, body, config)
-  .then(res => {
-    // If successful, return the user data to the current state
-    dispatch({ type: REGISTER_SUCCESS, payload: res.data });
+  axios.post(`${server}/api/users`, ...basicConfig({ email, password, startingBalance }))
+  .then(res => { dispatch({ type: REGISTER_SUCCESS, payload: res.data });
   }).catch(err => {
     // If unsuccessful, put the errors in the current state
     dispatch(returnErrors(err.response.data, err.response.status, 'REGISTER_FAIL'));
@@ -58,15 +51,9 @@ export const register = ({ email, password, startingBalance }) => dispatch => {
 
 // Attempt to log in with the given email and password
 export const login = ({ email, password }) => dispatch => {
-  // Set headers
-  const config = { headers: { 'Content-Type': 'application/json' } };
-  // Turn the entries into JSON format for sending to the server
-  const body = JSON.stringify({ email, password });
   // Send the registry with the body and config
-  axios.post(`${server}/api/auth`, body, config)
-  .then(res => {
-    // If successful, return the user data to the current state
-    dispatch({ type: LOGIN_SUCCESS, payload: res.data });
+  axios.post(`${server}/api/auth`, ...basicConfig({ email, password }))
+  .then(res => { dispatch({ type: LOGIN_SUCCESS, payload: res.data });
   }).catch(err => {
     // If unsuccessful, put the errors in the current state
     err.response ?
@@ -76,9 +63,40 @@ export const login = ({ email, password }) => dispatch => {
   });
 }
 
+// Request a password reset link
+export const forgotPassword = email => dispatch => {
+  // Send the email to send a reset link to
+  axios.post(`${server}/api/auth/reset_password`, ...basicConfig({email}))
+  .then( res => {
+    dispatch(returnErrors( res.data ))
+    changePage('login');
+  })
+  .catch( err => { dispatch(returnErrors(err.response.data)); });
+}
+
+// Check the password reset token
+export const changePassword = (password, token) => dispatch => {
+  // Set headers
+  axios.post(`${server}/api/auth/reset_password/${token}`, ...basicConfig({password}))
+  .then( res => {
+    dispatch({ type: LOGIN_SUCCESS, payload: res.data });
+    dispatch(changePage('manage'));
+  })
+  .catch( err => dispatch(returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL')));
+}
+
 // Issue the logout action type
 export const logout = ()  => {
   return { type: LOGOUT_SUCCESS };
+}
+
+// Set basic headers and a payload for actions that don't require a token
+export const basicConfig = payload => {
+  // Set headers
+  const config = { headers: { 'Content-Type': 'application/json' } };
+  // Turn the entries into JSON format for sending to the server
+  const body = JSON.stringify(payload);
+  return [body, config];
 }
 
 // Get a config object with the json web token

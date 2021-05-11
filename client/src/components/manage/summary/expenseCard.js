@@ -158,7 +158,8 @@ const ExpenseCard = () => {
 
         {/* Show expenses by category for the selected time in a pie chart */}
         <div className="w-full">
-          <h2 className="mt-6 sm:mt-2 font-jose text-xl font-bold text-center text-blue-200">Expenses Breakdown:</h2>
+          <h2 className="mt-6 sm:mt-2 font-jose text-xl font-bold text-center text-blue-200">
+          Expenses Breakdown:</h2>
           <CobblerChart data={totalsByCategory() || [{value: 0}]} />
         </div>
       </div>

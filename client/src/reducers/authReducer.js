@@ -7,6 +7,8 @@ LOGIN_FAIL,
 LOGOUT_SUCCESS,
 REGISTER_SUCCESS,
 REGISTER_FAIL,
+RESET_FAIL,
+RESET_VERIFIED,
 CHANGE_PAGE
 } from '../actions/types'
 
@@ -15,7 +17,8 @@ const initialState = {
   isAuthenticated: null,
   isLoading: false,
   user: null,
-  currentPage: 'home'
+  currentPage: 'home',
+  genuineReset: false
 }
 
 const authReducer = (state = initialState, action) => {
@@ -59,6 +62,17 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         currentPage: action.payload
+      }
+    case RESET_VERIFIED:
+      return {
+        ...state,
+        genuineReset: true
+      }
+    case RESET_FAIL:
+      return {
+        ...state,
+        genuineReset: false,
+        currenPage: 'login'
       }
     default:
       return state;

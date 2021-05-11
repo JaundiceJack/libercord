@@ -34,6 +34,10 @@ export const LOGIN_FAIL           = "LOGIN_FAIL";
 export const LOGOUT_SUCCESS       = "LOGOUT_SUCCESS";
 export const REGISTER_SUCCESS     = "REGISTER_SUCCESS";
 export const REGISTER_FAIL        = "REGISTER_FAIL";
+export const RESET_VERIFIED       = "RESET_VERIFIED";
+export const RESET_FAIL           = "RESET_FAIL";
+export const CHECKING_TOKEN       = "CHECKING_TOKEN";
+
 export const CHANGE_PAGE          = "CHANGE_PAGE";
 export const GET_ERRORS           = "GET_ERRORS";
 export const CLEAR_ERRORS         = "CLEAR_ERRORS";

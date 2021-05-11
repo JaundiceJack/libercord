@@ -82,21 +82,21 @@ export const tableFormContainerClasses =
   " bg-gradient-to-br from-gray-700 to-gray-500 ";
 export const labelClasses =
   " px-3 py-2 " +
-  " font-bold font-medium text-sm text-blue-100 " +
+  " font-bold font-medium font-jose text-sm text-blue-100 " +
   " rounded-l-xl " +
   " bg-gradient-to-b from-gray-700 via-gray-800 to-gray-700 ";
 export const inputClasses =
-  " text-gray-600  " +
+  " text-gray-600 font-jose " +
   " rounded-xl " +
   " bg-white " +
   " focus:outline-none focus:ring-2 ring-green-500 ";
 export const selectClasses =
   " w-full border-gray-300 rounded-xl " +
-  " text-gray-600 bg-white " +
+  " text-gray-600 bg-white font-jose " +
   " hover:border-gray-400 focus:outline-none appearance-none ";
 export const buttonClasses =
   " px-3 py-2 " +
-  " font-bold font-medium text-sm  " +
+  " font-bold font-jose font-medium text-sm  " +
   " rounded-xl border-l shadow " +
   " bg-gradient-to-br from-black to-gray-700 " +
   " hover:bg-gradient-to-tl hover:from-gray-700 hover:to-black " +
