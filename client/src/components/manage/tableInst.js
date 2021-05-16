@@ -8,7 +8,9 @@ import {
 } from 'react-virtualized';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 // Import style presets
-import { tableRowClasses, tableSelectedClasses, tableHeaderClasses } from '../tailwinds'
+import { tableRowClasses,
+         tableSelectedClasses,
+         tableHeaderClasses } from '../tailwinds'
 // Import a helper function for date display
 import { formatDate } from '../../functions/dateFunctions';
 
@@ -36,7 +38,7 @@ const TableInst = ({
   }
 
   // Apply styles to the header row, selected row, and others
-  const rowClasses = ({index}) => {
+  const rowClasses = ({ index }) => {
     switch (index) {
       case -1:
         return tableHeaderClasses

@@ -17,10 +17,14 @@ const IncomeTable = (  ) => {
     dispatch(selectIncome(rowData, index)) };
   const sorted = ()  => {
     dispatch(sortedIncomes()) };
+  // Format the income prices
+  const formatted = income.incomes.map(inc => {
+    return {...inc, value: "$"+inc.value};
+  })
 
   return (
     <TableA
-      data        = {income.incomes}
+      data        = {formatted}
       cols        = {income.columns}
       selectedRow = {income.selectedRow}
       selectDatum = {select}

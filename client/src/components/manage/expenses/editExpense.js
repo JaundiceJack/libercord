@@ -25,7 +25,7 @@ const EditExpense = ({ toggleEdit }) => {
   // Set internal component state variables
   const [id,         setId]         = useState(selected._id);
   const [category,   setCategory]   = useState(selected.category);
-  const [value,      setValue]      = useState(selected.value);
+  const [value,      setValue]      = useState(selected.value.replace("$", ""));
   const [name,       setName]       = useState(selected.name);
   const [location,   setLocation]   = useState(selected.location);
   const [date,       setDate]       = useState(inputDate(selected.date));
@@ -38,7 +38,7 @@ const EditExpense = ({ toggleEdit }) => {
   const setUpdate   = () => {
     setId(      selected._id);
     setCategory(selected.category);
-    setValue(   selected.value);
+    setValue(   selected.value.replace("$", ""));
     setName(    selected.name);
     setLocation(selected.location);
     setDate(
@@ -86,7 +86,7 @@ const EditExpense = ({ toggleEdit }) => {
         category: category,
         name:     name,
         location: location,
-        value:    value,
+        value:    value.replace("$", ""),
         date:     date + ' 00:00:00'
       }
       dispatch(editExpense(edits));

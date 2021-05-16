@@ -8,6 +8,8 @@ import {
   LOADING_INCOMES,
   UPDATE_INCOME_COL,
   SORT_INCOME,
+  TOGGLE_INCOME_EDIT,
+  TOGGLE_INCOME_DELETING,
   AUTH_ERROR
 } from './types.js';
 // Import axios to handle http requests
@@ -81,3 +83,9 @@ export const sortedIncomes = () => { return { type: SORT_INCOME } }
 
 // Set the incomes to loading for spinner animations & etc.
 export const setIncomesLoading = () => { return { type: LOADING_INCOMES } }
+
+// Toggle the income editing state
+export const toggleIncomeEditing = () => { return { type: TOGGLE_INCOME_EDIT } }
+
+// Toggle the income deleting state
+export const toggleIncomeDeleting = () => { return { type: TOGGLE_INCOME_DELETING } }

@@ -8,6 +8,8 @@ import {
   LOADING_EXPENSES,
   UPDATE_EXPENSE_COL,
   SORT_EXPENSE,
+  TOGGLE_EXPENSE_EDIT,
+  TOGGLE_EXPENSE_DELETING,
   AUTH_ERROR
 } from './types.js';
 // Import axios to handle http requests
@@ -81,3 +83,9 @@ export const sortedExpenses = () => { return { type: SORT_EXPENSE } };
 
 // Set the expenses to loading for spinner animations & etc.
 export const setExpensesLoading = () => { return { type: LOADING_EXPENSES } };
+
+// Toggle the expense editing state
+export const toggleExpenseEditing = () => { return { type: TOGGLE_EXPENSE_EDIT } };
+
+// Toggle the expense deleting state
+export const toggleExpenseDeleting = () => { return { type: TOGGLE_EXPENSE_DELETING } };

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 // Import Icons
 import { IoChevronBackCircle, IoChevronForwardCircle } from "react-icons/io5";
+import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 // Import date functions to parse data
 import { isSameMonth, isSameYear } from 'date-fns';
 // Import components
@@ -80,11 +81,11 @@ const ExpenseCard = () => {
     <div className={cardContainerClasses+"col-start-1 sm:col-start-2 col-end-4"}>
       <div className="flex flex-row px-2 pt-2 pb-1 items-end justify-center sm:justify-start">
         <button onClick={decrementYear} className="text-red-200 mx-2" >
-          <IoChevronBackCircle size="30px" />
+          <HiChevronLeft size="30px" />
         </button>
-        <h2 className="font-jose text-xl text-red-200">{year} Expenses</h2>
+        <h2 className="font-jose text-xl text-blue-100">{year} Expenses</h2>
         <button onClick={incrementYear} className="text-red-200 ml-2">
-          <IoChevronForwardCircle size="30px" />
+          <HiChevronRight size="30px" />
         </button>
       </div>
       <div className="h-px w-full bg-gradient-to-r from-red-600 to-transparent "></div>

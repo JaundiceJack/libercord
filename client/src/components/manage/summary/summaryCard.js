@@ -167,7 +167,7 @@ const SummaryCard = () => {
 
 
   return (
-    <div className={cardContainerClasses+"col-span-3 sm:col-span-1 sm:sticky sm:top-4"}>
+    <div className={cardContainerClasses+"h-40 col-span-3 sm:col-span-1 sm:sticky sm:top-4"}>
       <div className="flex flex-row px-2 pt-2 pb-1 justify-center">
         <h2 className="font-jose text-xl text-blue-300">Your Finances</h2>
       </div>

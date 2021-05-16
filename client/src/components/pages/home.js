@@ -1,7 +1,15 @@
+// Import basics
+import React, { useState, useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 // Import components
 import FeatureCard from './featureCard';
 // Import main image
 import hero from '../../images/bitcoin.jpg';
+// Import style presets
+import { buttonClasses } from '../tailwinds';
+// Import router stuff
+import { Link } from 'react-router-dom';
 // Import icons
 import { FaHeartbeat, FaChartLine, FaBalanceScale, FaPiggyBank } from 'react-icons/fa';
 import { GiVelociraptorTracks, GiBackwardTime, GiImprisoned, GiPiggyBank, GiScales } from 'react-icons/gi';
@@ -13,54 +21,42 @@ import SwiperCore, { Navigation, Pagination, Scrollbar, Autoplay } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import Swiper styles
 import 'swiper/swiper-bundle.css';
-
+// Import actions
+import { changePage } from '../../actions/authActions';
 
 
 const Home = () => {
-  const containerClasses = "relative z-10 lg:max-w-2xl lg:w-full rounded-lg " +
-                           " h-full flex items-center " +
-                           " bg-gradient-to-r from-black to-gray-900 ";
-
-  const dividerClasses = " absolute hidden lg:block absolute right-0 inset-y-0 " +
-                         " h-full w-48 text-white transform translate-x-1/2 ";
-
-  const contentClasses = " px-8 py-4 flex flex-col ";
-
-  const h1Classes = " font-libre text-6xl leading-normal " +
-  " bg-clip-text text-transparent bg-gradient-to-b from-gray-200 to-blue-400 "
-  const h2Classes = " font-libre text-3xl leading-tight " +
-  " bg-clip-text text-transparent bg-gradient-to-b from-gray-300 to-blue-500 "
-  const introTextClasses = "mt-3 text-lg text-gray-300 font-jose "
-
-  const heroImageClasses = "h-56 sm:h-72 md:h-96 lg:h-full w-full mt-4 sm:mt-0 " +
-                           " object-cover rounded-r-xl rounded-l-xl sm:rounded-l-none "
-
+  // Change the highlighted page icon
+  const dispatch = useDispatch();
+  const changeActive = nextPage => { dispatch(changePage(nextPage)) }
 
   const cards = [
     <FeatureCard header="Balance Spending"
-    text="Enter your daily expenses and income to see exactly where your money is going."
-    icon=<GiScales size="40px" color="#ABC" /> />,
+                 text="Enter your daily expenses and income to see exactly where your money is going."
+                 icon=<GiScales size="40px" color="#ABC" /> />,
     <FeatureCard header="Track Savings"
-    text="See exactly how much you're saving (or losing) each month, and what you can cut back on to save more."
-    icon=<GiPiggyBank size="40px" color="#ABC" /> />,
+                 text="See exactly how much you're saving (or losing) each month, and what you can cut back on to save more."
+                 icon=<GiPiggyBank size="40px" color="#ABC" /> />,
     <FeatureCard header="Monitor Assets"
-    text="Get up-to-date stock, crypto, and precious metals prices when you're ready to invest."
-    icon=<AiOutlineLineChart size="40px" color="#ABC" /> />,
+                 text="Get up-to-date stock, crypto, and precious metals prices when you're ready to invest."
+                 icon=<AiOutlineLineChart size="40px" color="#ABC" /> />,
     <FeatureCard header="Limit Liabilities"
-    text="Keep records of your loans, debts, and mortgage to keep your wallet above water."
-    icon=<GiImprisoned size="40px" color="#ABC" /> />
+                 text="Keep records of your loans, debts, and mortgage to keep your wallet above water."
+                 icon=<GiImprisoned size="40px" color="#ABC" /> />
   ]
-
 
   // install Swiper modules
   SwiperCore.use([Navigation, Pagination, Scrollbar, Autoplay]);
 
   return (
-    <div className="relative flex-grow">
-      <div className={containerClasses}>
+    <div className="relative flex-grow flex flex-col">
+      <div className="lg:mr-0 sm:mr-8 mr-0 relative z-10 lg:max-w-2xl \
+                      lg:w-full rounded-lg h-full flex items-center \
+                      bg-gradient-to-r from-black to-gray-900 ">
 
         {/* Make a divider shape with an svg */}
-        <svg className={dividerClasses}
+        <svg className="absolute hidden lg:block absolute right-0 inset-y-0 \
+                        h-full w-48 text-white transform translate-x-1/2 "
              viewBox="0 0 100 100"
              preserveAspectRatio="none" fill="inherit">
           <defs>
@@ -73,84 +69,80 @@ const Home = () => {
         </svg>
 
         {/* Introduce the site */}
-        <main className={contentClasses}>
-          <h1 className={h1Classes}>
-            LiberCrypt
-          </h1>
-          <h2 className={h2Classes}>
-            Liberty through Finance.
-          </h2>
-          <p className={introTextClasses}>
-            Keeping up with your financial health making you sick? Let LiberCrypt Help!
-            With LiberCrypt you can record and visualize your finances to incrementally achieve your monetary goals.
-          </p>
+        <main className="lg:px-0 lg:py-0 sm:px-8 sm:py-4 px-2 py-2   \
+                         flex flex-col lg:mx-0 mx-auto ">
+          <div className="flex flex-col items-start">
+            <h1 className="w-full sm:text-left text-center text-6xl  \
+                           font-libre leading-tight sm:leading-normal text-transparent  \
+                           bg-clip-text bg-gradient-to-b from-gray-200 to-blue-400    ">
+              Liber<br className="sm:hidden"/>Crypt
+            </h1>
+            <h2 className="mt-3 w-full sm:text-left text-center text-3xl  \
+                           font-libre leading-tight text-transparent \
+                           bg-clip-text bg-gradient-to-b from-gray-300 to-blue-500 ">
+              Liberty through Finance.
+            </h2>
+            <p className="mt-3 w-full sm:text-left text-center text-lg \
+                          font-jose text-blue-100">
+              Keeping up with your financial health making you sick?
+            </p>
+            <div className="mt-2 flex sm:flex-row flex-col mx-auto sm:mx-0 items-baseline">
+              <p className="sm:mr-4 font-jose font-semibold text-blue-200 \
+                            sm:text-left text-center w-full">
+                Let LiberCrypt Help!
+              </p>
+              <div className="mt-6 sm:mt-2 flex flex-row items-center">
+                <Link to="/login" onClick={() => changeActive('login')}>
+                  <button className={buttonClasses+
+                    "mr-3 border-green-600 text-green-400 whitespace-nowrap"}>
+                    Log In
+                  </button>
+                </Link>
+                <p className="mr-3 font-jose font-semibold text-blue-200">or</p>
+                <Link to="/create" onClick={() => changeActive('create')}>
+                  <button className={buttonClasses+
+                    "border-blue-400 text-blue-300 whitespace-nowrap"}>
+                    Make an Account
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
 
-          <Swiper
-            id='slider'
-            className="mt-12"
-            style={{marginLeft: 0, width: 600, height: 200}}
-            spaceBetween={0}
-            slidesPerView={1}
-            loop={true}
-            autoplay={{ delay: 6000 }}
-            pagination={{ clickable: true }}
-            scrollbar={{ draggable: true }}
-            onSlideChange={() => {return}}
-            onSwiper={(swiper) => {return}}
-          >
-            {cards.map(card => {
-              return <SwiperSlide className="flex">
-                {({ isActive }) => (
-                  isActive && card
-                )}
-              </SwiperSlide> })}
-          </Swiper>
+          {/* App Details Slider */}
+          <div className="w-80 sm:w-120 md:w-152 sm:self-start self-center">
+            <Swiper
+              id='slider'
+              autoWidth='true'
+              className="my-6 md:mb-2 md:mt-12"
+              style={{marginLeft: 0, height: 200}}
+              spaceBetween={0}
+              slidesPerView={1}
+              loop={true}
+              autoplay={{ delay: 6000 }}
+              pagination={{ clickable: true }}
+              scrollbar={{ draggable: true }}
+              onSlideChange={() => {return}}
+              onSwiper={(swiper) => {return}}
+            >
+              {cards.map(card => {
+                return <SwiperSlide className="">
+                         {({ isActive }) => ( isActive && card )}
+                       </SwiperSlide> })}
+            </Swiper>
+          </div>
         </main>
       </div>
 
-      <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-        <img className={heroImageClasses} src={hero} alt="" />
+      {/* Hero Image */}
+      <div className="relative lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 px-2 \
+                      sm:mr-0 -mr-2 sm:px-8 sm:py-4 lg:px-0 lg:py-0">
+        <img className="sm:h-56 md:h-80 lg:h-full w-full mt-4 lg:mt-0 \
+                        object-cover rounded-r-xl rounded-l-xl lg:rounded-l-none "
+                        src={hero} alt="Bitcoin, credit, and gold." />
       </div>
     </div>
   );
 };
 
 export default Home;
-
-/*
-<div className="grid grid-cols-2 gap-4 p-0 sm:p-2">
-
-  <div className="col-span-2 relative">
-    <img className="rounded-lg" src={hero} alt="Bitcoin & Gold"></img>
-    <div className="sm:absolute sm:top-5 mb-2 sm:mb-0 mt-4 sm:mt-0 pl-6 flex flex-col text-center sm:text-left">
-      <span className={introTextClasses+"text-5xl font-extrabold mb-2"}>
-        LiberCrypt
-      </span>
-      <span className={introTextClasses+"text-2xl font-bold"}>
-        Liberty through finance.
-      </span>
-    </div>
-    <div className="h-0.5 w-full bg-gradient-to-r from-black via-blue-600 to-transparent"></div>
-  </div>
-
-
-  <div className="text-center col-span-2 pt-6 p-4 bg-gradient-to-br from-black via-gray-900 to-gray-800 rounded-md">
-    <span className="text-xl font-bold text-blue-200" style={{"text-shadow": "0px 0px 10px #444"}}>
-      Sick of keeping track of your financial health?<br/>Let LiberCrypt help!
-    </span>
-    <div className="mt-6 mb-10"></div>
-
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-      <FeatureCard header="Manage Financial Health"
-      text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-      icon=<FaHeartbeat size="60px" color="#ABC" /> />
-      <FeatureCard header="Track Assets & Income"
-      text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-      icon=<GiVelociraptorTracks size="60px" color="#ABC" /> />
-      <FeatureCard header="Limit Expenses & Liabilities"
-      text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-      icon=<IoSpeedometerOutline size="60px" color="#ABC" /> />
-    </div>
-  </div>
-</div>
-*/

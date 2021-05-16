@@ -6,6 +6,8 @@ import {
   DELETE_INCOME,
   LOADING_INCOMES,
   UPDATE_INCOME_COL,
+  TOGGLE_INCOME_EDIT,
+  TOGGLE_INCOME_DELETING,
   SORT_INCOME,
 } from '../actions/types.js';
 import { SortDirection } from 'react-virtualized';
@@ -36,7 +38,8 @@ const initialState = {
     {name: 'date',     text: 'When',     view: true},
     {name: 'source', text: 'Source', view: false},
   ],
-
+  editing: false,
+  deleting: false,
   sortBy: 'date',
   selectedRow: null,
   sortDirection: SortDirection.DESC,
@@ -95,7 +98,19 @@ const incomeReducer = (state = initialState, action) => {
         ...state,
         selectedRow: null,
         sortDirection: state.sortDirection === SortDirection.DESC ?
-          SortDirection.ASC : SortDirection.DESC
+          SortDirection.ASC : SortDirection.DESC,
+        editing: false,
+        deleting: false
+      }
+    case TOGGLE_INCOME_EDIT:
+      return {
+        ...state,
+        editing: !state.editing
+      }
+    case TOGGLE_INCOME_DELETING:
+      return {
+        ...state,
+        deleting: !state.deleting
       }
     default:
       return state;

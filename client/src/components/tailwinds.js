@@ -27,18 +27,14 @@ export const summaryClasses =
   " rounded-t-lg border-b border-green-900 " +
   " bg-gradient-to-br from-black to-gray-700 ";
 
-export const mainClasses =
-  " flex-1 flex flex-col md:flex-row mx-auto " +
-  " rounded " +
-  " bg-gradient-to-br from-black via-black to-gray-900 ";
 
 // Nav Classes
 export const navClasses =
-  " flex flex-row md:flex-col sticky top-0 sm:h-screen z-50 " +
+  " flex flex-row md:flex-col sticky top-0 md:h-screen z-50 " +
   " bg-black rounded-bl rounded-b-lg sm:rounded-none "
 export const navLinkClasses =
   " relative flex group items-center justify-center " +
-  " border-t-4 sm:border-t-0 border-l-0 sm:border-l-4 border-black hover:border-blue-400 " +
+  " border-t-4 md:border-t-0 border-l-0 md:border-l-4 border-black hover:border-blue-400 " +
   " h-16 w-20 cursor-pointer ";
 export const navIconClasses =
   " absolute opacity-1 group-hover:opacity-0 text-gray-300 " +
@@ -65,14 +61,14 @@ export const hrCenterClasses =
 export const tableContainerClasses =
   " min-h-screen " +
   " rounded-xl border-l border-gray-600 " +
-  " bg-gray-300 ";
+  " bg-gradient-to-br from-gray-900 to-transparent ";
 export const tableHeaderClasses =
-  " bg-gradient-to-br from-gray-700 to-gray-900 rounded-t-xl text-blue-100 "
+  " bg-gradient-to-br from-gray-700 to-transparent rounded-t-xl text-blue-100 "
 export const tableRowClasses =
-  " bg-gray-300 border-b border-gray-400 hover:bg-gray-400 ";
+  " bg-gradient-to-br from-gray-300 to-gray-500 border-b border-gray-400 hover:bg-gray-400 font-jose ";
   export const tableSelectedClasses =
-    " bg-yellow-300 border-l-8 border-yellow-500 ";
-export const tableFooterClasses =
+    " bg-gradient-to-br from-yellow-300 to-yellow-500 ";
+export const tableEndClasses =
   " h-5 rounded-b-md bg-gray-900 "
 
 // Input Classes

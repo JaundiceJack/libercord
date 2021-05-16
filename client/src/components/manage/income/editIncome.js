@@ -18,6 +18,19 @@ import { submitClasses,
 // Import a date formatter
 import { inputDate }     from '../../../functions/dateFunctions';
 
+// So, there's a bug here
+// When an item is selected, and edit is pressed, and the table is sorted,
+// the user is locked into the edit box,
+// when instead when the table is sorted,
+// maybe something where if selected is null, it shoots off a toggleEdit
+// and run the update function each second
+
+// i think not here, in the incomeOptions, i need to put the editing state,
+// in the store, and when the sort action is issued, change editing to false,
+
+
+
+
 const EditIncome = ({ toggleEdit }) => {
   // Get the selected income and selectable categories from the store
   const selected   = useSelector( state => state.income.selectedIncome );
@@ -25,7 +38,7 @@ const EditIncome = ({ toggleEdit }) => {
   // Set internal component state variables
   const [id,         setId]         = useState(selected._id);
   const [category,   setCategory]   = useState(selected.category);
-  const [value,      setValue]      = useState(selected.value);
+  const [value,      setValue]      = useState(selected.value.replace("$", ""));
   const [source,     setSource]     = useState(selected.source);
   const [date,       setDate]       = useState(inputDate(selected.date));
   const [addSrc,     setAddSrc]     = useState(selected.source ? true : false);
@@ -36,7 +49,7 @@ const EditIncome = ({ toggleEdit }) => {
   const setUpdate   = () => {
     setId(      selected._id);
     setCategory(selected.category);
-    setValue(   selected.value);
+    setValue(   selected.value.replace("$", ""));
     setSource(  selected.source);
     setDate(
       inputDate(selected.date));

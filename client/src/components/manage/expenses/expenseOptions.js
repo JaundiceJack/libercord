@@ -17,15 +17,17 @@ import { buttonClasses,
          errorMsgClasses }    from '../../tailwinds';
 // Import server actions
 import { clearErrors }        from '../../../actions/errorActions';
+import { toggleExpenseEditing,
+         toggleExpenseDeleting } from '../../../actions/expenseActions';
 
 const ExpenseOptions = ( ) => {
   // Get the selected row from the store
   const selectedRow = useSelector( state => state.expense.selectedRow );
   const serverError = useSelector( state => state.error.msg.msg );
+  const editing     = useSelector( state => state.expense.editing );
+  const deleting    = useSelector( state => state.expense.deleting );
   // Set the internal component states
   const [adding,        setAdding]        = useState(false);
-  const [editing,       setEditing]       = useState(false);
-  const [deleting,      setDeleting]      = useState(false);
   const [editCols,      setEditCols]      = useState(false);
   const [editSelection, setEditSelection] = useState(false);
 
@@ -42,9 +44,9 @@ const ExpenseOptions = ( ) => {
   const onAdd     = () => setAdding(!adding);
   const onColEdit = () => setEditCols(!editCols);
   const onEdit    = () => { selectedRow !== null && selectedRow !== undefined
-                            && setEditing(!editing) };
+                            && dispatch(toggleExpenseEditing()) };
   const onDelete  = () => { selectedRow !== null && selectedRow !== undefined
-                            && setDeleting(!deleting) };
+                            && dispatch(toggleExpenseDeleting()) };
 
   return (
     <div className={cardContainerClasses+"col-span-5 sm:col-span-1 p-2 self-start"}>

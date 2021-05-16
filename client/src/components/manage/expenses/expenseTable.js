@@ -17,10 +17,14 @@ const ExpenseTable = () => {
     dispatch(selectExpense(rowData, index)) };
   const sorted = ()  => {
     dispatch(sortedExpenses()) };
+  // Format the expense prices
+  const formatted = expense.expenses.map(exp => {
+    return {...exp, value: "$"+exp.value};
+  })
 
   return (
     <TableA
-      data       ={expense.expenses}
+      data       ={formatted}
       cols       ={expense.columns}
       selectedRow={expense.selectedRow}
       selectDatum={select}

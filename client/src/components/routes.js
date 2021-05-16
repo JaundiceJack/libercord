@@ -18,32 +18,6 @@ const Routes = () => {
   // Handle the reset password route
   const history = useHistory();
   const dispatch = useDispatch();
-  useEffect(() => {
-    console.log("routes loaded");
-    /*
-    if (history.location.pathname.startsWith('/reset:')) {
-      // Dispatch a token verification request to the server
-      const token = history.location.pathname.substr(7);
-      dispatch(checkResetToken(token));
-
-      // So, on the reset page, I should check if the token is currently being verified first,
-      // if it's not, check if the isGenuine is true
-      // if isGenuine is true, render the reset page, otherwise redirect to the login with errors
-      // if it is being verified, load a blank page until done verifying
-
-      // Send the user to the reset password page
-      history.push('/reset');
-
-    }
-
-
-    ok, now i have the routes fixed a bit, and the idea a bit more clear,
-    instead of complicated routing stuff on the new password page,
-    instead i'll simply do the token verification before changing the password,
-    that way i can respond with an error on the page
-    (and possibly redirect to the forgot page to prompt a new email submission)
-    */
-  }, []);
 
   return (
     <div className="p-2 flex flex-col w-full">

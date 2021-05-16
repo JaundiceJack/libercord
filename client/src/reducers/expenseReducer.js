@@ -6,6 +6,8 @@ import {
   DELETE_EXPENSE,
   LOADING_EXPENSES,
   UPDATE_EXPENSE_COL,
+  TOGGLE_EXPENSE_EDIT,
+  TOGGLE_EXPENSE_DELETING,
   SORT_EXPENSE,
 } from '../actions/types.js';
 import { SortDirection } from 'react-virtualized';
@@ -50,6 +52,8 @@ const initialState = {
     {name: 'location', text: 'Location', view: false},
     {name: 'name',     text: 'Item',     view: false}
   ],
+  editing: false,
+  deleting: false,
   sortBy: 'date',
   selectedRow: null,
   sortDirection: SortDirection.DESC,
@@ -108,7 +112,19 @@ const expenseReducer = (state = initialState, action) => {
         ...state,
         selectedRow: null,
         sortDirection: state.sortDirection === SortDirection.DESC ?
-          SortDirection.ASC : SortDirection.DESC
+          SortDirection.ASC : SortDirection.DESC,
+        editing: false,
+        deleting: false
+      }
+    case TOGGLE_EXPENSE_EDIT:
+      return {
+        ...state,
+        editing: !state.editing
+      }
+    case TOGGLE_EXPENSE_DELETING:
+      return {
+        ...state,
+        deleting: !state.deleting
       }
     default:
       return state;

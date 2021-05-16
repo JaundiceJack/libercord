@@ -8,8 +8,6 @@ import { BrowserRouter } from 'react-router-dom';
 // Import components
 import Nav    from './components/nav';
 import Routes from './components/routes';
-// Import style presets
-import { mainClasses } from './components/tailwinds';
 
 class App extends Component {
   render() {
@@ -19,7 +17,8 @@ class App extends Component {
         {/*Connect nav links to their routes via Browser Router*/}
         <BrowserRouter>
           <div className="bg-gray-800 min-h-screen flex">
-            <main className={mainClasses}>
+            <main className="flex-1 flex flex-col md:flex-row \
+                             rounded bg-gradient-to-br from-black via-black to-gray-900 ">
               <Nav />
               <Routes />
             </main>

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 // Import server actions
 import { getIncomes } from '../../../actions/incomeActions';
 // Import Icons
-import { IoChevronBackCircle, IoChevronForwardCircle } from "react-icons/io5";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 // Import date functions to parse data
 import { isSameMonth, isSameYear, isBefore } from 'date-fns';
 // Import components
@@ -177,13 +177,13 @@ const SavingsCard = () => {
 
   return (
     <div className={cardContainerClasses+"col-start-1 sm:col-start-2 col-end-4"}>
-      <div className="flex flex-row px-2 pt-2 pb-1 justify-center sm:justify-start">
+      <div className="flex flex-row px-2 pt-2 pb-1 items-end justify-center sm:justify-start">
         <button onClick={decrementYear} className="text-yellow-200 mx-2" >
-          <IoChevronBackCircle size="30px" />
+          <HiChevronLeft size="30px" />
         </button>
-        <h2 className="font-jose text-xl text-yellow-200">{year} Savings</h2>
+        <h2 className="font-jose text-xl text-blue-100">{year} Savings</h2>
         <button onClick={incrementYear} className="text-yellow-200 ml-2">
-          <IoChevronForwardCircle size="30px" />
+          <HiChevronRight size="30px" />
         </button>
       </div>
       <div className={hrLeftClasses}></div>

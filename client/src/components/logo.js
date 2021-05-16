@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import logo from '../images/lclogo.png'
 
 const Logo = ({ onClick }) => {
-  const logoClasses = "h-16 w-16 mt-1 sm:mt-4 ml-1 sm:ml-0 mb-6 self-start sm:self-center " +
-                      "transform duration-75 hover:scale-110 "
+  const logoClasses = "h-10 w-10 md:h-14 md:w-14 md:mt-4 ml-4 mb-4 mt-3 mr-4 md:mr-0" +
+                      " transform duration-75 hover:scale-110 "
 
   return (
     <Link to="/" className={logoClasses} onClick={onClick}>
