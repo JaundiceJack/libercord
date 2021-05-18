@@ -50,8 +50,8 @@ const Home = () => {
 
   return (
     <div className="relative flex-grow flex flex-col">
-      <div className="lg:mr-0 sm:mr-8 mr-0 relative z-10 lg:max-w-2xl \
-                      lg:w-full rounded-lg h-full flex items-center \
+      <div className="lg:mr-0 sm:mr-8 mr-0 relative z-10 lg:w-1/2 \
+                      rounded-lg h-full flex items-center \
                       bg-gradient-to-r from-black to-gray-900 ">
 
         {/* Make a divider shape with an svg */}
@@ -110,7 +110,7 @@ const Home = () => {
           </div>
 
           {/* App Details Slider */}
-          <div className="w-80 sm:w-120 md:w-152 sm:self-start self-center">
+          <div className="w-80 sm:w-120 md:w-152 lg:w-120 sm:self-start self-center">
             <Swiper
               id='slider'
               autoWidth='true'
@@ -135,7 +135,7 @@ const Home = () => {
       </div>
 
       {/* Hero Image */}
-      <div className="relative lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 px-2 \
+      <div className="relative lg:absolute lg:inset-y-0 lg:right-0 lg:w-3/5 px-2 \
                       sm:mr-0 -mr-2 sm:px-8 sm:py-4 lg:px-0 lg:py-0">
         <img className="sm:h-56 md:h-80 lg:h-full w-full mt-4 lg:mt-0 \
                         object-cover rounded-r-xl rounded-l-xl lg:rounded-l-none "

@@ -10,17 +10,19 @@ const app = express();
 // Body parser middleware
 app.use(express.json());
 
-// Set up cross origin resource sharing
+// Set up cross origin resource sharing (for Heroku)
+/*
 if (process.env.NODE_ENV === 'production') {
   const whitelist = [];
   const corsOptions = {
     origin: (origin, callback) => {
       if (whitelist.indexOf(origin) !== -1) { callback(null, true) }
-      else { callback(new Error('Not allowed by CORS')) }
+      else { callback(new Error(`${origin} not allowed by CORS`)) }
     }
   }
   app.use(cors(corsOptions));
 }
+*/
 
 // Get the mongo connection key
 const db = require('./config/keys').mongoURI;

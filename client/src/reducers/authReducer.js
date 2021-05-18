@@ -56,7 +56,7 @@ const authReducer = (state = initialState, action) => {
         user: null,
         isAuthenticated: false,
         isLoading: false,
-        currentPage: 'home'
+        currentPage: 'login'
       };
     case CHANGE_PAGE:
       return {
