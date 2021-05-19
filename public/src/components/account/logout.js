@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 // Import icons
 import { RiLogoutCircleLine } from 'react-icons/ri';
 // Import server actions
-import { logout, changeActive } from '../../actions/authActions';
+import { logout, changePage } from '../../actions/authActions';
 // Import style presets
 import { navLinkClasses, navIconClasses, navTextClasses } from '../tailwinds';
 
