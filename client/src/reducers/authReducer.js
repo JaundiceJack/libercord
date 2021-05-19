@@ -55,8 +55,7 @@ const authReducer = (state = initialState, action) => {
         token: null,
         user: null,
         isAuthenticated: false,
-        isLoading: false,
-        currentPage: 'login'
+        isLoading: false
       };
     case CHANGE_PAGE:
       return {

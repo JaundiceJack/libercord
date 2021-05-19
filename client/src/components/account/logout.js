@@ -1,27 +1,32 @@
 // Import basics
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+// Import router stuff
+import { Link } from 'react-router-dom';
 // Import icons
 import { RiLogoutCircleLine } from 'react-icons/ri';
 // Import server actions
-import { logout } from '../../actions/authActions';
+import { logout, changeActive } from '../../actions/authActions';
 // Import style presets
 import { navLinkClasses, navIconClasses, navTextClasses } from '../tailwinds';
 
 const Logout = () => {
   // Dispatch the logout action if the button is clicked
   const dispatch = useDispatch();
-  const onLogout = () => { dispatch(logout()); }
+  const onLogout = () => {
+    dispatch(changePage('login')); 
+    dispatch(logout());
+  }
 
   return (
-    <div onClick={onLogout} className={navLinkClasses}>
+    <Link to='/login' onClick={onLogout} className={navLinkClasses}>
       <p className={navTextClasses}>
         Logout
       </p>
       <p className={navIconClasses}>
         <RiLogoutCircleLine size="40px" />
       </p>
-    </div>
+    </Link>
   );
 };
 
