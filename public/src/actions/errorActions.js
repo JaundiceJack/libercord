@@ -1,17 +1,22 @@
-// Import action types
-import { GET_ERRORS, CLEAR_ERRORS } from './types';
+import {
+  USER_ERROR_RESET,
+} from './types.js';
 
-// Put any action errors into the current state
-export const returnErrors = (msg, status, id = null) => {
-  return {
-    type: GET_ERRORS,
-    payload: { msg, status, id }
-  }
-}
+export const handleError = err => {
+  return err.response &&
+    err.response.data.message ?
+    err.response.data.message : err.message;
+};
 
-// Remove any errors from the current state
-export const clearErrors = () => {
-  return {
-    type: CLEAR_ERRORS
+export const clearError = type => dispatch => {
+  switch (type) {
+    case 'user':
+      dispatch({ type: USER_ERROR_RESET });
+      break;
+    case 'all':
+      dispatch({ type: USER_ERROR_RESET });
+      break;
+    default:
+      dispatch({ type: type });
   }
-}
+};

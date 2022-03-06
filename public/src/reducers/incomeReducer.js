@@ -1,117 +1,103 @@
 import {
-  GET_INCOMES,
-  ADD_INCOME,
-  SELECT_INCOME,
-  EDIT_INCOME,
-  DELETE_INCOME,
-  LOADING_INCOMES,
-  UPDATE_INCOME_COL,
-  TOGGLE_INCOME_EDIT,
-  TOGGLE_INCOME_DELETING,
-  SORT_INCOME,
+  INCOME_LIST_REQUEST,   INCOME_LIST_SUCCESS,   INCOME_LIST_FAILURE,
+  INCOME_GET_REQUEST,    INCOME_GET_SUCCESS,    INCOME_GET_FAILURE,
+  INCOME_CREATE_REQUEST, INCOME_CREATE_SUCCESS, INCOME_CREATE_FAILURE,
+  INCOME_EDIT_REQUEST,   INCOME_EDIT_SUCCESS,   INCOME_EDIT_FAILURE,
+  INCOME_DELETE_REQUEST, INCOME_DELETE_SUCCESS, INCOME_DELETE_FAILURE,
+  INCOME_ERROR_RESET,    INCOME_DIRECT_SELECT,
+  INCOME_TOGGLE_ADDING,  INCOME_TOGGLE_EDITING, INCOME_TOGGLE_DELETING,
+  INCOME_TABLE_SORT
 } from '../actions/types.js';
-import { SortDirection } from 'react-virtualized';
+
 
 const initialState = {
   incomes: [],
+  selected: null,
   loading: false,
-  categories: [
-    "Bond Interest",
-    "Dividend",
-    "Equipment Rental",
-    "Gift",
-    "Gig",
-    "Inheritance",
-    "Fulltime Job",
-    "Parttime Job",
-    "Loan Interest",
-    "Lucky Find",
-    "Real Estate Rental",
-    "Real Estate Sale Profit",
-    "Stimulus",
-    "Welfare",
-    "Other"
-  ],
-  columns: [
-    {name: 'value',    text: 'Received',     view: true},
-    {name: 'category', text: 'Category', view: true},
-    {name: 'date',     text: 'When',     view: true},
-    {name: 'source', text: 'Source', view: false},
-  ],
+  adding: false,
   editing: false,
   deleting: false,
-  sortBy: 'date',
-  selectedRow: null,
-  sortDirection: SortDirection.DESC,
-  selectedIncome: null,
+
+  table: {
+    sortBy: 'date',
+    sortDirection: 'desc',
+    selectedRow: null,
+    columns: [
+      { name: 'value',    text: 'Received', view: true },
+      { name: 'category', text: 'Category', view: true },
+      { name: 'date',     text: 'When',     view: true },
+      { name: 'source',   text: 'Source',   view: false },
+    ]
+  }
 }
 
 const incomeReducer = (state = initialState, action) => {
   switch(action.type) {
-    case GET_INCOMES:
+    case INCOME_LIST_REQUEST:
+    case INCOME_GET_REQUEST:
+    case INCOME_CREATE_REQUEST:
+    case INCOME_EDIT_REQUEST:
+    case INCOME_DELETE_REQUEST:
+      return { ...state, loading: true }
+    case INCOME_LIST_FAILURE:
+    case INCOME_GET_FAILURE:
+    case INCOME_CREATE_FAILURE:
+    case INCOME_EDIT_FAILURE:
+    case INCOME_DELETE_FAILURE:
+      return { ...state, loading: false, error: action.payload }
+    case INCOME_LIST_SUCCESS:
+      return { ...state, loading: false, incomes: action.payload }
+    case INCOME_GET_SUCCESS:
+      return { ...state, loading: false, selected: action.payload }
+    case INCOME_CREATE_SUCCESS:
       return {
         ...state,
-        incomes: action.payload,
+        // Add the new income to the end
+        incomes: [
+          ...state.incomes,
+           action.payload
+         ],
+        selected: action.payload,
+        adding: false,
         loading: false
       }
-    case DELETE_INCOME:
+    case INCOME_EDIT_SUCCESS:
       return {
         ...state,
-        incomes: state.incomes.filter(income => income._id !== action.payload),
-        selectedIncome: null,
-        selectedRow: null
+        // Filter out the income with the payload's id and add the edited one to the end
+        incomes: [
+          ...state.incomes.filter(income => income._id !== action.payload._id),
+          action.payload
+        ],
+        selected: action.payload,
+        editing: false,
+        loading: false
       }
-    case ADD_INCOME:
+    case INCOME_DELETE_SUCCESS:
       return {
         ...state,
-        incomes: [...state.incomes, action.payload],
-        selectedIncome: null,
-        selectedRow: null
+        // Filter out the income with the payload's id
+        incomes: [
+          ...state.incomes.filter(income => income._id !== action.payload)
+        ],
+        selected: null,
+        deleting: false,
+        loading: false
       }
-    case LOADING_INCOMES:
+    case INCOME_TOGGLE_ADDING: return { ...state, adding: !state.adding }
+    case INCOME_TOGGLE_EDITING: return { ...state, editing: !state.editing }
+    case INCOME_TOGGLE_DELETING: return { ...state, deleting: !state.deleting }
+    case INCOME_DIRECT_SELECT: return { ...state, selected: action.payload }
+
+    case INCOME_TABLE_SORT:
       return {
         ...state,
-        loading: true
-      }
-    case UPDATE_INCOME_COL:
-      return {
-        ...state,
-        columns: state.columns.map(col =>
-          col.name === action.payload.name ? action.payload : col)
-      }
-    case SELECT_INCOME:
-      return {
-        ...state,
-        selectedIncome: action.payload.income,
-        selectedRow:    action.payload.index
-      }
-    case EDIT_INCOME:
-      return {
-        ...state,
-        incomes: [...state.incomes.filter(income =>
-          {return income._id !== action.payload._id}), action.payload],
-        selectedIncome: null,
-        selectedRow: null,
-      }
-    case SORT_INCOME:
-      return {
-        ...state,
-        selectedRow: null,
-        sortDirection: state.sortDirection === SortDirection.DESC ?
-          SortDirection.ASC : SortDirection.DESC,
+        adding: false,
         editing: false,
         deleting: false
       }
-    case TOGGLE_INCOME_EDIT:
-      return {
-        ...state,
-        editing: !state.editing
-      }
-    case TOGGLE_INCOME_DELETING:
-      return {
-        ...state,
-        deleting: !state.deleting
-      }
+    case INCOME_ERROR_RESET:
+      return { ...state, error: null }
     default:
       return state;
   }

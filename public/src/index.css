@@ -3,16 +3,178 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import external fonts */
 @import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
 @import url('https://fonts.googleapis.com/css?family=Libre+Baskerville');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;600;700&display=swap');
 
-
+/* Font Classes */
 .font-libre { font-family: 'Libre Baskerville'; }
-.font-jose { font-family: 'Josefin Sans'; }
+.font-jose { font-family: 'Josefin Sans', 'Arial'; }
+.font-mont { font-family: 'Montserrat Alternates', 'Arial'; }
+.text-shadow { text-shadow: -1px 0px 10px #111; }
 
+/* Background gradients */
+.bg-header {
+  background: radial-gradient(at top, #606069, #404049);
+  box-shadow: inset 0 0 2px #050512;
+}
+.bg-content {
+  background: radial-gradient(at bottom, rgba(100, 100, 100, 0.95), rgba(100, 100, 100, 0.85), rgba(100, 100, 100, 0.5))
+}
+.bg-shadow { box-shadow: 0 -2px 10px 5px #050512; }
+.bg-input-label {
+  background: radial-gradient(at right, #606069, #404049);
+  box-shadow: 0 0 2px #050512;
+  z-index: 10;
+}
+.bg-input-entry {
+  box-shadow: 0 0 2px #050512;
+  z-index: 20;
+}
+.bg-input-append {
+  background: radial-gradient(at left, #606069, #404049);
+  box-shadow: 0 0 2px #050512;
+  z-index: 10;
+}
+.container-bg {
+  background: radial-gradient(#606069, #404049);
+  box-shadow: 0 -1px 5px 1px #000;
+}
+.container-bg-dark {
+  background: radial-gradient(at bottom, #303039, #101019);
+  box-shadow: 0 -1px 5px 1px #000;
+}
+
+
+/* Button colors */
+.button-next { width: 0;
+  height: 0;
+  border-top: 60px solid transparent;
+  border-bottom: 60px solid transparent;
+
+  border-left: 60px solid green; }
+.button-prev { width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+
+  border-right:10px solid blue;  }
+
+.bg-button-gray {
+  background: radial-gradient(rgba(200, 200, 220, 0.95), rgba(200, 200, 220, 0.65));
+  box-shadow: 0 2px 3px 1px #252532;
+}
+.bg-button-gray:hover {
+  background: radial-gradient(rgba(200, 200, 220, 0.95), rgba(200, 200, 220, 0.85));
+  box-shadow: 0 2px 6px 2px #393949;
+}
+.bg-button-green {
+  background: radial-gradient(rgba(74, 222, 128, 0.95), rgba(74, 222, 128, 0.65));
+  box-shadow: 0 2px 3px 1px #252532;
+}
+.bg-button-green:hover {
+  background: radial-gradient(rgba(74, 222, 128, 0.95), rgba(74, 222, 128, 0.85));
+  box-shadow: 0 2px 6px 2px #393949;
+}
+.bg-button-blue {
+  background: radial-gradient(rgba(59, 130, 246, 0.95), rgba(59, 130, 246, 0.65));
+  box-shadow: 0 2px 3px 1px #252532;
+}
+.bg-button-blue:hover {
+  background: radial-gradient(rgba(59, 130, 246, 0.95), rgba(59, 130, 246, 0.85));
+  box-shadow: 0 2px 6px 2px #393949;
+}
+.bg-button-yellow {
+  background: radial-gradient(rgba(250, 204, 21, 0.95), rgba(250, 204, 21, 0.65));
+  box-shadow: 0 2px 3px 1px #252532;
+}
+.bg-button-yellow:hover {
+  background: radial-gradient(rgba(250, 204, 21, 0.95), rgba(250, 204, 21, 0.85));
+  box-shadow: 0 2px 6px 2px #393949;
+}
+.bg-button-red {
+  background: radial-gradient(rgba(248, 113, 113, 0.95), rgba(248, 113, 113, 0.65));
+  box-shadow: 0 2px 3px 1px #252532;
+}
+.bg-button-red:hover {
+  background: radial-gradient(rgba(248, 113, 113, 0.95), rgba(248, 113, 113, 0.85));
+  box-shadow: 0 2px 6px 2px #393949;
+}
+.bg-button-indigo {
+  background: radial-gradient(rgba(129, 140, 248, 0.95), rgba(129, 140, 248, 0.65));
+  box-shadow: 0 2px 3px 1px #252532;
+}
+.bg-button-indigo:hover {
+  background: radial-gradient(rgba(129, 140, 248, 0.95), rgba(129, 140, 248, 0.85));
+  box-shadow: 0 2px 6px 2px #393949;
+}
+
+/* Error fade effect */
 .fadeError { animation: fade 1s linear 4s 1 forwards; }
-
 @keyframes fade {
   from { opacity: 100; }
   to   { opacity: 0;   }
+}
+
+/* Nav tooltip styling */
+.tooltip {
+  background: rgb(55 65 81);
+  box-shadow: 0 0 10px 3px #09090d;
+}
+.tooltip::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 100%; /* To the left of the tooltip */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent rgb(55 65 81) transparent transparent;
+}
+
+/* Custom dropdown menu styling */
+select {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  padding: 0 1em 0 0;
+  margin: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+  outline: none;
+}
+select::-ms-expand {
+  display: none;
+}
+.custom-select {
+  width: 100%;
+  border: 1px solid #777;
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1.1;
+  background-color: rgb(243 244 246);
+  background-image: rgb(243 244 246);
+  box-shadow: 0 0 2px #050512;
+  z-index: 20;
+  display: grid;
+  grid-template-areas: "select";
+  align-items: center;
+}
+.custom-select::after {
+  content: "";
+  width: 0.8em;
+  height: 0.5em;
+  margin-right: 5px;
+  background-color: #777;
+  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  justify-self: end;
+}
+
+select,
+.custom-select:after {
+  grid-area: select;
 }

@@ -2,36 +2,17 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const AssetSchema = new Schema({
-  user_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  category: {
-    type: String,
-    required: true
-  },
-  name: {
-    type: String,
-    required: true
-  },
-  value: {
-    type: Number,
-    default: 0
-  },
+  name:         { type: String, required: true },
+  user_id:      { type: Schema.Types.ObjectId, ref: 'users' },
+  category:     { type: Schema.Types.ObjectId, ref: 'categories', required: true },
   amount: {
-    type: Number
+    owned: { type: Number },
+    units: { type: String, default: "token" },
+    unit_price: { type: Number },
   },
-  acquisition: {
-    type: Date,
-    default: Date.now
-  },
-  units: {
-    type: String,
-    default: ""
-  },
-  interest: {
-    type: Number
-  }
+  date: { type: Date, default: Date.now },
+  currency:  { type: String, default: "$" },
+  interest:      { type: Number }
 });
 
 module.exports = Asset = mongoose.model('asset', AssetSchema);

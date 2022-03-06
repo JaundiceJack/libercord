@@ -1,58 +1,82 @@
 // Import action types
 import {
-  GET_LIABILITIES,
-  ADD_LIABILITY,
-  DELETE_LIABILITY,
-  LOADING_LIABILITIES
+  LIABILITY_LIST_REQUEST,   LIABILITY_LIST_SUCCESS,   LIABILITY_LIST_FAILURE,
+  LIABILITY_GET_REQUEST,    LIABILITY_GET_SUCCESS,    LIABILITY_GET_FAILURE,
+  LIABILITY_CREATE_REQUEST, LIABILITY_CREATE_SUCCESS, LIABILITY_CREATE_FAILURE,
+  LIABILITY_EDIT_REQUEST,   LIABILITY_EDIT_SUCCESS,   LIABILITY_EDIT_FAILURE,
+  LIABILITY_DELETE_REQUEST, LIABILITY_DELETE_SUCCESS, LIABILITY_DELETE_FAILURE,
+  LIABILITY_ERROR_RESET,    LIABILITY_DIRECT_SELECT,
+  LIABILITY_TOGGLE_ADDING,  LIABILITY_TOGGLE_EDITING, LIABILITY_TOGGLE_DELETING
 } from './types.js';
 // Import axios to handle http requests
 import axios from 'axios';
-// Import token config to authorize updates and returnErrors to register errors
-import { tokenConfig } from './authActions';
-import { returnErrors } from './errorActions';
-// Import the server route
-import server from './route';
+// Import server actions: to report authorization errors
+import { handleError } from './errorActions';
+
+// Create a config variable to send with routes requiring authorization
+const tokenConfig = getState => {
+  const { user: { user } } = getState();
+  return { headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${user.token}`
+  }};
+}
+
+// Make a basic request header for json data
+const basicConfig = { headers: { "Content-type": "application/json" } };
 
 // Return all of the user's liabilities
-export const getLiabilities= () => (dispatch, getState) => {
-  dispatch(setLiabilitiesLoading());
-  // Get the user id
-  const user = getState().auth.user;
-  if (user) {
-    // Create an authorization token and get the liabilities
-    axios.get(`${server}/api/liabilities/` + user.id, tokenConfig(getState))
-    .then(res => dispatch({ type: GET_LIABILITIES, payload: res.data }))
-    .catch(err => {if (err.response) dispatch(returnErrors(err.response.data, err.response.status))});
-  }
-  else console.log("User not in client memory.");
+export const getLiabilities = () => async (dispatch, getState) => {
+  dispatch({ type: LIABILITY_LIST_REQUEST });
+  try {
+    const { data } = await axios.get('/api/liabilities/', tokenConfig(getState));
+    dispatch({ type: LIABILITY_LIST_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: LIABILITY_LIST_FAILURE, payload: handleError(e) }) }
+}
+
+// Return an liability with the given id
+export const getLiability = id => async (dispatch, getState) => {
+  dispatch({ type: LIABILITY_GET_REQUEST });
+  try {
+    const { data } = await axios.get(`/api/liabilities/${id}`, tokenConfig(getState));
+    dispatch({ type: LIABILITY_GET_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: LIABILITY_GET_FAILURE, payload: handleError(e) }) }
 }
 
 // Create a new liability from the user entries
-export const addLiability = liability => (dispatch, getState) => {
-  // Get the user id
-  const user = getState().auth.user;
-  if (user.id) {
-    // Convert the new liability to JSON and add in the user's id
-    const newLiability = JSON.stringify({...liability, user_id: user.id});
-    // Submit a post with the new liability and the json web token
-    axios.post(`${server}/api/liabilities`, newLiability, tokenConfig(getState))
-    .then(res =>
-      // If successful, add the liability to the current state
-      dispatch({ type: ADD_LIABILITY, payload: res.data }))
-    .catch(err => {
-      // If unsuccessful, display the errors
-      if (err.response) dispatch(returnErrors(err.response.data, err.response.status));
-    })
-  }
+export const addLiability = liability => async (dispatch, getState) => {
+  dispatch({ type: LIABILITY_CREATE_REQUEST });
+  try {
+    const newLiability = JSON.stringify(liability);
+    const { data } = await axios.post('/api/liabilities/', newLiability, tokenConfig(getState));
+    dispatch({ type: LIABILITY_CREATE_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: LIABILITY_CREATE_FAILURE, payload: handleError(e) }) }
+}
+
+// Edit the liability with the given id
+export const editLiability = (id, liability) => async (dispatch, getState) => {
+  dispatch({ type: LIABILITY_EDIT_REQUEST });
+  try {
+    const editedLiability = JSON.stringify(liability);
+    const { data } = await axios.put(`/api/liabilities/${id}`, editedLiability, tokenConfig(getState));
+    dispatch({ type: LIABILITY_EDIT_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: LIABILITY_EDIT_FAILURE, payload: handleError(e) }) }
 }
 
 // Remove the selected liability
-export const deleteLiability = id => (dispatch, getState) => {
-  axios.delete(`${server}/api/liabilities/${id}`, tokenConfig(getState))
-  .then(res =>
-    dispatch({ type: DELETE_LIABILITY, payload: id })
-  )
+export const deleteLiability = id => async (dispatch, getState) => {
+  dispatch({ type: LIABILITY_DELETE_REQUEST });
+  try {
+    const { data } = await axios.delete(`/api/liabilities/${id}`);
+    dispatch({ type: LIABILITY_DELETE_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: LIABILITY_DELETE_FAILURE, payload: handleError(e) }) }
 }
 
-// Set the liabilities to loading for spinner animations & etc.
-export const setLiabilitiesLoading = () => { return { type: LOADING_LIABILITIES } }
+// Toggle form states
+export const toggleAdding = () => dispatch => { dispatch({ type: LIABILITY_TOGGLE_ADDING }) };
+export const toggleEditing = () => dispatch => { dispatch({ type: LIABILITY_TOGGLE_EDITING }) };
+export const toggleDeleting = () => dispatch => { dispatch({ type: LIABILITY_TOGGLE_DELETING }) };
+
+// Set the given liability as the selected
+export const selectLiability = liability => dispatch => {
+  dispatch({ type: LIABILITY_DIRECT_SELECT, payload: liability })}

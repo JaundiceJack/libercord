@@ -1,91 +1,91 @@
 // Import action types
 import {
-  GET_EXPENSES,
-  ADD_EXPENSE,
-  SELECT_EXPENSE,
-  EDIT_EXPENSE,
-  DELETE_EXPENSE,
-  LOADING_EXPENSES,
-  UPDATE_EXPENSE_COL,
-  SORT_EXPENSE,
-  TOGGLE_EXPENSE_EDIT,
-  TOGGLE_EXPENSE_DELETING,
-  AUTH_ERROR
+  EXPENSE_LIST_REQUEST,   EXPENSE_LIST_SUCCESS,   EXPENSE_LIST_FAILURE,
+  EXPENSE_GET_REQUEST,    EXPENSE_GET_SUCCESS,    EXPENSE_GET_FAILURE,
+  EXPENSE_CREATE_REQUEST, EXPENSE_CREATE_SUCCESS, EXPENSE_CREATE_FAILURE,
+  EXPENSE_EDIT_REQUEST,   EXPENSE_EDIT_SUCCESS,   EXPENSE_EDIT_FAILURE,
+  EXPENSE_DELETE_REQUEST, EXPENSE_DELETE_SUCCESS, EXPENSE_DELETE_FAILURE,
+  EXPENSE_ERROR_RESET,    EXPENSE_DIRECT_SELECT,
+  EXPENSE_TOGGLE_ADDING,  EXPENSE_TOGGLE_EDITING, EXPENSE_TOGGLE_DELETING,
+  EXPENSE_TABLE_SORT
 } from './types.js';
 // Import axios to handle http requests
 import axios from 'axios';
-// Import token config to authorize updates and returnErrors to register errors
-import { tokenConfig } from './authActions';
-import { returnErrors } from './errorActions';
-// Import the server route
-import server from './route';
+// Import server actions: to report authorization errors
+import { handleError } from './errorActions';
+
+// Create a config variable to send with routes requiring authorization
+const tokenConfig = getState => {
+  const { user: { user } } = getState();
+  return { headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${user.token}`
+  }};
+}
+
+// Make a basic request header for json data
+const basicConfig = { headers: { "Content-type": "application/json" } };
 
 // Return all of the user's expenses
-export const getExpenses = () => (dispatch, getState) => {
-  dispatch(setExpensesLoading());
-  // Get the user id
-  const user = getState().auth.user;
-  if (user) {
-    const user_id = user.id || user._id;
-    // Create an authorization token and get the expenses
-    axios.get(`${server}/api/expenses/${user_id}`, tokenConfig(getState))
-    .then(res => dispatch({ type: GET_EXPENSES, payload: res.data }))
-    .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
-  }
-  else return { type: AUTH_ERROR };
+export const getExpenses = () => async (dispatch, getState) => {
+  dispatch({ type: EXPENSE_LIST_REQUEST });
+  try {
+    const { data } = await axios.get('/api/expenses/', tokenConfig(getState));
+    dispatch({ type: EXPENSE_LIST_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: EXPENSE_LIST_FAILURE, payload: handleError(e) }) }
+}
+
+// Return an expense with the given id
+export const getExpense = id => async (dispatch, getState) => {
+  dispatch({ type: EXPENSE_GET_REQUEST });
+  try {
+    const { data } = await axios.get(`/api/expenses/${id}`, tokenConfig(getState));
+    dispatch({ type: EXPENSE_GET_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: EXPENSE_GET_FAILURE, payload: handleError(e) }) }
 }
 
 // Create a new expense from the user entries
-export const addExpense = expense => (dispatch, getState) => {
-  // Get the user id
-  const user = getState().auth.user;
-  if (user) {
-    const user_id = user.id || user._id;
-    // Convert the new expense to JSON and add in the user's id
-    const newExpense = JSON.stringify({...expense, user_id: user_id});
-    // Submit a post with the new expense and the json web token
-    axios.post(`${server}/api/expenses`, newExpense, tokenConfig(getState))
-    .then(res => dispatch({ type: ADD_EXPENSE, payload: res.data }))
-    .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
-  }
-  else return { type: AUTH_ERROR };
+export const addExpense = expense => async (dispatch, getState) => {
+  dispatch({ type: EXPENSE_CREATE_REQUEST });
+  try {
+    const newExpense = JSON.stringify(expense);
+    const { data } = await axios.post('/api/expenses/', newExpense, tokenConfig(getState));
+    dispatch({ type: EXPENSE_CREATE_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: EXPENSE_CREATE_FAILURE, payload: handleError(e) }) }
 }
 
-// Edit the selected expense with new entries
-export const editExpense = expense => (dispatch, getState) => {
-  // Convert the edited expense to JSON
-  const edits = JSON.stringify({ ...expense });
-  // Submit a post with the edited expense and the json web token
-  axios.post(`${server}/api/expenses/${expense._id}`, edits, tokenConfig(getState))
-  .then(res => dispatch({ type: EDIT_EXPENSE, payload: res.data }))
-  .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
+// Edit the expense with the given id
+export const editExpense = (id, expense) => async (dispatch, getState) => {
+  dispatch({ type: EXPENSE_EDIT_REQUEST });
+  try {
+    const editedExpense = JSON.stringify(expense);
+    const { data } = await axios.put(`/api/expenses/${id}`, editedExpense, tokenConfig(getState));
+    dispatch({ type: EXPENSE_EDIT_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: EXPENSE_EDIT_FAILURE, payload: handleError(e) }) }
 }
 
 // Remove the selected expense
-export const deleteExpense = id => (dispatch, getState) => {
-  axios.delete(`${server}/api/expenses/${id}`, tokenConfig(getState))
-  .then(res => dispatch({ type: DELETE_EXPENSE, payload: id }))
+export const deleteExpense = id => async (dispatch, getState) => {
+  dispatch({ type: EXPENSE_DELETE_REQUEST });
+  try {
+    const { data } = await axios.delete(`/api/expenses/${id}`, tokenConfig(getState));
+    dispatch({ type: EXPENSE_DELETE_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: EXPENSE_DELETE_FAILURE, payload: handleError(e) }) }
 }
 
-// Show or hide a column when the selector is clicked
-export const updateExpenseCol = clicked => dispatch => {
-  dispatch({ type: UPDATE_EXPENSE_COL, payload: clicked });
+// Clear server/user error notifications
+export const clearExpenseError = () => dispatch => {
+  dispatch({ type: EXPENSE_ERROR_RESET });
 }
 
-// Store the selected expense id to locate it later
-export const selectExpense = (expense, index) => dispatch => {
-  dispatch({ type: SELECT_EXPENSE, payload: {expense, index} });
-}
+// Toggle form states
+export const toggleAdding = () => dispatch => { dispatch({ type: EXPENSE_TOGGLE_ADDING }) };
+export const toggleEditing = () => dispatch => { dispatch({ type: EXPENSE_TOGGLE_EDITING }) };
+export const toggleDeleting = () => dispatch => { dispatch({ type: EXPENSE_TOGGLE_DELETING }) };
 
-// Change the selected index when the table is sorted
-// TODO: instead of deselecting it, move it to the current position of the selected one
-export const sortedExpenses = () => { return { type: SORT_EXPENSE } };
+// Set the given expense as the selected
+export const selectExpense = expense => dispatch => {
+  dispatch({ type: EXPENSE_DIRECT_SELECT, payload: expense })}
 
-// Set the expenses to loading for spinner animations & etc.
-export const setExpensesLoading = () => { return { type: LOADING_EXPENSES } };
-
-// Toggle the expense editing state
-export const toggleExpenseEditing = () => { return { type: TOGGLE_EXPENSE_EDIT } };
-
-// Toggle the expense deleting state
-export const toggleExpenseDeleting = () => { return { type: TOGGLE_EXPENSE_DELETING } };
+// Sort the expense table by ascending or descending
+export const sortTable = () => dispatch => { dispatch({ type: EXPENSE_TABLE_SORT }) };

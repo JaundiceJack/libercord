@@ -1,4 +1,5 @@
 # Don't publish db passwords & webtoken keys
-config/keys_dev.js
+.env
 # Don't fill up my github
 node_modules/
+node_modules

@@ -1,26 +1,27 @@
 const mongoose = require('mongoose');
-const Schema  = mongoose.Schema;
+const bcrypt = require('bcryptjs');
 
-const UserSchema = new Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  signUpDate: {
-    type: Date,
-    default: Date.now
-  },
-  startingBalance: {
-    type: Number,
-    default: 0
-  },
-  passwordResetToken: String,
-  passwordResetExpire: Date
+const userSchema = mongoose.Schema({
+  name:     { type: String,  required: true },
+  email:    { type: String,  required: true, unique: true },
+  password: { type: String,  required: true },
+  isAdmin:  { type: Boolean, required: true, default: false },
+  balance:  { type: Number, default: 0 },
+}, { timestamps: true } );
+
+userSchema.methods.matchPassword = async function(enteredPassword) {
+  // Compare the entered password to the encrypted password
+  return await bcrypt.compare(enteredPassword, this.password);
+}
+
+userSchema.pre('save', async function(next) {
+  // Skip the password encyption if the password was not changed
+  if (!this.isModified('password')) { next(); }
+  // Encrypt the password before saving a new user/modifying password
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
 })
 
-module.exports = User = mongoose.model('user', UserSchema);
+const User = mongoose.model('users', userSchema);
+
+module.exports = User;

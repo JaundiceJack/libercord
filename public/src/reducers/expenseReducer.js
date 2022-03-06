@@ -1,131 +1,104 @@
 import {
-  GET_EXPENSES,
-  ADD_EXPENSE,
-  SELECT_EXPENSE,
-  EDIT_EXPENSE,
-  DELETE_EXPENSE,
-  LOADING_EXPENSES,
-  UPDATE_EXPENSE_COL,
-  TOGGLE_EXPENSE_EDIT,
-  TOGGLE_EXPENSE_DELETING,
-  SORT_EXPENSE,
+  EXPENSE_LIST_REQUEST,   EXPENSE_LIST_SUCCESS,   EXPENSE_LIST_FAILURE,
+  EXPENSE_GET_REQUEST,    EXPENSE_GET_SUCCESS,    EXPENSE_GET_FAILURE,
+  EXPENSE_CREATE_REQUEST, EXPENSE_CREATE_SUCCESS, EXPENSE_CREATE_FAILURE,
+  EXPENSE_EDIT_REQUEST,   EXPENSE_EDIT_SUCCESS,   EXPENSE_EDIT_FAILURE,
+  EXPENSE_DELETE_REQUEST, EXPENSE_DELETE_SUCCESS, EXPENSE_DELETE_FAILURE,
+  EXPENSE_ERROR_RESET,    EXPENSE_DIRECT_SELECT,
+  EXPENSE_TOGGLE_ADDING,  EXPENSE_TOGGLE_EDITING, EXPENSE_TOGGLE_DELETING,
+  EXPENSE_TABLE_SORT
 } from '../actions/types.js';
-import { SortDirection } from 'react-virtualized';
+
 
 const initialState = {
   expenses: [],
+  selected: null,
   loading: false,
-  categories: [
-    "Alcohol",
-    "Cannabis",
-    "Car Repair",
-    "Child Care",
-    "Clothes",
-    "Dentistry",
-    "Dining Out",
-    "Electric",
-    "Flights",
-    "Garbage",
-    "Gas",
-    "Groceries",
-    "Hardware",
-    "Hotel",
-    "Internet",
-    "Laundry",
-    "Medical Care",
-    "Outdoor Recreation",
-    "Pet Care",
-    "Pharmaceuticals",
-    "Rent",
-    "Software",
-    "Subscription",
-    "Television",
-    "Tools",
-    "Video Game",
-    "Water",
-    "Other"
-  ],
-  columns: [
-    {name: 'value',    text: 'Spent',     view: true},
-    {name: 'category', text: 'Category', view: true},
-    {name: 'date',     text: 'When',     view: true},
-    {name: 'location', text: 'Location', view: false},
-    {name: 'name',     text: 'Item',     view: false}
-  ],
+  adding: false,
   editing: false,
   deleting: false,
-  sortBy: 'date',
-  selectedRow: null,
-  sortDirection: SortDirection.DESC,
-  selectedExpense: null,
+
+  table: {
+    sortBy: 'date',
+    sortDirection: 'desc',
+    selectedRow: null,
+    columns: [
+      {name: 'value',    text: 'Spent',    view: true},
+      {name: 'category', text: 'Category', view: true},
+      {name: 'date',     text: 'When',     view: true},
+      {name: 'location', text: 'Location', view: false},
+      {name: 'name',     text: 'Item',     view: false}
+    ]
+  }
 }
 
 const expenseReducer = (state = initialState, action) => {
   switch(action.type) {
-    case GET_EXPENSES:
+    case EXPENSE_LIST_REQUEST:
+    case EXPENSE_GET_REQUEST:
+    case EXPENSE_CREATE_REQUEST:
+    case EXPENSE_EDIT_REQUEST:
+    case EXPENSE_DELETE_REQUEST:
+      return { ...state, loading: true }
+    case EXPENSE_LIST_FAILURE:
+    case EXPENSE_GET_FAILURE:
+    case EXPENSE_CREATE_FAILURE:
+    case EXPENSE_EDIT_FAILURE:
+    case EXPENSE_DELETE_FAILURE:
+      return { ...state, loading: false, error: action.payload }
+    case EXPENSE_LIST_SUCCESS:
+      return { ...state, loading: false, expenses: action.payload }
+    case EXPENSE_GET_SUCCESS:
+      return { ...state, loading: false, selected: action.payload }
+    case EXPENSE_CREATE_SUCCESS:
       return {
         ...state,
-        expenses: action.payload,
+        // Add the new expense to the end
+        expenses: [
+          ...state.expenses,
+           action.payload
+         ],
+        selected: action.payload,
+        adding: false,
         loading: false
       }
-    case DELETE_EXPENSE:
+    case EXPENSE_EDIT_SUCCESS:
       return {
         ...state,
-        expenses: state.expenses.filter(expense => expense._id !== action.payload),
-        selectedExpense: null,
-        selectedRow: null
+        // Filter out the expense with the payload's id and add the edited one to the end
+        expenses: [
+          ...state.expenses.filter(expense => expense._id !== action.payload._id),
+          action.payload
+        ],
+        selected: action.payload,
+        editing: false,
+        loading: false
       }
-    case ADD_EXPENSE:
+    case EXPENSE_DELETE_SUCCESS:
       return {
         ...state,
-        expenses: [...state.expenses, action.payload],
-        selectedExpense: null,
-        selectedRow: null,
+        // Filter out the expense with the payload's id
+        expenses: [
+          ...state.expenses.filter(expense => expense._id !== action.payload)
+        ],
+        selected: null,
+        deleting: false,
+        loading: false
       }
-    case LOADING_EXPENSES:
+    case EXPENSE_TOGGLE_ADDING: return { ...state, adding: !state.adding }
+    case EXPENSE_TOGGLE_EDITING: return { ...state, editing: !state.editing }
+    case EXPENSE_TOGGLE_DELETING: return { ...state, deleting: !state.deleting }
+    case EXPENSE_DIRECT_SELECT: return { ...state, selected: action.payload }
+    case EXPENSE_TABLE_SORT:
       return {
         ...state,
-        loading: true
-      }
-    case UPDATE_EXPENSE_COL:
-      return {
-        ...state,
-        columns: state.columns.map(col =>
-          col.name === action.payload.name ? action.payload : col)
-      }
-    case SELECT_EXPENSE:
-      return {
-        ...state,
-        selectedExpense: action.payload.expense,
-        selectedRow: action.payload.index
-      }
-    case EDIT_EXPENSE:
-      return {
-        ...state,
-        expenses: [...state.expenses.filter(expense =>
-          {return expense._id !== action.payload._id}), action.payload],
-        selectedExpense: null,
-        selectedRow: null,
-      }
-    case SORT_EXPENSE:
-      return {
-        ...state,
-        selectedRow: null,
-        sortDirection: state.sortDirection === SortDirection.DESC ?
-          SortDirection.ASC : SortDirection.DESC,
+
+        adding: false,
         editing: false,
         deleting: false
       }
-    case TOGGLE_EXPENSE_EDIT:
-      return {
-        ...state,
-        editing: !state.editing
-      }
-    case TOGGLE_EXPENSE_DELETING:
-      return {
-        ...state,
-        deleting: !state.deleting
-      }
+    case EXPENSE_ERROR_RESET:
+      return { ...state, error: null }
     default:
       return state;
   }

@@ -1,91 +1,91 @@
 // Import action types
 import {
-  GET_INCOMES,
-  ADD_INCOME,
-  SELECT_INCOME,
-  EDIT_INCOME,
-  DELETE_INCOME,
-  LOADING_INCOMES,
-  UPDATE_INCOME_COL,
-  SORT_INCOME,
-  TOGGLE_INCOME_EDIT,
-  TOGGLE_INCOME_DELETING,
-  AUTH_ERROR
+  INCOME_LIST_REQUEST,   INCOME_LIST_SUCCESS,   INCOME_LIST_FAILURE,
+  INCOME_GET_REQUEST,    INCOME_GET_SUCCESS,    INCOME_GET_FAILURE,
+  INCOME_CREATE_REQUEST, INCOME_CREATE_SUCCESS, INCOME_CREATE_FAILURE,
+  INCOME_EDIT_REQUEST,   INCOME_EDIT_SUCCESS,   INCOME_EDIT_FAILURE,
+  INCOME_DELETE_REQUEST, INCOME_DELETE_SUCCESS, INCOME_DELETE_FAILURE,
+  INCOME_ERROR_RESET,    INCOME_DIRECT_SELECT,
+  INCOME_TOGGLE_ADDING,  INCOME_TOGGLE_EDITING, INCOME_TOGGLE_DELETING,
+  INCOME_TABLE_SORT
 } from './types.js';
 // Import axios to handle http requests
 import axios from 'axios';
-// Import token config to authorize updates and returnErrors to register errors
-import { tokenConfig } from './authActions';
-import { returnErrors } from './errorActions';
-// Import the server route
-import server from './route';
+// Import server actions: to report authorization errors
+import { handleError } from './errorActions';
+
+// Create a config variable to send with routes requiring authorization
+const tokenConfig = getState => {
+  const { user: { user } } = getState();
+  return { headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${user.token}`
+  }};
+}
+
+// Make a basic request header for json data
+const basicConfig = { headers: { "Content-type": "application/json" } };
 
 // Return all of the user's incomes
-export const getIncomes = () => (dispatch, getState) => {
-  dispatch(setIncomesLoading());
-  // Get the user id
-  const user = getState().auth.user;
-  if (user) {
-    const user_id = user.id || user._id;
-    // Create an authorization token and get the incomes
-    axios.get(`${server}/api/incomes/${user_id}`, tokenConfig(getState))
-    .then(res => dispatch({ type: GET_INCOMES, payload: res.data }))
-    .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
-  }
-  else return { type: AUTH_ERROR };
+export const getIncomes = () => async (dispatch, getState) => {
+  dispatch({ type: INCOME_LIST_REQUEST });
+  try {
+    const { data } = await axios.get('/api/incomes/', tokenConfig(getState));
+    dispatch({ type: INCOME_LIST_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: INCOME_LIST_FAILURE, payload: handleError(e) }) }
+}
+
+// Return an income with the given id
+export const getIncome = id => async (dispatch, getState) => {
+  dispatch({ type: INCOME_GET_REQUEST });
+  try {
+    const { data } = await axios.get(`/api/incomes/${id}`, tokenConfig(getState));
+    dispatch({ type: INCOME_GET_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: INCOME_GET_FAILURE, payload: handleError(e) }) }
 }
 
 // Create a new income from the user entries
-export const addIncome = income => (dispatch, getState) => {
-  // Get the user id
-  const user = getState().auth.user;
-  if (user) {
-    const user_id = user.id || user._id;
-    // Convert the new income to JSON and add in the user's id
-    const newIncome = JSON.stringify({...income, user_id: user_id});
-    // Submit a post with the new income and the json web token
-    axios.post(`${server}/api/incomes`, newIncome, tokenConfig(getState))
-    .then(res => dispatch({ type: ADD_INCOME, payload: res.data }))
-    .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
-  }
-  else return { type: AUTH_ERROR };
+export const addIncome = income => async (dispatch, getState) => {
+  dispatch({ type: INCOME_CREATE_REQUEST });
+  try {
+    const newIncome = JSON.stringify(income);
+    const { data } = await axios.post('/api/incomes/', newIncome, tokenConfig(getState));
+    dispatch({ type: INCOME_CREATE_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: INCOME_CREATE_FAILURE, payload: handleError(e) }) }
 }
 
-// Edit the selected income with new entries
-export const editIncome = income => (dispatch, getState) => {
-  // Convert the edited income to JSON
-  const edits = JSON.stringify({ ...income });
-  // Submit a post with the edited income and the json web token
-  axios.post(`${server}/api/incomes/${income._id}`, edits, tokenConfig(getState))
-  .then(res => dispatch({ type: EDIT_INCOME, payload: res.data }))
-  .catch(err => dispatch(returnErrors(err.response.data, err.response.status)))
+// Edit the income with the given id
+export const editIncome = (id, income) => async (dispatch, getState) => {
+  dispatch({ type: INCOME_EDIT_REQUEST });
+  try {
+    const editedIncome = JSON.stringify(income);
+    const { data } = await axios.put(`/api/incomes/${id}`, editedIncome, tokenConfig(getState));
+    dispatch({ type: INCOME_EDIT_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: INCOME_EDIT_FAILURE, payload: handleError(e) }) }
 }
 
 // Remove the selected income
-export const deleteIncome = id => (dispatch, getState) => {
-  axios.delete(`${server}/api/incomes/${id}`, tokenConfig(getState))
-  .then(res => dispatch({ type: DELETE_INCOME, payload: id }))
+export const deleteIncome = id => async (dispatch, getState) => {
+  dispatch({ type: INCOME_DELETE_REQUEST });
+  try {
+    const { data } = await axios.delete(`/api/incomes/${id}`, tokenConfig(getState));
+    dispatch({ type: INCOME_DELETE_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: INCOME_DELETE_FAILURE, payload: handleError(e) }) }
 }
 
-// Show or hide a column when the selector is clicked
-export const updateIncomeCol = clicked => dispatch => {
-  dispatch({ type: UPDATE_INCOME_COL, payload: clicked });
+// Clear server/user error notifications
+export const clearIncomeError = () => dispatch => {
+  dispatch({ type: INCOME_ERROR_RESET });
 }
 
-// Store the selected income id to locate it later
-export const selectIncome = (income, index) => dispatch => {
-  dispatch({ type: SELECT_INCOME, payload: {income, index} });
-}
+// Toggle form states
+export const toggleAdding = () => dispatch => { dispatch({ type: INCOME_TOGGLE_ADDING }) };
+export const toggleEditing = () => dispatch => { dispatch({ type: INCOME_TOGGLE_EDITING }) };
+export const toggleDeleting = () => dispatch => { dispatch({ type: INCOME_TOGGLE_DELETING }) };
 
-// Change the selected index when the table is sorted
-// TODO: instead of deselecting it, move it to the current position of the selected one
-export const sortedIncomes = () => { return { type: SORT_INCOME } }
+// Set the given income as the selected
+export const selectIncome = income => dispatch => {
+  dispatch({ type: INCOME_DIRECT_SELECT, payload: income })}
 
-// Set the incomes to loading for spinner animations & etc.
-export const setIncomesLoading = () => { return { type: LOADING_INCOMES } }
-
-// Toggle the income editing state
-export const toggleIncomeEditing = () => { return { type: TOGGLE_INCOME_EDIT } }
-
-// Toggle the income deleting state
-export const toggleIncomeDeleting = () => { return { type: TOGGLE_INCOME_DELETING } }
+// Sort the income table by ascending or descending
+export const sortTable = () => dispatch => { dispatch({ type: INCOME_TABLE_SORT }) };
