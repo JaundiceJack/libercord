@@ -1,20 +1,24 @@
 # libercord
 
-Website: www.libercord.com
-Description: Libercord is a full-stack web-app to track personal finances.
-Author: James McNeilan
-Stack: MERN
+<div>
+  <p>Website: www.libercord.com</p>
+  <p>Description: Libercord is a full-stack web-app to track personal finances.</p>
+  <p>Author: James McNeilan</p>
+  <p>Stack: MERN</p>
+</div>
 
-Backend Libraries Used:
-bcryptjs@v2.4.3
-concurrently@v6.0.0
-cors@v2.8.5
-dotenv@v16.0.0
-express@v4.17.1
-express-async-handler@v1.2.0
-jsonwebtoken@v^8.5.1
-mongoose@v5.12.0
-nodemailer@v6.6.0
+<div>
+  <h2>Backend Libraries Used:</h2>
+  <p>bcryptjs@v2.4.3</p>
+  <p>concurrently@v6.0.0</p>
+  <p>cors@v2.8.5</p>
+  <p>dotenv@v16.0.0</p>
+  <p>express@v4.17.1</p>
+  <p>express-async-handler@v1.2.0</p>
+  <p>jsonwebtoken@v^8.5.1</p>
+  <p>mongoose@v5.12.0</p>
+  <p>nodemailer@v6.6.0</p>
+</div>
 
 Frontend Libraries Used:
 craco
