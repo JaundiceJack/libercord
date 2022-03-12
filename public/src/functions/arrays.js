@@ -20,6 +20,12 @@ export const yearlySavings = (incomes, expenses, year) => {
   return yearlyIncome - yearlyExpenses;
 }
 
+export const totalSavings = (incomes, expenses) => {
+  const totalIncome = incomes.reduce(totalValue, 0);
+  const totalExpenses = expenses.reduce(totalValue, 0);
+  return totalIncome - totalExpenses;
+}
+
 // Obtain the totals for each month's transactions, Return an array of objects
 export const monthlyTotals = (type, transactions, year) => {
   return months.map((month, index) => {

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 // Import dispatch actions
 import { toggleEditingBalance } from '../../../../../../actions/userActions.js';
 // Import helper functions
-import { yearlyTotal, yearlySavings } from '../../../../../../functions/arrays.js';
+import { yearlyTotal, yearlySavings, totalSavings } from '../../../../../../functions/arrays.js';
 // Import Components
 import Detail       from '../../../../../misc/detail.js';
 import Button       from '../../../../../input/button.js';
@@ -41,7 +41,7 @@ const SavingsInfo = ({ year, onPrev, onNext  }) => {
 
             <div className="flex flex-row mt-auto items-center">
               <Detail label="Balance:"
-                data={`$${((user.balance) + yearlySavings(incomes, expenses, year)).toFixed(2)}`} />
+                data={`$${((user.balance) + totalSavings(incomes, expenses)).toFixed(2)}`} />
 
               <Button icon={<AiOutlineEdit />}
                 onClick={() => dispatch(toggleEditingBalance())} />
