@@ -1,6 +1,6 @@
 <div>
   <h1>LiberCord</h1>
-  <p>Website: www.libercord.com</p>
+  <p>Website: <a target="_blank">www.libercord.com</a></p>
   <p>Description: Libercord is a full-stack web-app to track personal finances.</p>
   <p>Author: James McNeilan</p>
   <p>Stack: MERN</p>
