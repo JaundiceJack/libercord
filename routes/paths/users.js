@@ -2,22 +2,19 @@
 const express = require('express');
 const router = express.Router();
 const private = require('../../middleware/authMW');
-const { loginUser, getProfile, updateProfile, registerUser, editBalance } =
+const { loginUser, getProfile, updateProfile, registerUser } =
   require('../actions/userController.js');
 
-// POST api/user/ | create a new user | public
+// POST api/users/ | create a new user | public
 router.route('/')
   .post(registerUser);
-// POST: api/user/login | authorize user & get token | public
+// POST: api/users/login | authorize user & get token | public
 router.route('/login')
   .post(loginUser);
-// GET: api/user/profile | get the user's information | private
-// PUT: api/user/profile | update the user's information | private
+// GET: api/users/profile | get the user's information | private
+// PUT: api/users/profile | update the user's information | private
 router.route('/profile')
   .get(private, getProfile)
   .put(private, updateProfile);
-// PUT: api/user/balance | updated the user's initial balance | private
-router.route('/balance')
-  .put(private, editBalance);
 
 module.exports = router;

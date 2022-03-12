@@ -2,59 +2,43 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // Import dispatch actions
-import { getExpenses, addExpense, editExpense, clearExpenseError }
+import { addExpense, editExpense, clearExpenseError }
   from '../../../../../actions/expenseActions.js';
-import { getCategories, clearCategoryError }
+import { getCategories, deleteCategory, clearCategoryError }
   from '../../../../../actions/categoryActions.js';
+import { getLocations, deleteLocation, clearLocationError }
+  from '../../../../../actions/locationActions.js';
 import { formatDateForInput } from '../../../../../functions/dates.js';
 // Import icons
 import { GiCheckMark } from 'react-icons/gi';
 // Import components
 import TextEntry   from '../../../../input/textEntry.js';
-import SelectEntry from '../../../../input/selectEntry.js';
 import Button      from '../../../../input/button.js';
 import Message     from '../../../../misc/message.js';
 import Spinner     from '../../../../misc/spinner.js';
+import FormSelection from '../../../../input/formSelection.js';
 
 const ExpenseGen = ({ editing=false }) => {
   // Get state variables from redux
-  const { selected, expenses, loading: loadingExpense, error: expenseError } =
+  const { selected, loading: loadingExpense, error: expenseError } =
     useSelector(state => state.expense);
   const { categories, loading: loadingCategories, error: categoryError } =
     useSelector(state => state.category);
-  const expenseCategories = categories.
-    filter(cat => cat.type === 'expense').
-    map(cat => { return { name: cat.name, value: cat._id } });
+  const { locations, loading: loadingLocations, error: locationError } =
+    useSelector(state => state.location);
 
-  // Get the categories and expenses upon loading
-  const dispatch = useDispatch();
-  const timer = useRef(null);
-  useEffect(() => {
-    if (!timer.current) {
-      if (expenses.length === 0) dispatch(getExpenses());
-      if (categories.length === 0) dispatch(getCategories());
-      timer.current = setTimeout(() => {
-        dispatch(clearExpenseError());
-        dispatch(clearCategoryError());
-        timer.current = null;
-      }, [5000]);
-    }
-  }, [dispatch, categories]);
+  // Filter out categories with type: expense
+  const expenseCategories = categories.filter(cat => cat.type === 'expense');
 
   // Set validation error messages
   const [msgs, setMsgs] = useState([]);
   // If editing, use the selected expense values, otherwise set defaults
   const [expense, setExpense] = useState({
     name: "",
-    category: editing ?
-      (selected && selected.category) :
-      categories &&
-        categories.filter(cat => cat.type === 'expense').length > 0 ?
-        categories.filter(cat => cat.type === 'expense')[0] :
-        "621c3770fab276bac7fdcb7f",
-    location: editing ?
-      (selected && selected.location) :
-      "",
+    category: "",
+    location: "",
+    newLocation: "",
+    newCategory: "",
     value: editing ?
       (selected && selected.value) :
       "",
@@ -68,60 +52,99 @@ const ExpenseGen = ({ editing=false }) => {
   // Set a function to modify the expense values from input elements
   const editInfo = e => { setExpense({...expense, [e.target.name]: e.target.value })}
 
+  // Get the locations and categories upon loading
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCategories());
+    dispatch(getLocations());
+  }, []);
+  // If locations or categories updates, load the expense defaults
+  useEffect(() => {
+    if (!editing) setExpense(exp => {
+      return { ...exp,
+        category: (expenseCategories[0] && expenseCategories[0]._id),
+        location: (locations[0] && locations[0]._id) }
+    })
+  }, [editing, categories, locations]);
+
+  // Clear errors after 5 seconds
+  const timer = useRef(null);
+  useEffect(() => {
+    // Clear errors after 5 seconds
+    if (!timer.current) {
+      timer.current = setTimeout(() => {
+        expenseError  && dispatch(clearExpenseError());
+        categoryError && dispatch(clearCategoryError());
+        locationError && dispatch(clearLocationError());
+        timer.current = null;
+      }, [5000]);
+    }
+    // Clear out the timer on unmount
+    return () => { timer.current && clearTimeout(timer.current) }
+  }, [expenseError, categoryError, locationError]);
+
+  // Validate entries
+  const validateEntries = () => {
+    let errors = [];
+    if (expense.location === "" && expense.newLocation === "") {
+      errors.push("Expense location required."); }
+    if (expense.category === "" && expense.newCategory === "") {
+      errors.push("Expense category required."); }
+    if (expense.value === "" || expense.value === null) {
+      errors.push("Expense amount required."); }
+    if (isNaN(Number(expense.value))) {
+      errors.push("Expense amount must be a number."); }
+    setMsgs(errors);
+    return errors;
+  }
+  // Submit entries
+  const submitEntries = () => {
+    editing ?
+      dispatch(editExpense(selected._id, expense)) :
+      dispatch(addExpense(expense));
+  }
   // Check for valid entries and send the expense to the server
   const onSubmit = e => {
     e.preventDefault();
-    let errors = [];
-    if (expense.category === "" || expense.category === null) {
-      errors.push("Expense category required.");
-      setMsgs([...msgs, "Expense category required."]); }
-    if (expense.value === "" || expense.value === null) {
-      errors.push("Expense amount required.");
-      setMsgs([...msgs, "Expense amount required."]); }
-    if (errors.length === 0) {
-      editing ?
-        dispatch(editExpense(selected._id, expense)) :
-        dispatch(addExpense(expense));
-    }
-    else { setTimeout(() => {
-      errors = [];
-      setMsgs([]); }, 5000); }
+    validateEntries().length === 0 ?
+      submitEntries() :
+      setTimeout(() => setMsgs([]), 5000)
   }
 
   return (
     <form onSubmit={onSubmit}  className="p-4">
-      {(loadingExpense || loadingCategories) ? <Spinner /> :
+      {(loadingExpense || loadingCategories || loadingLocations) ? <Spinner /> :
         <div className="flex flex-col">
-          <TextEntry label="Location:"
-            name="location"
-            labelColor="text-yellow-400"
-            value={expense.location}
-            onChange={editInfo} />
-          <TextEntry label="Total:"
-            name="value"
-            labelColor="text-yellow-400"
-            value={expense.value}
-            append={"$"}
-            onChange={editInfo} />
-          <SelectEntry label="Category:"
-            name="category"
-            options={expenseCategories}
-            labelColor="text-yellow-400"
-            value={expense.category}
-            onChange={editInfo} />
-          <TextEntry type='date' label="Date:"
-            labelColor="text-yellow-400"
-            name="date"
-            value={expense.date}
-            onChange={editInfo}
-            extraClasses="mb-6" />
+          <FormSelection values={expense} items={locations}
+            label="Location:" newLabel="Location:"
+            name="location" newName="newLocation"
+            onEdit={editInfo} onEditNew={editInfo}
+            onDelete={() => expense.location && dispatch(deleteLocation(expense.location))} />
+
+          <TextEntry label="Total:" name="value"
+            value={(expense && expense.value) || ""} onChange={editInfo}
+            labelColor="text-yellow-400" placeholder="Enter total cost"
+            append={"$"} />
+
+          <FormSelection values={expense} items={categories.filter(cat => cat.type === 'expense')}
+            label="Category:" newLabel="Category:"
+            name="category" newName="newCategory"
+            onEdit={editInfo} onEditNew={editInfo}
+            onDelete={() => expense.category && dispatch(deleteCategory(expense.category))} />
+
+          <TextEntry type='date' label="Date:" name="date"
+            value={expense && expense.date} onChange={editInfo}
+            labelColor="text-yellow-400" extraClasses="mb-6" />
+
           <Button type="submit"
             label={editing ? "Save Changes" : "Save Expense"}
+            extraClasses="w-36 self-center"
             icon={<GiCheckMark />} />
 
-          {msgs.map(msg => <Message warning={msg} />)}
-          {expenseError && <Message error={expenseError} />}
+          {msgs.map(msg =>  <Message warning={msg} />)}
+          {expenseError  && <Message error={expenseError} />}
           {categoryError && <Message error={categoryError} />}
+          {locationError && <Message error={locationError} />}
         </div>
       }
     </form>

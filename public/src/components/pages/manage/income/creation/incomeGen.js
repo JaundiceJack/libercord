@@ -2,74 +2,42 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // Import dispatch actions
-import { getIncomes, addIncome, editIncome, clearIncomeError }
+import { addIncome, editIncome, clearIncomeError }
   from '../../../../../actions/incomeActions.js';
-import { getCategories, clearCategoryError }
+import { getCategories, deleteCategory, clearCategoryError }
   from '../../../../../actions/categoryActions.js';
-import { getSources, clearSourceError }
+import { getSources, deleteSource, clearSourceError }
   from '../../../../../actions/sourceActions.js';
 import { formatDateForInput } from '../../../../../functions/dates.js';
 // Import icons
 import { GiCheckMark } from 'react-icons/gi';
-import { TiBackspaceOutline } from 'react-icons/ti';
 // Import components
 import TextEntry   from '../../../../input/textEntry.js';
-import SelectEntry from '../../../../input/selectEntry.js';
 import Button      from '../../../../input/button.js';
 import Message     from '../../../../misc/message.js';
 import Spinner     from '../../../../misc/spinner.js';
+import FormSelection from '../../../../input/formSelection.js';
 
 const IncomeGen = ({ editing=false }) => {
   // Get state variables from redux
-  const { selected, incomes, loading: loadingIncome, error: incomeError } =
+  const { selected, loading: loadingIncome, error: incomeError } =
     useSelector(state => state.income);
   const { categories, loading: loadingCategories, error: categoryError } =
     useSelector(state => state.category);
-  const [addingCategory, setAddingCategory] = useState(false);
-  const toggleNewCat = () => { setAddingCategory(!addingCategory) };
   const { sources, loading: loadingSources, error: sourceError } =
     useSelector(state => state.source);
-  const [addingSource, setAddingSource] = useState(false);
-  const toggleNewSrc = () => { setAddingSource(!addingSource) };
 
-  const incomeCategories = categories
-    .filter(cat => cat.type === 'income')
-    .map(cat => { return { name: cat.name, value: cat._id } });
-  const incomeSources = sources
-    .map(src => { return { name: src.name, value: src._id }})
-
-  // Get the categories and incomes upon loading
-  const dispatch = useDispatch();
-  const timer = useRef(null);
-  useEffect(() => {
-    if (!timer.current) {
-      if (incomes.length === 0) dispatch(getIncomes());
-      if (categories.length === 0) dispatch(getCategories());
-      if (sources.length === 0 ) dispatch(getSources());
-      timer.current = setTimeout(() => {
-        dispatch(clearIncomeError());
-        dispatch(clearCategoryError());
-        dispatch(clearSourceError());
-        timer.current = null;
-      }, [5000]);
-    }
-  }, [dispatch, incomes, categories, sources]);
+  // Filter out categories with type: income
+  const incomeCategories = categories.filter(cat => cat.type === 'income');
 
   // Set validation error messages
   const [msgs, setMsgs] = useState([]);
   // If editing, use the selected income values, otherwise set defaults
   const [income, setIncome] = useState({
     name: "",
-    category: editing ?
-      (selected && selected.category) :
-      categories &&
-        categories.filter(cat => cat.type === 'income').length > 0 ?
-        categories.filter(cat => cat.type === 'income')[0] :
-        "621c4f98fab276bac7fdcb82",
+    category: editing ? (selected && selected.category && selected.category._id) : "",
+    source: editing ? (selected && selected.source && selected.source._id) : "",
     newCategory: "",
-    source: editing ?
-      (selected && selected.source) :
-      "",
     newSource: "",
     value: editing ?
       (selected && selected.value) :
@@ -84,105 +52,100 @@ const IncomeGen = ({ editing=false }) => {
   // Set a function to modify the income values from input elements
   const editInfo = e => { setIncome({...income, [e.target.name]: e.target.value })}
 
+  // Get the sources and categories upon loading
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCategories());
+    dispatch(getSources());
+  }, []);
+  // If sources or categories updates, load the income defaults
+  useEffect(() => {
+    if (!editing) setIncome(inc => {
+      return { ...inc,
+        category: (incomeCategories[0] && incomeCategories[0]._id),
+        source: (sources[0] && sources[0]._id) }
+    })
+  }, [editing, categories, sources]);
+
+  // Clear errors after 5 seconds
+  const timer = useRef(null);
+  useEffect(() => {
+    // Clear errors after 5 seconds
+    if (!timer.current) {
+      timer.current = setTimeout(() => {
+        incomeError  && dispatch(clearIncomeError());
+        categoryError && dispatch(clearCategoryError());
+        sourceError && dispatch(clearSourceError());
+        timer.current = null;
+      }, [5000]);
+    }
+    // Clear out the timer on unmount
+    return () => { timer.current && clearTimeout(timer.current) }
+  }, [incomeError, categoryError, sourceError]);
+
+  // Validate entries
+  const validateEntries = () => {
+    let errors = [];
+    if (income.source === "" && income.newSource === "") {
+      errors.push("Income source required."); }
+    if (income.category === "" && income.newCategory === "") {
+      errors.push("Income category required."); }
+    if (income.value === "" || income.value === null) {
+      errors.push("Income amount required."); }
+    if (isNaN(Number(income.value))) {
+      errors.push("Income amount must be a number."); }
+    setMsgs(errors);
+    return errors;
+  }
+  // Submit entries
+  const submitEntries = () => {
+    editing ?
+      dispatch(editIncome(selected._id, income)) :
+      dispatch(addIncome(income));
+  }
   // Check for valid entries and send the income to the server
   const onSubmit = e => {
     e.preventDefault();
-    let errors = [];
-    if (income.source === "") {
-      errors.push("Income source required.");
-      setMsgs([...msgs, "Income source required."]); }
-    if ((income.category === "" || income.category === null) && income.newSource === "") {
-      errors.push("Income category required.");
-      setMsgs([...msgs, "Income category required."]); }
-    if (income.value === "" || income.value === null) {
-      errors.push("Income amount required.");
-      setMsgs([...msgs, "Income amount required."]); }
-    if (errors.length === 0) {
-      editing ? dispatch(editIncome(selected._id, income)) : dispatch(addIncome(income));
-    }
-    else { setTimeout(() => {
-      errors = [];
-      setMsgs([]); }, 5000); }
+    validateEntries().length === 0 ?
+      submitEntries() :
+      setTimeout(() => setMsgs([]), 5000)
   }
 
   return (
     <form onSubmit={onSubmit} className="p-4">
-      {(loadingIncome || loadingCategories) ? <Spinner /> :
+      {(loadingIncome || loadingCategories || loadingSources) ? <Spinner /> :
         <div className="flex flex-col">
-          {addingSource ?
-            <TextEntry label="Source:"
-              labelColor="text-yellow-400"
-              placeholder="Enter new source"
-              name="newSource"
-              value={income.newSource}
-              onChange={editInfo}
-              append={
-                <Button icon={<TiBackspaceOutline/>}
-                  color="gray"
-                  title="Return to selections"
-                  onClick={toggleNewSrc}
-                  appended={true} />} /> :
 
-            <SelectEntry label="Source:"
-              labelColor="text-yellow-400"
-              name="source"
-              value={income.source}
-              options={incomeSources}
-              onChange={editInfo}
-              append={
-                <Button label="New"
-                  color="yellow"
-                  onClick={toggleNewSrc}
-                  appended={true} />} />
+          <FormSelection values={income} items={sources}
+            label="Source:" newLabel="Source:"
+            name="source" newName="newSource"
+            onEdit={editInfo} onEditNew={editInfo}
+            onDelete={() => income.source && dispatch(deleteSource(income.source))} />
 
-          }
-          <TextEntry label="Amount:"
-            labelColor="text-yellow-400"
-            name="value"
-            value={income.value}
-            onChange={editInfo}
+          <TextEntry label="Amount:" name="value"
+            value={(income && income.value) || ""} onChange={editInfo}
+            labelColor="text-yellow-400" placeholder="Enter payment"
             append={"$"} />
-          {addingCategory ?
-            <TextEntry label="Category:"
-              labelColor="text-yellow-400"
-              placeholder="Enter new category"
-              name="newCategory"
-              value={income.newCategory}
-              onChange={editInfo}
-              append={
-                <Button icon={<TiBackspaceOutline/>}
-                  color="gray"
-                  title="Return to selections"
-                  onClick={toggleNewCat}
-                  appended={true} />} /> :
 
-            <SelectEntry label="Category:"
-              labelColor="text-yellow-400"
-              name="category"
-              value={income.category}
-              options={incomeCategories}
-              onChange={editInfo}
-              append={
-                <Button label="New"
-                  color="yellow"
-                  onClick={toggleNewCat}
-                  appended={true} />} />
+          <FormSelection values={income} items={categories.filter(cat => cat.type === 'income')}
+            label="Category:" newLabel="Category:"
+            name="category" newName="newCategory"
+            onEdit={editInfo} onEditNew={editInfo}
+            onDelete={() => income.category && dispatch(deleteCategory(income.category))} />
 
-          }
-          <TextEntry type='date' label="Date:"
-            labelColor="text-yellow-400"
-            name="date"
-            value={income.date}
-            onChange={editInfo}
-            extraClasses="mb-6" />
+          <TextEntry type='date' label="Date:" name="date"
+            value={income && income.date} onChange={editInfo}
+            labelColor="text-yellow-400" extraClasses="mb-6" />
 
           <Button type="submit"
             label={editing ? "Save Changes" : "Save Income"}
+            extraClasses="w-36 self-center"
             icon={<GiCheckMark />} />
 
-          {msgs.map(msg => <Message warning={msg} />)}
-          {incomeError && <Message error={incomeError} />}
+          {msgs.map(msg =>  <Message warning={msg} />)}
+          {incomeError   && <Message error={incomeError} />}
           {categoryError && <Message error={categoryError} />}
+          {sourceError   && <Message error={sourceError} />}
         </div>
       }
     </form>

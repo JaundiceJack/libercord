@@ -4,7 +4,6 @@ import { FixedSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 // Import functions
 import { formatDateMMDD } from '../../functions/dates.js';
-import { capitalize } from '../../functions/strings.js';
 
 const ScrollWindow = ({ selected, items, onSelect }) => {
   // Compose row classes
@@ -37,7 +36,10 @@ const ScrollWindow = ({ selected, items, onSelect }) => {
           {item && (item.date ?
             formatDateMMDD(item.date) :
             formatDateMMDD(item.date))}</p>
-        <p className="col-span-6">{item && item.source ? item.source : item.location}</p>
+        <p className="col-span-6">{
+          (item && item.source && item.source.name) ? item.source.name :
+          (item && item.location && item.location.name) ? item.location.name : ""
+        }</p>
         <p className="col-span-4">{item && item.value && item.value.toFixed(2) + " $"}</p>
       </div>
     )

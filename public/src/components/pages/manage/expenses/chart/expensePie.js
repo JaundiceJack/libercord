@@ -1,9 +1,15 @@
+// Import Basics
 import { useState }    from 'react';
 import { useSelector } from 'react-redux';
-import { capitalize }  from '../../../../../functions/strings.js';
-import PieChart        from '../../../../misc/pieChart.js';
-import BrowseButton    from '../../../../input/browseButton.js';
+// Import Components
+import PieChart     from '../../../../misc/pieChart.js';
+import BrowseButton from '../../../../input/browseButton.js';
+import Button       from '../../../../input/button.js';
+// Import functions
 import { add, sub, isSameMonth, getMonth } from 'date-fns'
+import { capitalize } from '../../../../../functions/strings.js';
+// Import Icons
+import { VscCircleFilled } from 'react-icons/vsc';
 
 const ExpensePie = () => {
   const [date, setDate] = useState(new Date());
@@ -11,25 +17,42 @@ const ExpensePie = () => {
   const backMonth = () => { setDate(sub(date, { months: 1 })) };
   const { expenses } = useSelector(state => state.expense);
 
+  const [filterBy, setFilterBy] = useState('location');
+
   // Sum up the expenses from matching locations
-  let locations = {}
+  let locationTotals = {}
   const expensesThisMonth = expenses.filter(exp =>
     isSameMonth(new Date(exp.date), date));
   expensesThisMonth.forEach((exp, i) => {
-    locations[exp.location] = (locations[exp.location] || 0) + exp.value });
-
+    if (exp.location && exp.location.name)
+      locationTotals[exp.location.name] =
+        (locationTotals[exp.location.name] || 0) + exp.value });
   // Convert the locations/totals into a recharts-readable data array
-  let data = [];
-  for (let [key, value] of Object.entries(locations)) {
-    data.push({ name: capitalize(key), value: value, location: capitalize(key) });
+  let locationData = [];
+  for (let [key, value] of Object.entries(locationTotals)) {
+    locationData.push({ name: capitalize(key), value: value, location: capitalize(key) });
+  }
+
+  // Sum up the expenses from matching categories
+  let categoryTotals = {};
+  const categoriesThisMonth = expenses.filter(exp =>
+    isSameMonth(new Date(exp.date), date));
+  categoriesThisMonth.forEach((exp, i) => {
+    if (exp.category && exp.category.name)
+      categoryTotals[exp.category.name] =
+        (categoryTotals[exp.category.name] || 0) + exp.value });
+  // Convert the categorys/totals into a recharts-readable data array
+  let categoryData = [];
+  for (let [key, value] of Object.entries(categoryTotals)) {
+    categoryData.push({ name: capitalize(key), value: value, category: capitalize(key) });
   }
 
   const months = ['January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'];
 
   return (
-    <div className="w-full h-full rounded-md flex flex-col">
-      <div className="flex justify-center p-2 items-center" >
+    <div className="flex flex-col h-full">
+      <div className="w-full flex justify-center p-2 items-center" >
         <BrowseButton direction="back" onClick={backMonth} />
         <h4 className="text-blue-200 text-md font-semibold">
           {months[getMonth(date)]} {date.getFullYear()}
@@ -37,15 +60,34 @@ const ExpensePie = () => {
         <BrowseButton direction="next" onClick={nextMonth} />
       </div>
 
-      <div className="self-center my-auto ">
-        {data.length > 0 ?
-          <PieChart data={data} label={"location"} total={
-            data.reduce((a, b) => {return a += b.value}, 0)
-          } /> :
-        <p className="text-blue-100 text-center font-semibold font-jose my-auto">
-          No expenses for this month yet.</p> }
-      </div>
+      {filterBy === 'location' ? (
+        <div className="self-center mx-auto my-auto ">
+          {locationData.length > 0 ?
+            <PieChart data={locationData} label="location" total={
+              locationData.reduce((a, b) => {return a += b.value}, 0)
+            } /> :
+          <p className="text-blue-100 text-center font-semibold font-jose my-auto">
+            No expenses for this month yet.</p> }
+        </div>
+      ) : filterBy === 'category' ? (
+        <div className="self-center mx-auto my-auto ">
+          {categoryData.length > 0 ?
+            <PieChart data={categoryData} label="category" total={
+              categoryData.reduce((a, b) => {return a += b.value}, 0)
+            } /> :
+          <p className="text-blue-100 text-center font-semibold font-jose my-auto">
+            No expenses for this month yet.</p> }
+        </div>
+      ) : <div></div>}
 
+      <div className="justify-self-end flex flex-col">
+        <Button label="By Location" icon={filterBy === 'location' && <VscCircleFilled color="#00FF00" />}
+          color="indigo" onClick={() => setFilterBy('location')}
+          extraClasses="w-48 mx-auto mb-2" />
+        <Button label="By Category" icon={filterBy === 'category' && <VscCircleFilled color="#00FF00" />}
+          color="yellow" onClick={() => setFilterBy('category')}
+          extraClasses="w-48 mx-auto" />
+      </div>
     </div>
   )
 }

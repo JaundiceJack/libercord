@@ -1,9 +1,5 @@
-// Import basics
-import React, { useState, useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
 // Import router stuff
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 // Import Page Components
 import Home          from './pages/home/_home.js';
 import Employ        from './pages/employment/_employ.js';

@@ -13,6 +13,8 @@ import {
 import axios from 'axios';
 // Import server actions: to report authorization errors
 import { handleError } from './errorActions';
+import { inlineCreateCategory } from './categoryActions.js';
+import { inlineCreateLocation } from './locationActions.js';
 
 // Create a config variable to send with routes requiring authorization
 const tokenConfig = getState => {
@@ -24,7 +26,7 @@ const tokenConfig = getState => {
 }
 
 // Make a basic request header for json data
-const basicConfig = { headers: { "Content-type": "application/json" } };
+//const basicConfig = { headers: { "Content-type": "application/json" } };
 
 // Return all of the user's expenses
 export const getExpenses = () => async (dispatch, getState) => {
@@ -48,8 +50,18 @@ export const getExpense = id => async (dispatch, getState) => {
 export const addExpense = expense => async (dispatch, getState) => {
   dispatch({ type: EXPENSE_CREATE_REQUEST });
   try {
-    const newExpense = JSON.stringify(expense);
-    const { data } = await axios.post('/api/expenses/', newExpense, tokenConfig(getState));
+    // Create an expense submission with locaiton and category ids included
+    const submission = {
+      ...expense,
+      location: expense.newLocation ?
+        await inlineCreateLocation({ name: expense.newLocation }, dispatch, getState) :
+        expense.location,
+      category: expense.newCategory ?
+        await inlineCreateCategory({ name: expense.newCategory, type: 'expense' }, dispatch, getState) :
+        expense.category
+    }
+
+    const { data } = await axios.post('/api/expenses/', submission, tokenConfig(getState));
     dispatch({ type: EXPENSE_CREATE_SUCCESS, payload: data });
   } catch (e) { dispatch({ type: EXPENSE_CREATE_FAILURE, payload: handleError(e) }) }
 }
@@ -58,8 +70,18 @@ export const addExpense = expense => async (dispatch, getState) => {
 export const editExpense = (id, expense) => async (dispatch, getState) => {
   dispatch({ type: EXPENSE_EDIT_REQUEST });
   try {
-    const editedExpense = JSON.stringify(expense);
-    const { data } = await axios.put(`/api/expenses/${id}`, editedExpense, tokenConfig(getState));
+    // Create an expense submission with locaiton and category ids included
+    const submission = {
+      ...expense,
+      location: expense.newLocation ?
+        await inlineCreateLocation({ name: expense.newLocation }, dispatch, getState) :
+        expense.location,
+      category: expense.newCategory ?
+        await inlineCreateCategory({ name: expense.newCategory, type: 'expense' }, dispatch, getState) :
+        expense.category
+    }
+
+    const { data } = await axios.put(`/api/expenses/${id}`, submission, tokenConfig(getState));
     dispatch({ type: EXPENSE_EDIT_SUCCESS, payload: data });
   } catch (e) { dispatch({ type: EXPENSE_EDIT_FAILURE, payload: handleError(e) }) }
 }

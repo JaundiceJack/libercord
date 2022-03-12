@@ -23,7 +23,7 @@ const tokenConfig = getState => {
 }
 
 // Make a basic request header for json data
-const basicConfig = { headers: { "Content-type": "application/json" } };
+//const basicConfig = { headers: { "Content-type": "application/json" } };
 
 // Return all of the user's assets
 export const getAssets = () => async (dispatch, getState) => {
@@ -80,3 +80,8 @@ export const toggleDeleting = () => dispatch => { dispatch({ type: ASSET_TOGGLE_
 // Set the given asset as the selected
 export const selectAsset = asset => dispatch => {
   dispatch({ type: ASSET_DIRECT_SELECT, payload: asset })}
+
+// Clear server/user error notifications
+export const clearAssetError = () => dispatch => {
+  dispatch({ type: ASSET_ERROR_RESET });
+}

@@ -1,5 +1,5 @@
-import { PieChart, Sector, Pie, Cell, Legend, Tooltip } from 'recharts';
-import { capitalize, truncateString } from '../../functions/strings.js';
+import { PieChart, Pie, Cell, Tooltip } from 'recharts';
+import { truncateString } from '../../functions/strings.js';
 
 const CustomPieChart = ({ data, label="source", total="5" }) => {
   const COLORS = [
@@ -13,8 +13,7 @@ const CustomPieChart = ({ data, label="source", total="5" }) => {
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = (props) => {
     const { cx, cy,
-      midAngle, innerRadius, outerRadius,
-      percent, index } = props;
+      midAngle, innerRadius, outerRadius, index } = props;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);

@@ -5,19 +5,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getIncomes, toggleAdding, toggleEditing, toggleDeleting }
   from '../../../../actions/incomeActions.js';
 // Import Components
-import Header        from '../../../misc/header.js';
 import IncomeGen     from './creation/incomeGen.js';
 import IncomeDelete  from './creation/incomeDelete.js';
 import IncomeTable   from './table/incomeTable.js';
-import IncomeOptions from './options/incomeOptions.js';
+//import IncomeOptions from './options/incomeOptions.js';
 import IncomePie    from './chart/incomePie.js';
 import Button        from '../../../input/button.js';
 // Import Icons
-import { GiReceiveMoney } from 'react-icons/gi';
+
 import { AiOutlineEdit } from 'react-icons/ai';
 import { VscDiffAdded, VscDiffRemoved } from 'react-icons/vsc';
 import { TiArrowBackOutline } from 'react-icons/ti';
-
 
 const Income = ({ history }) => {
   // Get state variables from redux
@@ -35,14 +33,13 @@ const Income = ({ history }) => {
 
   return (
     <div className={"flex flex-col mx-0 mt-4 sm:m-4 h-full "}>
-      <Header text="Income" icon={<GiReceiveMoney />} />
       <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-        <div className="bg-content bg-shadow rounded-lg h-120 flex flex-col justify-center p-4">
-
+        <div className="bg-content bg-shadow rounded-lg h-120 flex flex-col justify-center p-2">
           {(adding || editing || deleting) &&
             <Button color="red"
               title="Go Back"
               icon={<TiArrowBackOutline size="20" />}
+              extraClasses="w-14 self-center"
               onClick={() => {
                 adding ? dispatch(toggleAdding()) :
                 editing ? dispatch(toggleEditing()) :
@@ -79,7 +76,6 @@ const Income = ({ history }) => {
         <div className="lg:col-span-2 bg-content bg-shadow rounded-lg h-120 p-4">
           <IncomePie />
         </div>
-
       </div>
     </div>
 

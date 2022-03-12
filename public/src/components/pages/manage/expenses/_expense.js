@@ -5,15 +5,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getExpenses, toggleAdding, toggleEditing, toggleDeleting }
   from '../../../../actions/expenseActions.js';
 // Import Components
-import Header         from '../../../misc/header.js';
 import ExpenseGen     from './creation/expenseGen.js';
 import ExpenseDelete  from './creation/expenseDelete.js';
 import ExpenseTable   from './table/expenseTable.js';
-import ExpenseOptions from './options/expenseOptions.js';
+//import ExpenseOptions from './options/expenseOptions.js';
 import ExpensePie     from './chart/expensePie.js';
 import Button         from '../../../input/button.js';
 // Import Icons
-import { GiPayMoney } from 'react-icons/gi';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { VscDiffAdded, VscDiffRemoved } from 'react-icons/vsc';
 import { TiArrowBackOutline } from 'react-icons/ti';
@@ -34,14 +32,13 @@ const Expense = ({ history }) => {
 
   return (
     <div className={"flex flex-col mx-0 mt-4 sm:m-4 h-full "}>
-      <Header text="Expenses" icon={<GiPayMoney />} />
-
       <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-        <div className="bg-content bg-shadow rounded-lg h-120 flex flex-col justify-center p-4">
+        <div className="bg-content bg-shadow rounded-lg h-120 flex flex-col justify-center p-2">
           {(adding || editing || deleting) &&
             <Button color="red"
               title="Go Back"
               icon={<TiArrowBackOutline size="20" />}
+              extraClasses="w-14 self-center"
               onClick={() => {
                 adding ? dispatch(toggleAdding()) :
                 editing ? dispatch(toggleEditing()) :

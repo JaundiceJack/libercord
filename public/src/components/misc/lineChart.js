@@ -3,7 +3,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 const CustomLineChart = ({ data }) => {
 
   const CustomizedYAxisTick = props => {
-    const { x, y, stroke, payload } = props;
+    const { x, y, payload } = props;
     return (
       <g transform={`translate(${x},${y})`}>
         <text x={0} y={-15} dy={16} textAnchor="end" fill="#a74">

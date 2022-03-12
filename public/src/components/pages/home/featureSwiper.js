@@ -1,14 +1,12 @@
 // Swiper version: 6.8.4
 
-// Import basics
-import { useState } from 'react';
 // Import Swiper React components
 import SwiperCore, { A11y, Pagination, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 // Import components
 import FeatureCard from './featureCard.js';
 // Import icons
-import { GiScales, GiPiggyBank, GiImprisoned } from 'react-icons/gi'
+import { GiScales, GiPiggyBank } from 'react-icons/gi'
 import { AiOutlineLineChart } from 'react-icons/ai'
 // Import Swiper styles
 import 'swiper/swiper-bundle.min.css';
@@ -27,13 +25,9 @@ const FeatureSwiper = () => {
       text="See exactly how much you're saving (or losing) each month, and what you can cut back on to save more."
       icon={<GiPiggyBank size="40px"  />} />,
     <FeatureCard
-      header="Monitor Assets"
-      text="Get up-to-date stock, crypto, and precious metals prices when you're ready to invest."
-      icon={<AiOutlineLineChart size="40px"  />} />,
-    <FeatureCard
-      header="Limit Liabilities"
-      text="Keep records of your loans, debts, and mortgage to keep your wallet above water."
-      icon={<GiImprisoned size="40px"  />} />
+      header="Chart Progress"
+      text="Get a visualization of how you're doing each month and year with financial summary charts."
+      icon={<AiOutlineLineChart size="40px"  />} />
   ]
 
   return (

@@ -14,7 +14,7 @@ const NavLink = ({ path, label, color, icon, onClick, extraClasses }) => {
         "absolute bottom-0 left-0 right-0 py-2 px-6 h-12 hover:h-11 w-12  " +
         "flex items-center justify-center focus:outline-none rounded-lg " +
         "transform duration-300 border-b-4 hover:border-b-0 " +
-        `border-${color}-800 bg-button-${color} `}>
+        `bg-button-${color} `}>
         <div className="text-blue-200">
           {icon}
         </div>

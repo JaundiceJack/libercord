@@ -5,9 +5,10 @@ import {
   USER_LOGOUT_SUCCESS,
   USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAILURE,
   USER_EDIT_REQUEST,     USER_EDIT_SUCCESS,     USER_EDIT_FAILURE,
-  USER_DETAILS_RESET,
-  BALANCE_EDIT_REQUEST, BALANCE_EDIT_SUCCESS, BALANCE_EDIT_FAILURE,
-  BALANCE_TOGGLE_EDITING
+  USER_DETAILS_RESET,    USER_ERROR_RESET,
+  BALANCE_TOGGLE_EDITING,
+  ASSET_RESET, LIABILITY_RESET, INCOME_RESET, EXPENSE_RESET,
+  CATEGORY_RESET, SOURCE_RESET, LOCATION_RESET
 } from './types';
 // Import axios to handle http requests
 import axios from 'axios';
@@ -30,7 +31,7 @@ const basicConfig = { headers: { "Content-type": "application/json" } };
 export const loadUser = () => async (dispatch, getState) => {
   dispatch({ type: USER_GET_REQUEST });
   try {
-    const { data } = await axios.get(`/api/user/profile`, tokenConfig(getState));
+    const { data } = await axios.get(`/api/users/profile`, tokenConfig(getState));
     dispatch({ type: USER_GET_SUCCESS, payload: data });
   } catch (e) { dispatch({ type: USER_GET_FAILURE, payload: handleError(e) }); }
 }
@@ -39,7 +40,7 @@ export const loadUser = () => async (dispatch, getState) => {
 export const editUser = user => async (dispatch, getState) => {
   dispatch({ type: USER_EDIT_REQUEST });
   try {
-    const { data } = await axios.put(`/api/user/profile`, user, tokenConfig);
+    const { data } = await axios.put(`/api/users/profile`, user, tokenConfig(getState));
     dispatch({ type: USER_EDIT_SUCCESS, payload: data });
   }
   catch (e) { dispatch({ type: USER_EDIT_FAILURE, payload: handleError(e) }) };
@@ -68,17 +69,19 @@ export const login = user => async dispatch => {
 // Issue the logout action
 export const logout = () => dispatch => {
   localStorage.removeItem('user');
+  dispatch({ type: ASSET_RESET });
+  dispatch({ type: LIABILITY_RESET });
+  dispatch({ type: INCOME_RESET });
+  dispatch({ type: EXPENSE_RESET });
+  dispatch({ type: CATEGORY_RESET });
+  dispatch({ type: SOURCE_RESET });
+  dispatch({ type: LOCATION_RESET });
   dispatch({ type: USER_DETAILS_RESET });
   dispatch({ type: USER_LOGOUT_SUCCESS });
 }
 
-export const editBalance = balance => async (dispatch, getState) => {
-  dispatch({ type: BALANCE_EDIT_REQUEST });
-  try {
-    const { data } = await axios.put('/api/users/balance',
-      balance, tokenConfig(getState) );
-    dispatch({ type: BALANCE_EDIT_SUCCESS, payload: data });
-  } catch (e) { dispatch({ type: BALANCE_EDIT_FAILURE, payload: handleError(e) }); }
-}
-
 export const toggleEditingBalance = () => dispatch => { dispatch({ type: BALANCE_TOGGLE_EDITING }) };
+
+// Clear server/user error notifications
+export const clearUserError = () => dispatch => {
+  dispatch({ type: USER_ERROR_RESET })}

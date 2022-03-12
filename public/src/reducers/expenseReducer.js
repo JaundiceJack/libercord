@@ -6,7 +6,7 @@ import {
   EXPENSE_DELETE_REQUEST, EXPENSE_DELETE_SUCCESS, EXPENSE_DELETE_FAILURE,
   EXPENSE_ERROR_RESET,    EXPENSE_DIRECT_SELECT,
   EXPENSE_TOGGLE_ADDING,  EXPENSE_TOGGLE_EDITING, EXPENSE_TOGGLE_DELETING,
-  EXPENSE_TABLE_SORT
+  EXPENSE_TABLE_SORT, EXPENSE_RESET
 } from '../actions/types.js';
 
 
@@ -97,8 +97,8 @@ const expenseReducer = (state = initialState, action) => {
         editing: false,
         deleting: false
       }
-    case EXPENSE_ERROR_RESET:
-      return { ...state, error: null }
+    case EXPENSE_ERROR_RESET: return { ...state, error: null }
+    case EXPENSE_RESET: return initialState;
     default:
       return state;
   }

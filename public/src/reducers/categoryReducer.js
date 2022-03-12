@@ -4,15 +4,16 @@ import {
   CATEGORY_CREATE_REQUEST, CATEGORY_CREATE_SUCCESS, CATEGORY_CREATE_FAILURE,
   CATEGORY_EDIT_REQUEST,   CATEGORY_EDIT_SUCCESS,   CATEGORY_EDIT_FAILURE,
   CATEGORY_DELETE_REQUEST, CATEGORY_DELETE_SUCCESS, CATEGORY_DELETE_FAILURE,
-  CATEGORY_ERROR_RESET
+  CATEGORY_ERROR_RESET, CATEGORY_RESET
 } from '../actions/types.js';
 
 const initialState = {
   categories: [],
-  loading: false,
-  error: null,
-  adding: false,
-  editing: false,
+  selected: null,
+  error:    null,
+  loading:  false,
+  adding:   false,
+  editing:  false,
   deleting: false,
 }
 
@@ -35,12 +36,13 @@ const categoryReducer = (state = initialState, action) => {
     case CATEGORY_GET_SUCCESS:
       return { ...state, loading: false }
     case CATEGORY_CREATE_SUCCESS:
-      return {
-        ...state,
-        categories: [
-          ...state.categories,
-           action.payload
-         ],
+      const existing = state.categories.find(elem => {
+        return elem._id === action.payload._id })
+      return { ...state,
+        categories: existing ?
+          [...state.categories] :
+          [...state.categories, action.payload],
+        selected: action.payload,
         adding: false,
         loading: false
       }
@@ -63,8 +65,8 @@ const categoryReducer = (state = initialState, action) => {
         deleting: false,
         loading: false
       }
-    case CATEGORY_ERROR_RESET:
-      return { ...state, error: null }
+    case CATEGORY_ERROR_RESET: return { ...state, error: null }
+    case CATEGORY_RESET: return initialState
     default:
       return state;
   }

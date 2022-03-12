@@ -15,27 +15,38 @@ const Button = ({ type="button",
   appended=false
 }) => {
   return (
-    <div title={title} className={"relative h-10 flex items-end justify-center " + extraClasses}>
+    <div title={title} className={
+      `relative h-10 flex items-end justify-center ${(appended ? " " : "mx-1 ")}
+      ${extraClasses}`}>
       <button type={type}
         onClick={onClick}
         disabled={disabled}
         className={
-          "p-4 h-10 hover:border-b-0 focus:outline-none " +
-          "transform duration-300 flex items-center justify-center " +
-          (disabled ? "opacity-50 " : "hover:h-9 border-b-4  ") +
-          (appended ? "rounded-r-lg w-full " : "rounded-lg ") +
-          `bg-button-${color} border-${color}-700  ` +
-          + extraClasses
+          `p-4 h-10 w-full hover:border-b-0 focus:outline-none
+           transform duration-300 flex items-center justify-center
+          ${(disabled ? "opacity-50 " : "hover:h-9 border-b-4 ")}
+          ${(appended ? "rounded-r-lg w-full " : "rounded-lg ")}
+          bg-button-${color} `
         }>
         {loading ?
           <Spinner /> :
-          <div className="flex flex-row items-center justify-center ">
-            <p className={`text-${(textColor === 'white' || textColor === 'black') ?
-              textColor : (textColor + "-" + textBrightness)} ` + (icon && label && "mr-2") }>
-              {icon}</p>
-            <p className={`text-${(textColor === 'white' || textColor === 'black') ?
-              textColor : (textColor + "-" + textBrightness)} ` + "font-jose"}>
-              {label}</p>
+          <div className={`flex flex-row items-center justify-center`}>
+            <p className={`${((icon && label) ? "mr-2 " : " ")}
+              text-${(textColor === 'white' || textColor === 'black') ?
+                textColor :
+                (textColor + "-" + textBrightness)
+              }`
+            }>
+              {icon}
+            </p>
+            <p className={`whitespace-nowrap font-jose
+              text-${(textColor === 'white' || textColor === 'black') ?
+                textColor :
+                (textColor + "-" + textBrightness)
+              }`
+            }>
+              {label}
+            </p>
           </div>
         }
       </button>

@@ -12,6 +12,7 @@ import {
 import axios from 'axios';
 // Import server actions: to report authorization errors
 import { handleError } from './errorActions';
+import { getIncomes } from './incomeActions.js';
 
 // Create a config variable to send with routes requiring authorization
 const tokenConfig = getState => {
@@ -23,7 +24,7 @@ const tokenConfig = getState => {
 }
 
 // Make a basic request header for json data
-const basicConfig = { headers: { "Content-type": "application/json" } };
+//const basicConfig = { headers: { "Content-type": "application/json" } };
 
 // Return all of the user's sources
 export const getSources = () => async (dispatch, getState) => {
@@ -32,6 +33,21 @@ export const getSources = () => async (dispatch, getState) => {
     const { data } = await axios.get('/api/sources/', tokenConfig(getState));
     dispatch({ type: SOURCE_LIST_SUCCESS, payload: data });
   } catch (e) { dispatch({ type: SOURCE_LIST_FAILURE, payload: handleError(e) }) }
+}
+
+// Wait for a list of income sources from the server
+export const asyncGetSources = () => (dispatch, getState) => {
+  return new Promise(async (resolve, reject) => {
+    dispatch({ type: SOURCE_LIST_REQUEST });
+    try {
+      const { data } = await axios.get('/api/sources/', tokenConfig(getState));
+      dispatch({ type: SOURCE_LIST_SUCCESS, payload: data });
+      resolve(data);
+    } catch (e) {
+      dispatch({ type: SOURCE_LIST_FAILURE, payload: handleError(e) });
+      reject(e);
+    }
+  })
 }
 
 // Return an source with the given id
@@ -44,13 +60,33 @@ export const getSource = id => async (dispatch, getState) => {
 }
 
 // Create a new source from the user entries
-export const addSource = source => async (dispatch, getState) => {
+export const addSource = source => (dispatch, getState) => {
   dispatch({ type: SOURCE_CREATE_REQUEST });
-  try {
-    const newSource = JSON.stringify(source);
-    const { data } = await axios.post('/api/sources/', newSource, tokenConfig(getState));
-    dispatch({ type: SOURCE_CREATE_SUCCESS, payload: data });
-  } catch (e) { dispatch({ type: SOURCE_CREATE_FAILURE, payload: handleError(e) }) }
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await axios.post('/api/sources/', source, tokenConfig(getState));
+      dispatch({ type: SOURCE_CREATE_SUCCESS, payload: data });
+      resolve(data);
+    } catch (e) {
+      dispatch({ type: SOURCE_CREATE_FAILURE, payload: handleError(e) });
+      reject(e);
+    }
+  })
+}
+
+// Make a new source when entering income, return the new source's id when done
+export const inlineCreateSource = (source, dispatch, getState) => {
+  return new Promise(async (resolve, reject) => {
+    dispatch({ type: SOURCE_CREATE_REQUEST });
+    try {
+      const { data } = await axios.post('/api/sources/', source, tokenConfig(getState));
+      dispatch({ type: SOURCE_CREATE_SUCCESS, payload: data });
+      resolve(data._id);
+    } catch (e) {
+      dispatch({ type: SOURCE_CREATE_FAILURE, payload: handleError(e) });
+      reject(e);
+    }
+  })
 }
 
 // Edit the source with the given id
@@ -69,6 +105,8 @@ export const deleteSource = id => async (dispatch, getState) => {
   try {
     const { data } = await axios.delete(`/api/sources/${id}`, tokenConfig(getState));
     dispatch({ type: SOURCE_DELETE_SUCCESS, payload: data });
+    // Update incomes after deleting
+    dispatch(getIncomes());
   } catch (e) { dispatch({ type: SOURCE_DELETE_FAILURE, payload: handleError(e) }) }
 }
 

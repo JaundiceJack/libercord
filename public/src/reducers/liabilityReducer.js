@@ -5,7 +5,8 @@ import {
   LIABILITY_EDIT_REQUEST,   LIABILITY_EDIT_SUCCESS,   LIABILITY_EDIT_FAILURE,
   LIABILITY_DELETE_REQUEST, LIABILITY_DELETE_SUCCESS, LIABILITY_DELETE_FAILURE,
   LIABILITY_ERROR_RESET,    LIABILITY_DIRECT_SELECT,
-  LIABILITY_TOGGLE_ADDING,  LIABILITY_TOGGLE_EDITING, LIABILITY_TOGGLE_DELETING
+  LIABILITY_TOGGLE_ADDING,  LIABILITY_TOGGLE_EDITING, LIABILITY_TOGGLE_DELETING,
+  LIABILITY_RESET
 } from '../actions/types.js';
 
 const initialState = {
@@ -75,6 +76,8 @@ const liabilityReducer = (state = initialState, action) => {
     case LIABILITY_TOGGLE_EDITING: return { ...state, editing: !state.editing }
     case LIABILITY_TOGGLE_DELETING: return { ...state, deleting: !state.deleting }
     case LIABILITY_DIRECT_SELECT: return { ...state, selected: action.payload }
+    case LIABILITY_ERROR_RESET: return { ...state, error: null }
+    case LIABILITY_RESET: return initialState;
     default:
       return state;
   }

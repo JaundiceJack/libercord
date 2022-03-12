@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // Import dispatch actions
-import { editBalance } from '../../../../../../actions/userActions.js';
+import { editUser } from '../../../../../../actions/userActions.js';
 // Import Icons
 import { TiArrowBackOutline } from 'react-icons/ti';
 import { GiCheckMark } from 'react-icons/gi';
@@ -13,7 +13,8 @@ import Message from '../../../../../misc/message.js';
 import TextEntry from '../../../../../input/textEntry.js';
 
 const EditBalance = ({ toggle }) => {
-  const { user: { balance }, error, loading } = useSelector(state => state.user);
+  const { user, error, loading, user: { balance } } =
+    useSelector(state => state.user);
   const [initial, setInitial] = useState(balance || 0);
   const [msgs, setMsgs] = useState([]);
 
@@ -21,14 +22,12 @@ const EditBalance = ({ toggle }) => {
   const onSubmit = e => {
     e.preventDefault();
     let errors = [];
-    if (isNaN(Number(initial))) {
+    if (isNaN(Number(initial)))
       errors.push("Balance must be a number");
-      setMsgs([...msgs, "Balance must be a number."]); }
+    setMsgs(errors);
     errors.length === 0 ?
-      dispatch(editBalance({ balance: initial })) :
-      setTimeout(() => {
-        errors = [];
-        setMsgs([]); }, 5000)
+      dispatch(editUser({...user, balance: initial })) :
+      setTimeout(() => { setMsgs([]); }, 5000)
   }
 
   return (
@@ -51,6 +50,7 @@ const EditBalance = ({ toggle }) => {
 
           <Button type="submit"
             label="Save Changes"
+            extraClasses="w-42 mx-auto"
             icon={<GiCheckMark />} />
 
           {msgs.map(msg => <Message warning={msg} />)}

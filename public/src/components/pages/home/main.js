@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { setPage } from '../../../actions/pageActions.js';
 // Import components
 import FeatureSwiper from './featureSwiper.js';
-import Button from '../../input/button.js'
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -21,7 +20,7 @@ const Main = () => {
             "text-6xl font-jose font-semibold leading-tight sm:leading-normal " +
             "text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-500 " +
             "sm:text-left text-center w-full sm:mb-0 mb-4"}>
-            Liber<br className="sm:hidden"/>Crypt </h1>
+            Liber<br className="sm:hidden"/>Cord </h1>
           <h2 className={
             "text-2xl font-jose leading-tight text-transparent font-semibold " +
             "bg-clip-text bg-gradient-to-b from-yellow-200 to-yellow-500 mb-4 " +

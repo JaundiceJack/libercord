@@ -2,9 +2,9 @@
 // Import components
 import NavLink from './link.js';
 // Import Icons
-import { GiReceiveMoney, GiPayMoney, GiImprisoned } from 'react-icons/gi';
+import { GiReceiveMoney, GiPayMoney } from 'react-icons/gi';
 import { IoWalletOutline } from 'react-icons/io5';
-import { AiOutlineLineChart } from 'react-icons/ai';
+//import { AiOutlineLineChart } from 'react-icons/ai';
 
 const Links = () => {
   const links = [

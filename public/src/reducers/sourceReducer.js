@@ -7,14 +7,16 @@ import {
   SOURCE_DELETE_REQUEST, SOURCE_DELETE_SUCCESS, SOURCE_DELETE_FAILURE,
   SOURCE_ERROR_RESET,    SOURCE_DIRECT_SELECT,
   SOURCE_TOGGLE_ADDING,  SOURCE_TOGGLE_EDITING, SOURCE_TOGGLE_DELETING,
+  SOURCE_RESET
 } from '../actions/types.js';
 
 const initialState = {
-sources: [],
-  loading: false,
-  error: null,
-  adding: false,
-  editing: false,
+  sources:  [],
+  selected: null,
+  error:    null,
+  loading:  false,
+  adding:   false,
+  editing:  false,
   deleting: false,
 }
 
@@ -33,16 +35,18 @@ const locationReducer = (state = initialState, action) => {
     case SOURCE_DELETE_FAILURE:
       return { ...state, loading: false, error: action.payload }
     case SOURCE_LIST_SUCCESS:
-      return { ...state, loading: false, locations: action.payload }
+      return { ...state, loading: false, sources: action.payload }
     case SOURCE_GET_SUCCESS:
       return { ...state, loading: false }
     case SOURCE_CREATE_SUCCESS:
+      const existing = state.sources.find(elem => {
+        return elem._id === action.payload._id });
       return {
         ...state,
-      sources: [
-          ...state.locations,
-           action.payload
-         ],
+        sources: existing ?
+          [...state.sources] :
+          [...state.sources, action.payload],
+        selected: action.payload,
         adding: false,
         loading: false
       }
@@ -50,7 +54,7 @@ const locationReducer = (state = initialState, action) => {
       return {
         ...state,
       sources: [
-          ...state.locations.filter(location => location._id !== action.payload._id),
+          ...state.sources.filter(location => location._id !== action.payload._id),
           action.payload
         ],
         editing: false,
@@ -60,13 +64,17 @@ const locationReducer = (state = initialState, action) => {
       return {
         ...state,
       sources: [
-          ...state.locations.filter(location => location._id !== action.payload)
+          ...state.sources.filter(location => location._id !== action.payload)
         ],
         deleting: false,
         loading: false
       }
-    case SOURCE_ERROR_RESET:
-      return { ...state, error: null }
+    case SOURCE_TOGGLE_ADDING: return { ...state, adding: !state.adding }
+    case SOURCE_TOGGLE_EDITING: return { ...state, editing: !state.editing }
+    case SOURCE_TOGGLE_DELETING: return { ...state, deleting: !state.deleting }
+    case SOURCE_DIRECT_SELECT: return { ...state, selected: action.payload }
+    case SOURCE_ERROR_RESET: return { ...state, error: null }
+    case SOURCE_RESET: return initialState;
     default:
       return state;
   }

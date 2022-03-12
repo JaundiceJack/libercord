@@ -1,9 +1,10 @@
 // Import basics
 import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 // Import server actions
 import { login }      from '../../../actions/userActions.js';
-import { clearError } from '../../../actions/errorActions.js';
+import { clearUserError } from '../../../actions/userActions.js';
 // Import components
 import Message   from '../../misc/message.js';
 import Spinner   from '../../misc/spinner.js';
@@ -11,15 +12,17 @@ import TextEntry from '../../input/textEntry.js';
 import Button    from '../../input/button.js';
 
 const Login = ({ location, history }) => {
+  // Set input error messages
+  const [msgs, setMsgs] = useState([]);
+    // Initialize the component's state for each form field
   const [entries, setEntries] = useState({
     email: "",
     password: ""
   });
   const onEntry = e => { setEntries({ ...entries, [e.target.name]: e.target.value }); };
-  const [msgs, setMsgs] = useState([]);
 
   // Get the authentication state and submission errors
-  const { error, loading, user } = useSelector( state => state.user );
+  const { user, loading, error } = useSelector( state => state.user );
 
   // Grab any redirect from the history
   const redirect = location.search ? location.search.split('=')[1] : "/summary";
@@ -27,24 +30,23 @@ const Login = ({ location, history }) => {
   // Clear the msgs after the timer runs out
   const dispatch = useDispatch();
   const timer = useRef(null);
-  const clearErrors = () => {
-    timer.current = setTimeout(() => {
-    timer.current = null;
-    dispatch(clearError('user'));
-    setMsgs([]); }, 5000);
-  }
   // Update errors from the server / clear out errors after 5 seconds
   useEffect(() => {
+    // If the user is logged in, redirect to the summary page
     if (user.token) { history.push(redirect); }
-    else if (!timer.current) { clearErrors(); }
-  }, [error, dispatch, history, user, redirect]);
+    // Clear account login errors after 5 seconds
+    if (!timer.current) {
+      timer.current = setTimeout(() => {
+        dispatch(clearUserError());
+        timer.current = null;
+      }, [5000]);
+    }
+  }, [dispatch, user, error, history, redirect]);
   // Clear the timer on unmount
   useEffect(() => {return() => {timer.current&&clearTimeout(timer.current)}},[]);
 
-  // On form submission, attempt to log in
-  const onSubmit = e => {
-    e.preventDefault();
-    // Validate entries
+  // Check for input errors
+  const validateEntries = () => {
     let errs = [];
     if (entries.email === "" || entries.email === null)
       errs.push("Please enter a valid emal address.");
@@ -53,28 +55,45 @@ const Login = ({ location, history }) => {
     if (entries.password.length > 0 && entries.password.length < 8)
       errs.push("Passwords must be at least 8 characters in length.");
     setMsgs(errs);
+    return errs;
+  }
 
-    // Attempt logging in
-    if (errs.length === 0) { dispatch(login(entries)); }
-    // If there were entry errors, display them for 5 seconds
-    else { !timer.current && clearErrors(); }
+  // On form submission, attempt to log in
+  const onSubmit = e => {
+    e.preventDefault();
+    validateEntries().length === 0 ?
+      dispatch(login(entries)) :
+      setTimeout(() => setMsgs([]), 5000)
   }
 
   return (
     <main className="flex items-center h-full w-full">
-      <form className={"flex flex-col sm:items-start items-center mx-auto my-28 " +
-        "container-bg p-4 rounded-xl"}
-            onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className={`flex flex-col mx-auto my-28 p-4
+        sm:items-start items-center container-bg rounded-xl`}>
         { loading ? <Spinner /> :
           <div className="flex flex-col">
-            <h1 className={"sm:mr-2 mb-2 font-mont font-bold text-transparent bg-clip-text " +
-              "bg-gradient-to-b from-yellow-400 to-white text-xl"}>
-              Login: </h1>
-            <TextEntry name="email" type="email" label="Email:" placeholder="Email" labelColor="text-yellow-400"
-                   onChange={onEntry} />
-            <TextEntry name="password" type="password" label="Password:" placeholder="Password" labelColor="text-yellow-400"
-                   onChange={onEntry} extraClasses="mb-4" />
-            <Button type="submit" label="Login" color="green" extraClasses="mx-auto"/>
+            <div className="flex flex-row items-center justify-between mb-4">
+              <h1 className={`sm:mr-2 font-jose font-bold text-transparent
+                bg-clip-text bg-gradient-to-b from-yellow-400 to-white text-xl`}>
+                Login:
+              </h1>
+              <Link to="/create" title="Create a new account."
+                className={`font-jose text-sm text-yellow-400`}>
+                Need an account?
+              </Link>
+            </div>
+
+
+            <TextEntry name="email" type="email"
+              label="Email:" placeholder="Email"
+              labelColor="text-yellow-400" onChange={onEntry} />
+            <TextEntry name="password" type="password"
+              label="Password:" placeholder="Password"
+              labelColor="text-yellow-400" onChange={onEntry}
+              extraClasses="mb-6" />
+
+            <Button type="submit" label="Login"
+              color="green" extraClasses="mx-auto"/>
             { msgs.map(err => <Message error={err} /> )  }
             { error && <Message error={error} /> }
           </div>

@@ -23,7 +23,7 @@ const tokenConfig = getState => {
 }
 
 // Make a basic request header for json data
-const basicConfig = { headers: { "Content-type": "application/json" } };
+//const basicConfig = { headers: { "Content-type": "application/json" } };
 
 // Return all of the user's liabilities
 export const getLiabilities = () => async (dispatch, getState) => {
@@ -80,3 +80,8 @@ export const toggleDeleting = () => dispatch => { dispatch({ type: LIABILITY_TOG
 // Set the given liability as the selected
 export const selectLiability = liability => dispatch => {
   dispatch({ type: LIABILITY_DIRECT_SELECT, payload: liability })}
+
+// Clear server/user error notifications
+export const clearLiabilityError = () => dispatch => {
+  dispatch({ type: LIABILITY_ERROR_RESET });
+}

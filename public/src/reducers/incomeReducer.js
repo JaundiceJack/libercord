@@ -6,7 +6,7 @@ import {
   INCOME_DELETE_REQUEST, INCOME_DELETE_SUCCESS, INCOME_DELETE_FAILURE,
   INCOME_ERROR_RESET,    INCOME_DIRECT_SELECT,
   INCOME_TOGGLE_ADDING,  INCOME_TOGGLE_EDITING, INCOME_TOGGLE_DELETING,
-  INCOME_TABLE_SORT
+  INCOME_TABLE_SORT, INCOME_RESET
 } from '../actions/types.js';
 
 
@@ -96,8 +96,8 @@ const incomeReducer = (state = initialState, action) => {
         editing: false,
         deleting: false
       }
-    case INCOME_ERROR_RESET:
-      return { ...state, error: null }
+    case INCOME_ERROR_RESET: return { ...state, error: null }
+    case INCOME_RESET: return initialState;
     default:
       return state;
   }

@@ -1,29 +1,44 @@
 // Import Basics
-import { useSelector, useDispatch } from 'react-redux'
+import { useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 // Import dispatch actions
-import { deleteExpense, toggleDeleting } from '../../../../../actions/expenseActions.js'
+import { deleteExpense, clearExpenseError } from '../../../../../actions/expenseActions.js';
+// Import functions
+import { formatDateMMDD } from '../../../../../functions/dates.js';
 // Import components
 import Spinner from '../../../../misc/spinner.js';
 import Button  from '../../../../input/button.js';
 import Message from '../../../../misc/message.js';
 
-const ExpenseDelete = ({ toggleDelete }) => {
+const ExpenseDelete = () => {
   const { selected, loading, error } = useSelector(state => state.expense);
 
   // Send the delete request or go back to the previous screen
   const dispatch = useDispatch();
   const onDelete = () => { dispatch(deleteExpense(selected._id)) };
-  const onCancel = () => { dispatch(toggleDeleting()) };
+
+  // Clear errors
+  const timer = useRef(null);
+  useEffect(() => {
+    if (!timer.current) {
+      timer.current = setTimeout(() => {
+        dispatch(clearExpenseError());
+        timer.current = null;
+      }, [5000]);
+    }
+  }, [dispatch, error]);
 
   return (
     <div className="">
       { loading ? <Spinner extraClasses="mt-4"/> :
         <div className="flex flex-col mt-8">
-          <h3 className="text-white font-semibold text-center mb-8">
-            Are you sure you want to delete {selected.name}?</h3>
+          <h3 className="text-white font-semibold text-center mb-8 ">
+            Delete expense from {formatDateMMDD(selected.date)}?</h3>
           <div className="w-full flex flex-row justify-center">
-            <Button label="Delete It" color="green" onClick={onDelete} />
-            <Button label="Cancel"    color="red"   onClick={onCancel} />
+            <Button label="Delete It"
+              color="green"
+              title="Delete Selected Expense"
+              onClick={onDelete} />
           </div>
         </div>
       }

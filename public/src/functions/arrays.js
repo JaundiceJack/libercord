@@ -9,7 +9,6 @@ const months = [
 
 // Obtain a total for the year's transactions, Return a Number
 export const yearlyTotal = (transactions, year) => {
-  const date = new Date(year);
   return transactions
     .filter(elem => filterByYear(year, elem))
     .reduce(totalValue, 0);

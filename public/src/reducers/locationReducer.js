@@ -7,15 +7,17 @@ import {
   LOCATION_DELETE_REQUEST, LOCATION_DELETE_SUCCESS, LOCATION_DELETE_FAILURE,
   LOCATION_ERROR_RESET,    LOCATION_DIRECT_SELECT,
   LOCATION_TOGGLE_ADDING,  LOCATION_TOGGLE_EDITING, LOCATION_TOGGLE_DELETING,
+  LOCATION_RESET
 } from '../actions/types.js';
 
 
 const initialState = {
   locations: [],
-  loading: false,
-  error: null,
-  adding: false,
-  editing: false,
+  selected: null,
+  error:    null,
+  loading:  false,
+  adding:   false,
+  editing:  false,
   deleting: false,
 }
 
@@ -38,12 +40,14 @@ const locationReducer = (state = initialState, action) => {
     case LOCATION_GET_SUCCESS:
       return { ...state, loading: false }
     case LOCATION_CREATE_SUCCESS:
+      const existing = state.locations.find(elem => {
+        return elem._id === action.payload._id });
       return {
         ...state,
-        locations: [
-          ...state.locations,
-           action.payload
-         ],
+        locations: existing ?
+          [...state.locations] :
+          [...state.locations, action.payload],
+        selected: action.payload,
         adding: false,
         loading: false
       }
@@ -66,8 +70,12 @@ const locationReducer = (state = initialState, action) => {
         deleting: false,
         loading: false
       }
-    case LOCATION_ERROR_RESET:
-      return { ...state, error: null }
+    case LOCATION_TOGGLE_ADDING: return { ...state, adding: !state.adding }
+    case LOCATION_TOGGLE_EDITING: return { ...state, editing: !state.editing }
+    case LOCATION_TOGGLE_DELETING: return { ...state, deleting: !state.deleting }
+    case LOCATION_DIRECT_SELECT: return { ...state, selected: action.payload }
+    case LOCATION_ERROR_RESET: return { ...state, error: null }
+    case LOCATION_RESET: return initialState;
     default:
       return state;
   }

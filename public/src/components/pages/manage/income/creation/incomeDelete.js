@@ -26,7 +26,7 @@ const IncomeDelete = () => {
         timer.current = null;
       }, [5000]);
     }
-  }, [dispatch]);
+  }, [dispatch, error]);
 
   return (
     <div className="">

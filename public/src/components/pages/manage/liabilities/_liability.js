@@ -1,17 +1,17 @@
 // Import basics
-import { useSelector } from 'react-redux';
+//import { useSelector } from 'react-redux';
 // Import Components
 import Header           from '../../../misc/header.js';
-import LiabilityGen     from './creation/liabilityGen.js';
-import LiabilityDelete  from './creation/liabilityDelete.js';
-import LiabilityTable   from './table/liabilityTable.js';
-import LiabilityOptions from './options/liabilityOptions.js';
+//import LiabilityGen     from './creation/liabilityGen.js';
+//import LiabilityDelete  from './creation/liabilityDelete.js';
+//import LiabilityTable   from './table/liabilityTable.js';
+//import LiabilityOptions from './options/liabilityOptions.js';
 // Import Icons
 import { GiImprisoned } from 'react-icons/gi';
 
 const Liability = ({ history }) => {
   // Get state variables from redux
-  const { adding, editing, deleting } = useSelector(state => state.liability);
+  //const { adding, editing, deleting } = useSelector(state => state.liability);
 
   return (
     <div className={"flex flex-col m-4 h-full "}>

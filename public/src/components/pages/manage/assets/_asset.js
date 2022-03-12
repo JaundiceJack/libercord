@@ -1,17 +1,17 @@
 // Import basics
-import { useSelector } from 'react-redux';
+//import { useSelector } from 'react-redux';
 // Import Components
 import Header       from '../../../misc/header.js';
-import AssetGen     from './creation/assetGen.js';
-import AssetDelete  from './creation/assetDelete.js';
-import AssetTable   from './table/assetTable.js';
-import AssetOptions from './options/assetOptions.js';
+//import AssetGen     from './creation/assetGen.js';
+//import AssetDelete  from './creation/assetDelete.js';
+//import AssetTable   from './table/assetTable.js';
+//import AssetOptions from './options/assetOptions.js';
 // Import Icons
 import { AiOutlineLineChart } from 'react-icons/ai';
 
 const Asset = ({ history }) => {
   // Get state variables from redux
-  const { adding, editing, deleting } = useSelector(state => state.asset);
+  //const { adding, editing, deleting } = useSelector(state => state.asset);
 
   return (
     <div className={"flex flex-col m-4 h-full "}>

@@ -13,6 +13,8 @@ import {
 import axios from 'axios';
 // Import server actions: to report authorization errors
 import { handleError } from './errorActions';
+import { inlineCreateCategory } from './categoryActions.js';
+import { inlineCreateSource } from './sourceActions.js';
 
 // Create a config variable to send with routes requiring authorization
 const tokenConfig = getState => {
@@ -24,7 +26,7 @@ const tokenConfig = getState => {
 }
 
 // Make a basic request header for json data
-const basicConfig = { headers: { "Content-type": "application/json" } };
+//const basicConfig = { headers: { "Content-type": "application/json" } };
 
 // Return all of the user's incomes
 export const getIncomes = () => async (dispatch, getState) => {
@@ -48,8 +50,18 @@ export const getIncome = id => async (dispatch, getState) => {
 export const addIncome = income => async (dispatch, getState) => {
   dispatch({ type: INCOME_CREATE_REQUEST });
   try {
-    const newIncome = JSON.stringify(income);
-    const { data } = await axios.post('/api/incomes/', newIncome, tokenConfig(getState));
+    // Create an income submission with source and category ids included
+    const submission = {
+      ...income,
+      source: income.newSource ?
+        await inlineCreateSource({ name: income.newSource }, dispatch, getState) :
+        income.source,
+      category: income.newCategory ?
+        await inlineCreateCategory({ name: income.newCategory, type: 'income' }, dispatch, getState) :
+        income.category
+    }
+
+    const { data } = await axios.post('/api/incomes/', submission, tokenConfig(getState));
     dispatch({ type: INCOME_CREATE_SUCCESS, payload: data });
   } catch (e) { dispatch({ type: INCOME_CREATE_FAILURE, payload: handleError(e) }) }
 }
@@ -58,11 +70,23 @@ export const addIncome = income => async (dispatch, getState) => {
 export const editIncome = (id, income) => async (dispatch, getState) => {
   dispatch({ type: INCOME_EDIT_REQUEST });
   try {
-    const editedIncome = JSON.stringify(income);
-    const { data } = await axios.put(`/api/incomes/${id}`, editedIncome, tokenConfig(getState));
+    // Create an income submission with source and category ids included
+    const submission = {
+      ...income,
+      source: income.newSource ?
+        await inlineCreateSource({ name: income.newSource }, dispatch, getState) :
+        income.source,
+      category: income.newCategory ?
+        await inlineCreateCategory({ name: income.newCategory, type: 'income' }, dispatch, getState) :
+        income.category
+    }
+
+    const { data } = await axios.put(`/api/incomes/${id}`, submission, tokenConfig(getState));
     dispatch({ type: INCOME_EDIT_SUCCESS, payload: data });
   } catch (e) { dispatch({ type: INCOME_EDIT_FAILURE, payload: handleError(e) }) }
 }
+
+
 
 // Remove the selected income
 export const deleteIncome = id => async (dispatch, getState) => {

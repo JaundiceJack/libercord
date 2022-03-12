@@ -52,18 +52,17 @@
   height: 0;
   border-top: 60px solid transparent;
   border-bottom: 60px solid transparent;
-
   border-left: 60px solid green; }
 .button-prev { width: 0;
   height: 0;
   border-top: 10px solid transparent;
   border-bottom: 10px solid transparent;
-
   border-right:10px solid blue;  }
 
 .bg-button-gray {
   background: radial-gradient(rgba(200, 200, 220, 0.95), rgba(200, 200, 220, 0.65));
   box-shadow: 0 2px 3px 1px #252532;
+  border-color: rgba(100, 100, 110, 0.95);
 }
 .bg-button-gray:hover {
   background: radial-gradient(rgba(200, 200, 220, 0.95), rgba(200, 200, 220, 0.85));
@@ -72,6 +71,7 @@
 .bg-button-green {
   background: radial-gradient(rgba(74, 222, 128, 0.95), rgba(74, 222, 128, 0.65));
   box-shadow: 0 2px 3px 1px #252532;
+  border-color: rgba(37, 111, 64, 0.95);
 }
 .bg-button-green:hover {
   background: radial-gradient(rgba(74, 222, 128, 0.95), rgba(74, 222, 128, 0.85));
@@ -80,6 +80,7 @@
 .bg-button-blue {
   background: radial-gradient(rgba(59, 130, 246, 0.95), rgba(59, 130, 246, 0.65));
   box-shadow: 0 2px 3px 1px #252532;
+  border-color: rgba(29, 65, 123, 0.95);
 }
 .bg-button-blue:hover {
   background: radial-gradient(rgba(59, 130, 246, 0.95), rgba(59, 130, 246, 0.85));
@@ -88,6 +89,7 @@
 .bg-button-yellow {
   background: radial-gradient(rgba(250, 204, 21, 0.95), rgba(250, 204, 21, 0.65));
   box-shadow: 0 2px 3px 1px #252532;
+  border-color: rgba(125, 102, 10, 0.95)
 }
 .bg-button-yellow:hover {
   background: radial-gradient(rgba(250, 204, 21, 0.95), rgba(250, 204, 21, 0.85));
@@ -96,6 +98,7 @@
 .bg-button-red {
   background: radial-gradient(rgba(248, 113, 113, 0.95), rgba(248, 113, 113, 0.65));
   box-shadow: 0 2px 3px 1px #252532;
+  border-color: rgba(124, 56, 56, 0.95)
 }
 .bg-button-red:hover {
   background: radial-gradient(rgba(248, 113, 113, 0.95), rgba(248, 113, 113, 0.85));
@@ -104,6 +107,7 @@
 .bg-button-indigo {
   background: radial-gradient(rgba(129, 140, 248, 0.95), rgba(129, 140, 248, 0.65));
   box-shadow: 0 2px 3px 1px #252532;
+  border-color: rgba(65, 70, 124, 0.95)
 }
 .bg-button-indigo:hover {
   background: radial-gradient(rgba(129, 140, 248, 0.95), rgba(129, 140, 248, 0.85));

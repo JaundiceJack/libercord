@@ -5,7 +5,8 @@ import {
   ASSET_EDIT_REQUEST,   ASSET_EDIT_SUCCESS,   ASSET_EDIT_FAILURE,
   ASSET_DELETE_REQUEST, ASSET_DELETE_SUCCESS, ASSET_DELETE_FAILURE,
   ASSET_ERROR_RESET,    ASSET_DIRECT_SELECT,
-  ASSET_TOGGLE_ADDING,  ASSET_TOGGLE_EDITING, ASSET_TOGGLE_DELETING
+  ASSET_TOGGLE_ADDING,  ASSET_TOGGLE_EDITING, ASSET_TOGGLE_DELETING,
+  ASSET_RESET
 } from '../actions/types.js';
 
 const initialState = {
@@ -75,6 +76,8 @@ const assetReducer = (state = initialState, action) => {
     case ASSET_TOGGLE_EDITING: return { ...state, editing: !state.editing }
     case ASSET_TOGGLE_DELETING: return { ...state, deleting: !state.deleting }
     case ASSET_DIRECT_SELECT: return { ...state, selected: action.payload }
+    case ASSET_ERROR_RESET: return { ...state, error: null }
+    case ASSET_RESET: return initialState
     default:
       return state;
   }
