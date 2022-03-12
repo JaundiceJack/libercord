@@ -28,7 +28,7 @@ const Main = () => {
             Liberty through Finance. </h2>
           <p className={"text-blue-200 font-jose font-semibold text-md"}>
             Is your financial health making you sick?
-            Let LiberCrypt Help!  Create an account or
+            Let Libercord Help!  Create an account or
             login to begin.</p>
         </div>
 
