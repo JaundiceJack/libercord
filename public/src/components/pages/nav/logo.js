@@ -5,7 +5,7 @@ import logo from '../../../images/logoMin.png';
 
 const Logo = () => {
   return (
-    <Link to={`/home`}
+    <Link to={`/`}
       className={"relative flex flex-row items-center justify-center " +
       "sm:px-3 px-2 py-2 sm:mr-0 mx-1 sm:mb-3 rounded-lg group h-12 w-12"}>
       {/* Link Button */}
