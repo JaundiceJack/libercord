@@ -46,7 +46,7 @@ const userReducer = (state = initialState, action) => {
     case USER_REGISTER_FAILURE:
       window.localStorage.removeItem('token');
       return { ...state, loading: false, token: null, user: {},
-        authenticated: false,
+        authenticated: false, error: action.payload
       };
     case USER_ERROR_RESET: return { ...state, error: null };
     case USER_DETAILS_RESET: return { ...state, user: {} };

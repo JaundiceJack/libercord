@@ -13,7 +13,6 @@ const Body = () => {
         <div className="grow">
           <Routes />
         </div>
-
         <Footer />
       </div>
     </div>

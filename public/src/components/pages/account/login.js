@@ -3,8 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 // Import server actions
-import { login }      from '../../../actions/userActions.js';
-import { clearUserError } from '../../../actions/userActions.js';
+import { login, clearUserError } from '../../../actions/userActions.js';
 // Import components
 import Message   from '../../misc/message.js';
 import Spinner   from '../../misc/spinner.js';
@@ -77,17 +76,23 @@ const Login = ({ location, history }) => {
                 bg-clip-text bg-gradient-to-b from-yellow-400 to-white text-xl`}>
                 Login:
               </h1>
-              <Link to="/create" title="Create a new account."
-                className={`font-jose text-sm text-yellow-400`}>
-                Need an account?
-              </Link>
+              <div className="flex flex-col items-end">
+                <Link to="/create" title="Create a new account."
+                  className={`font-jose text-sm text-yellow-400`}>
+                  Need an account?
+                </Link>
+                <Link to="/forgot" title="Reset your password."
+                  className={`font-jose text-sm text-yellow-400`}>
+                  Forgot password?
+                </Link>
+              </div>
             </div>
 
 
-            <TextEntry name="email" type="email"
+            <TextEntry name="email" type="email" value={entries.email}
               label="Email:" placeholder="Email"
               labelColor="text-yellow-400" onChange={onEntry} />
-            <TextEntry name="password" type="password"
+            <TextEntry name="password" type="password" value={entries.password}
               label="Password:" placeholder="Password"
               labelColor="text-yellow-400" onChange={onEntry}
               extraClasses="mb-6" />

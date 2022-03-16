@@ -8,6 +8,7 @@ import userReducer from './userReducer.js';
 import pageReducer from './pageReducer.js';
 import locationReducer from './locationReducer.js';
 import sourceReducer from './sourceReducer.js';
+import resetReducer from './resetReducer.js';
 
 export default combineReducers({
   asset: assetReducer,
@@ -19,4 +20,5 @@ export default combineReducers({
   page: pageReducer,
   location: locationReducer,
   source: sourceReducer,
+  reset: resetReducer,
 })

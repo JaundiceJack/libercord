@@ -2,8 +2,8 @@
 const express = require('express');
 const router = express.Router();
 const private = require('../../middleware/authMW');
-const { loginUser, getProfile, updateProfile, registerUser } =
-  require('../actions/userController.js');
+const { loginUser, getProfile, updateProfile, registerUser,
+  sendResetLink, resetPassword } = require('../actions/userController.js');
 
 // POST api/users/ | create a new user | public
 router.route('/')
@@ -16,5 +16,14 @@ router.route('/login')
 router.route('/profile')
   .get(private, getProfile)
   .put(private, updateProfile);
+
+// POST: api/users/password-reset | send a reset link to the user's email | public
+router.route('/password-reset')
+  .post(sendResetLink);
+
+// POST: api/users/password-reset/:id/:token |
+// When the user clicks the email link, reset their password
+router.route('/password-reset/:id/:token')
+  .post(resetPassword)
 
 module.exports = router;

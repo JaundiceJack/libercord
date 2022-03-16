@@ -37,14 +37,14 @@ const Summary = ({ history }) => {
   }, [dispatch, user, expenses, incomes, history]);
 
   return (
-    <div className={"flex flex-col mx-0 mt-4 sm:m-4 h-full "}>
-      <div className={"grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 gap-4 " +
-        "min-h-screen p-4"}>
-        <div className={"flex flex-col justify-center bg-content bg-shadow " +
-          "h-120 rounded-lg p-4"}>
+    <div className={`flex flex-col mx-0 mt-4 sm:m-4 h-full `}>
+      <div className={`grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 gap-4
+        min-h-screen p-4`}>
+        <div className={
+          `flex flex-col justify-center bg-content bg-shadow rounded-lg p-4`}>
           <SavingsInfo year={year} onPrev={backYear} onNext={nextYear}  />
         </div>
-        <div className="lg:col-span-2 bg-content bg-shadow rounded-lg h-120 p-4">
+        <div className="lg:col-span-2 bg-content bg-shadow rounded-lg p-4">
           <SavingsChart year={year} onPrev={backYear} onNext={nextYear} />
         </div>
       </div>

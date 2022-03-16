@@ -9,16 +9,11 @@ import Expense       from './pages/manage/expenses/_expense.js';
 import Income        from './pages/manage/income/_income.js';
 import Asset         from './pages/manage/assets/_asset.js';
 import Liability     from './pages/manage/liabilities/_liability.js';
-//import Forgot      from './pages/account/forgot.js';
-//import Reset       from './pages/account/reset.js';
+import Forgot        from './pages/account/forgot.js';
+import Reset         from './pages/account/reset.js';
 import CreateAccount from './pages/account/create.js';
 
 const Routes = () => {
-
-  /*
-  <Route exact path="/forgot" component={Forgot} />
-  <Route path="/reset/:token" component={Reset} />
-  */
 
   return (
     <Switch>
@@ -31,6 +26,8 @@ const Routes = () => {
       <Route exact path="/assets"   component={Asset} />
       <Route exact path="/debts"    component={Liability} />
       <Route exact path="/employ"   component={Employ} />
+      <Route exact path="/forgot" component={Forgot} />
+      <Route path="/password-reset/:id/:token" component={Reset} />
     </Switch>
   )
 }

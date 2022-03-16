@@ -32,8 +32,9 @@ const Expense = ({ history }) => {
 
   return (
     <div className={"flex flex-col mx-0 mt-4 sm:m-4 h-full "}>
-      <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-        <div className="bg-content bg-shadow rounded-lg h-120 flex flex-col justify-center p-2">
+      <div className="min-h-screen p-4 sm:p-0 grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div style={{ minHeight: 30+"rem" }}
+          className={`bg-content bg-shadow rounded-lg flex flex-col justify-center p-2`}>
           {(adding || editing || deleting) &&
             <Button color="red"
               title="Go Back"
@@ -45,7 +46,6 @@ const Expense = ({ history }) => {
                 deleting && dispatch(toggleDeleting());
               }} />
           }
-
 
           {adding ? <ExpenseGen /> :
             editing ? <ExpenseGen editing={true} /> :
@@ -72,7 +72,7 @@ const Expense = ({ history }) => {
                 onClick={() => dispatch(toggleDeleting()) } />}
           </div>
         </div>
-        <div className="lg:col-span-2 bg-content bg-shadow rounded-lg h-120 p-4">
+        <div className="lg:col-span-2 bg-content bg-shadow rounded-lg p-4">
           <ExpensePie />
         </div>
       </div>

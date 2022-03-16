@@ -1,14 +1,17 @@
 // Import action types
 import {
-  USER_GET_REQUEST,      USER_GET_SUCCESS,      USER_GET_FAILURE,
-  USER_LOGIN_REQUEST,    USER_LOGIN_SUCCESS,    USER_LOGIN_FAILURE,
-  USER_LOGOUT_SUCCESS,
-  USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAILURE,
-  USER_EDIT_REQUEST,     USER_EDIT_SUCCESS,     USER_EDIT_FAILURE,
-  USER_DETAILS_RESET,    USER_ERROR_RESET,
-  BALANCE_TOGGLE_EDITING,
-  ASSET_RESET, LIABILITY_RESET, INCOME_RESET, EXPENSE_RESET,
-  CATEGORY_RESET, SOURCE_RESET, LOCATION_RESET
+  USER_GET_REQUEST,       USER_GET_SUCCESS,      USER_GET_FAILURE,
+  USER_LOGIN_REQUEST,     USER_LOGIN_SUCCESS,    USER_LOGIN_FAILURE,
+  USER_REGISTER_REQUEST,  USER_REGISTER_SUCCESS, USER_REGISTER_FAILURE,
+  USER_EDIT_REQUEST,      USER_EDIT_SUCCESS,     USER_EDIT_FAILURE,
+  BALANCE_TOGGLE_EDITING, USER_LOGOUT_SUCCESS,
+  RESET_EMAIL_REQUEST,    RESET_EMAIL_SUCCESS,    RESET_EMAIL_FAILURE,
+  RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAILURE,
+  USER_DETAILS_RESET,     USER_ERROR_RESET,       RESET_ERROR_RESET,
+  ASSET_RESET,            LIABILITY_RESET,        INCOME_RESET,
+  EXPENSE_RESET,          CATEGORY_RESET,         SOURCE_RESET,
+  LOCATION_RESET,         RESET_MESSAGE_RESET
+
 } from './types';
 // Import axios to handle http requests
 import axios from 'axios';
@@ -66,7 +69,7 @@ export const login = user => async dispatch => {
   } catch (e) { dispatch({ type: USER_LOGIN_FAILURE, payload: handleError(e) }); }
 }
 
-// Issue the logout action
+// Issue the logout action and clear out info for next user
 export const logout = () => dispatch => {
   localStorage.removeItem('user');
   dispatch({ type: ASSET_RESET });
@@ -80,8 +83,35 @@ export const logout = () => dispatch => {
   dispatch({ type: USER_LOGOUT_SUCCESS });
 }
 
+// Request a password reset link
+export const sendResetLink = email => async dispatch => {
+  dispatch({ type: RESET_EMAIL_REQUEST });
+  try {
+    const { data } = await axios.post(`/api/users/password-reset/`,
+      { email: email }, basicConfig);
+    dispatch({ type: RESET_EMAIL_SUCCESS, payload: data });
+  } catch (e) { dispatch({ type: RESET_EMAIL_FAILURE, payload: handleError(e) }); }
+}
+
+// Change the user's password
+export const updatePassword = (id, token, password) => async dispatch => {
+  dispatch({ type: RESET_PASSWORD_REQUEST });
+  try {
+    const { data } = await axios.post(`/api/users/password-reset/${id}/${token}`,
+      { password: password }, basicConfig);
+    dispatch({ type: RESET_PASSWORD_SUCCESS });
+    // Log the user in after successfully changing their password
+    dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+    localStorage.setItem('user', JSON.stringify(data));
+  } catch (e) { dispatch({ type: RESET_PASSWORD_FAILURE, payload: handleError(e) }); }
+}
+
 export const toggleEditingBalance = () => dispatch => { dispatch({ type: BALANCE_TOGGLE_EDITING }) };
 
 // Clear server/user error notifications
 export const clearUserError = () => dispatch => {
-  dispatch({ type: USER_ERROR_RESET })}
+  dispatch({ type: USER_ERROR_RESET }) }
+export const clearResetError = () => dispatch => {
+  dispatch({ type: RESET_ERROR_RESET }) }
+export const clearResetMessage = () => dispatch => {
+  dispatch({ type: RESET_MESSAGE_RESET }) }
