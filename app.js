@@ -2,13 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const connect = require('./db/connection.js');
+const path = require('path');
 const { notFound, errorFound } = require('./middleware/errorMW.js')
 dotenv.config();
-
-/* TODOS:
-  The total balance needs to have the initial plus total savings to date
-  right now it is only initial plus savings within viewable year
-*/
 
 // Instance the app server and use the internal body parser
 const app = express();

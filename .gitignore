@@ -1,5 +1,6 @@
 # Don't publish db passwords & webtoken keys
 .env
 # Don't fill up my github
-node_modules/
-node_modules
+/node_modules
+# Don't need the React build folder
+/build
