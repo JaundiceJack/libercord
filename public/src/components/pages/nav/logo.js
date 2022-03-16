@@ -23,7 +23,7 @@ const Logo = () => {
         {/* Link Tooltip */}
         <div className={
           "absolute transform duration-300 opacity-0 group-hover:opacity-100 tooltip " +
-          "left-16 h-10 w-0 rounded-lg flex items-center p-2 w-16 " }>
+          "left-16 h-10 w-0 rounded-lg hidden sm:flex items-center p-2 w-16 " }>
           <p className="text-white text-shadow text-center w-full font-semibold font-jose">
             Home
           </p>

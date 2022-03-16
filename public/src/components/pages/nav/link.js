@@ -21,7 +21,7 @@ const NavLink = ({ path, label, color, icon, onClick, extraClasses }) => {
       </div>
       {/* Link Tooltip */}
       <div className={
-        "absolute left-16 h-10 w-0 p-2 flex items-center tooltip rounded-lg " +
+        "absolute left-16 h-10 w-0 p-2 hidden sm:flex items-center tooltip rounded-lg " +
         "transform duration-300 opacity-0 group-hover:opacity-100 " +
         (label <= 5 ? "group-hover:w-16 " :
          label <  7 ? "group-hover:w-20 " : "group-hover:w-24 ") }>
