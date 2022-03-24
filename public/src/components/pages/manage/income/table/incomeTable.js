@@ -13,13 +13,8 @@ import Header        from '../../../../misc/header.js';
 import { VscDiffAdded } from 'react-icons/vsc';
 import { GiReceiveMoney } from 'react-icons/gi';
 
-const IncomeTable = () => {
+const IncomeTable = ({ year }) => {
   const { incomes, selected, loading, error } = useSelector(state => state.income);
-
-  // Set a year to filter incomes
-  const [year, setYear] = useState(new Date().getFullYear());
-  const backYear = () => { setYear(year - 1) };
-  const nextYear = () => { setYear(year + 1) };
 
   // Clear errors
   const timer = useRef(null);
@@ -40,18 +35,13 @@ const IncomeTable = () => {
         error ? <Message error={error} /> :
         incomes.length === 0 ?
         <div className="h-full w-full flex flex-col items-center justify-center">
-          <Header text="Income" icon={<GiReceiveMoney />} />
           <p className="text-blue-100 text-center font-semibold font-jose my-auto">
             No income yet.<br />
             Click the <VscDiffAdded className="inline"/> below to begin.
           </p>
         </div> :
 
-        <div className="flex flex-col w-full h-full p-2">
-          <Header text="Income" icon={<GiReceiveMoney />}
-            year={year} onNextYear={nextYear} onPrevYear={backYear} />
-
-
+        <div className="flex flex-col w-full h-full sm:p-2">
           <div className={"bg-gray-400 rounded-t-md border-b border-gray-800 bg-header shadow-xl " +
             "grid grid-cols-12 w-full py-1 px-2 items-center"}>
             <p className="col-span-2 text-blue-100 font-semibold">Date</p>

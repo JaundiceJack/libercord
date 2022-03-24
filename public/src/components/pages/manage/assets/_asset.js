@@ -7,22 +7,27 @@ import Header       from '../../../misc/header.js';
 //import AssetTable   from './table/assetTable.js';
 //import AssetOptions from './options/assetOptions.js';
 // Import Icons
-import { AiOutlineLineChart } from 'react-icons/ai';
+//import { AiOutlineLineChart } from 'react-icons/ai';
+import DetailWindow from '../../../containers/detailWindow.js';
+import { GiPayMoney } from 'react-icons/gi';
 
 const Asset = ({ history }) => {
   // Get state variables from redux
   //const { adding, editing, deleting } = useSelector(state => state.asset);
 
   return (
-    <div className={"flex flex-col m-4 h-full "}>
-      <Header text="Assets" icon={<AiOutlineLineChart />} />
+    <div className={"flex flex-col mx-0 mt-4 sm:m-4 h-full "}>
+      <div className="min-h-screen p-4 sm:p-0 grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 gap-4">
 
-      <div className="min-h-screen grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-        <div className="bg-content bg-shadow rounded-lg h-120"></div>
-        <div className="bg-content bg-shadow rounded-lg h-120"></div>
-        <div className="bg-content bg-shadow rounded-lg h-120"></div>
+          <DetailWindow header="Assets" icon={<GiPayMoney />} year="2022" content={
+            <div className="">
+              
+            </div>
+          } />
+
       </div>
     </div>
+
   )
 }
 /*

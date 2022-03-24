@@ -1,9 +1,8 @@
 import { useSelector } from 'react-redux';
 import LineChart from '../../../../../misc/lineChart.js';
-import BrowseButton from '../../../../../input/browseButton.js';
 import { monthlyTotals } from '../../../../../../functions/arrays.js';
 
-const SavingsChart = ({ year, onPrev, onNext }) => {
+const SavingsChart = ({ year }) => {
   // Pull variables from redux state
   const { incomes } = useSelector(state => state.income);
   const { expenses } = useSelector(state => state.expense);
@@ -22,20 +21,7 @@ const SavingsChart = ({ year, onPrev, onNext }) => {
   });
 
   return (
-    <div className={"w-full h-full rounded-md flex flex-col"}>
-      {/* Year Navigation */}
-      <div className={"flex flex-row justify-center items-center mb-4 p-2"}>
-        <BrowseButton direction="back" onClick={onPrev} />
-        <h4 className={"text-blue-200 text-md font-semibold"}>
-          {year}
-        </h4>
-        <BrowseButton direction="next" onClick={onNext} />
-      </div>
-      {/* Savings Chart */}
-      <div className={"flex flex-col h-full"}>
-        <LineChart data={data} />
-      </div>
-    </div>
+    <LineChart data={data} />
   )
 }
 
