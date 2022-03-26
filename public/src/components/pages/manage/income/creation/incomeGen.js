@@ -35,8 +35,10 @@ const IncomeGen = ({ editing=false }) => {
   // If editing, use the selected income values, otherwise set defaults
   const [income, setIncome] = useState({
     name: "",
-    category: editing ? (selected && selected.category && selected.category._id) : "",
-    source: editing ? (selected && selected.source && selected.source._id) : "",
+    category: (editing && selected && selected.category) ?
+      selected.category._id : "",
+    source: (editing && selected && selected.source) ?
+      selected.source._id : "",
     newCategory: "",
     newSource: "",
     value: editing ?

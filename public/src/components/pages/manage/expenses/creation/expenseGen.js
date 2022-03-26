@@ -35,8 +35,10 @@ const ExpenseGen = ({ editing=false }) => {
   // If editing, use the selected expense values, otherwise set defaults
   const [expense, setExpense] = useState({
     name: "",
-    category: "",
-    location: "",
+    category: (editing && selected && selected.category) ?
+      selected.category._id : "",
+    location: (editing && selected && selected.location) ?
+      selected.location._id : "",
     newLocation: "",
     newCategory: "",
     value: editing ?
