@@ -7,12 +7,12 @@ import {
   EXPENSE_DELETE_REQUEST, EXPENSE_DELETE_SUCCESS, EXPENSE_DELETE_FAILURE,
   EXPENSE_ERROR_RESET,    EXPENSE_DIRECT_SELECT,
   EXPENSE_TOGGLE_ADDING,  EXPENSE_TOGGLE_EDITING, EXPENSE_TOGGLE_DELETING,
-  EXPENSE_TABLE_SORT
+  EXPENSE_TABLE_SORT, USER_LOGIN_FAILURE
 } from './types.js';
 // Import axios to handle http requests
 import axios from 'axios';
 // Import server actions: to report authorization errors
-import { handleError } from './errorActions';
+import { handleError, raiseError } from './errorActions';
 import { inlineCreateCategory } from './categoryActions.js';
 import { inlineCreateLocation } from './locationActions.js';
 
@@ -34,7 +34,7 @@ export const getExpenses = () => async (dispatch, getState) => {
   try {
     const { data } = await axios.get('/api/expenses/', tokenConfig(getState));
     dispatch({ type: EXPENSE_LIST_SUCCESS, payload: data });
-  } catch (e) { dispatch({ type: EXPENSE_LIST_FAILURE, payload: handleError(e) }) }
+  } catch (e) { dispatch(raiseError(e, EXPENSE_LIST_FAILURE)) }
 }
 
 // Return an expense with the given id

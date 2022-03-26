@@ -7,11 +7,12 @@ import {
   LOCATION_DELETE_REQUEST, LOCATION_DELETE_SUCCESS, LOCATION_DELETE_FAILURE,
   LOCATION_ERROR_RESET,    LOCATION_DIRECT_SELECT,
   LOCATION_TOGGLE_ADDING,  LOCATION_TOGGLE_EDITING, LOCATION_TOGGLE_DELETING,
+  USER_LOGIN_FAILURE
 } from './types.js';
 // Import axios to handle http requests
 import axios from 'axios';
 // Import server actions: to report authorization errors
-import { handleError } from './errorActions.js';
+import { handleError, raiseError } from './errorActions.js';
 import { getIncomes } from './incomeActions.js';
 
 // Create a config variable to send with routes requiring authorization
@@ -32,7 +33,7 @@ export const getLocations = () => async (dispatch, getState) => {
   try {
     const { data } = await axios.get('/api/locations/', tokenConfig(getState));
     dispatch({ type: LOCATION_LIST_SUCCESS, payload: data });
-  } catch (e) { dispatch({ type: LOCATION_LIST_FAILURE, payload: handleError(e) }) }
+  } catch (e) { dispatch(raiseError(e, LOCATION_LIST_FAILURE)) }
 }
 
 // Wait for a list of expense locations from the server

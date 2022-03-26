@@ -5,12 +5,12 @@ import {
   CATEGORY_CREATE_REQUEST, CATEGORY_CREATE_SUCCESS, CATEGORY_CREATE_FAILURE,
   CATEGORY_EDIT_REQUEST,   CATEGORY_EDIT_SUCCESS,   CATEGORY_EDIT_FAILURE,
   CATEGORY_DELETE_REQUEST, CATEGORY_DELETE_SUCCESS, CATEGORY_DELETE_FAILURE,
-  CATEGORY_ERROR_RESET
+  CATEGORY_ERROR_RESET, USER_LOGIN_FAILURE
 } from './types.js';
 // Import axios to handle http requests
 import axios from 'axios';
 // Import server actions: to report authorization errors
-import { handleError } from './errorActions';
+import { handleError, raiseError } from './errorActions';
 //
 import { getIncomes } from './incomeActions.js';
 import { getExpenses } from './expenseActions.js';
@@ -33,7 +33,7 @@ export const getCategories = () => async (dispatch, getState) => {
   try {
     const { data } = await axios.get('/api/categories/', tokenConfig(getState));
     dispatch({ type: CATEGORY_LIST_SUCCESS, payload: data });
-  } catch (e) { dispatch({ type: CATEGORY_LIST_FAILURE, payload: handleError(e) }) }
+  } catch (e) { dispatch(raiseError(e, CATEGORY_LIST_FAILURE)) }
 }
 
 // Wait for a list of income sources from the server

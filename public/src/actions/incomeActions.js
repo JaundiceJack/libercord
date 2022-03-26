@@ -7,12 +7,12 @@ import {
   INCOME_DELETE_REQUEST, INCOME_DELETE_SUCCESS, INCOME_DELETE_FAILURE,
   INCOME_ERROR_RESET,    INCOME_DIRECT_SELECT,
   INCOME_TOGGLE_ADDING,  INCOME_TOGGLE_EDITING, INCOME_TOGGLE_DELETING,
-  INCOME_TABLE_SORT
+  INCOME_TABLE_SORT, USER_LOGIN_FAILURE
 } from './types.js';
 // Import axios to handle http requests
 import axios from 'axios';
 // Import server actions: to report authorization errors
-import { handleError } from './errorActions';
+import { handleError, raiseError } from './errorActions';
 import { inlineCreateCategory } from './categoryActions.js';
 import { inlineCreateSource } from './sourceActions.js';
 
@@ -34,7 +34,7 @@ export const getIncomes = () => async (dispatch, getState) => {
   try {
     const { data } = await axios.get('/api/incomes/', tokenConfig(getState));
     dispatch({ type: INCOME_LIST_SUCCESS, payload: data });
-  } catch (e) { dispatch({ type: INCOME_LIST_FAILURE, payload: handleError(e) }) }
+  } catch (e) { dispatch(raiseError(e, INCOME_LIST_FAILURE)) }
 }
 
 // Return an income with the given id

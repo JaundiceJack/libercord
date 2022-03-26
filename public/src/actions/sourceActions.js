@@ -7,11 +7,12 @@ import {
   SOURCE_DELETE_REQUEST, SOURCE_DELETE_SUCCESS, SOURCE_DELETE_FAILURE,
   SOURCE_ERROR_RESET,    SOURCE_DIRECT_SELECT,
   SOURCE_TOGGLE_ADDING,  SOURCE_TOGGLE_EDITING, SOURCE_TOGGLE_DELETING,
+  USER_LOGIN_FAILURE
 } from './types.js';
 // Import axios to handle http requests
 import axios from 'axios';
 // Import server actions: to report authorization errors
-import { handleError } from './errorActions';
+import { handleError, raiseError } from './errorActions';
 import { getIncomes } from './incomeActions.js';
 
 // Create a config variable to send with routes requiring authorization
@@ -32,7 +33,7 @@ export const getSources = () => async (dispatch, getState) => {
   try {
     const { data } = await axios.get('/api/sources/', tokenConfig(getState));
     dispatch({ type: SOURCE_LIST_SUCCESS, payload: data });
-  } catch (e) { dispatch({ type: SOURCE_LIST_FAILURE, payload: handleError(e) }) }
+  } catch (e) { dispatch(raiseError(e, SOURCE_LIST_FAILURE)) }
 }
 
 // Wait for a list of income sources from the server

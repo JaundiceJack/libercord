@@ -33,11 +33,11 @@ const SavingsInfo = ({ year }) => {
                 data={`$${yearlyTotal(expenses, year).toFixed(2)}`} />
             </div>
 
-            <Detail label={`${year} Savings:`} color="bg-yellow-50" to=""
+            <Detail label={`${year} Savings:`} color="bg-yellow-50" to="/summary"
               data={`$${yearlySavings(incomes, expenses, year).toFixed(2)}`} />
 
             <div className="flex flex-row mt-auto items-center">
-              <Detail label="Balance:" to=""
+              <Detail label="Balance:" to="/summary"
                 data={`$${((user.balance) + totalSavings(incomes, expenses)).toFixed(2)}`} />
 
               <Button icon={<AiOutlineEdit />}
