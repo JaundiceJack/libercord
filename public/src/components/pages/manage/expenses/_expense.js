@@ -24,6 +24,8 @@ import { GiPayMoney } from 'react-icons/gi';
 const Expense = ({ history }) => {
   // Get state variables from redux
   const { expenses, selected, adding, editing, deleting } = useSelector(state => state.expense);
+  const { user, error: userError } = useSelector(state => state.user);
+
   // Set a date to filter viewable expenses
   const [date, setDate] = useState(new Date());
   const nextMonth = () => { setDate(add(date, { months: 1 })) };
@@ -42,6 +44,10 @@ const Expense = ({ history }) => {
       timer.current = setTimeout(() => { timer.current = null; }, 5000);
     }
   }, [dispatch, expenses]);
+
+  // Redirect to login if token has expired
+  useEffect(() => { (userError || !user.token) &&
+    history.push('/login?redirect=expenses') }, [user, userError]);
 
   return (
     <div className={"flex flex-col mx-0 mt-4 sm:m-4 h-full "}>

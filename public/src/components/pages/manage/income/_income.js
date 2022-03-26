@@ -24,6 +24,8 @@ import { TiArrowBackOutline } from 'react-icons/ti';
 const Income = ({ history }) => {
   // Get state variables from redux
   const { incomes, selected, adding, editing, deleting } = useSelector(state => state.income);
+  const { user, error: userError } = useSelector(state => state.user);
+
   // Set a date to filter viewable incomes
   const [date, setDate] = useState(new Date());
   const nextMonth = () => { setDate(add(date, { months: 1 })) };
@@ -42,6 +44,10 @@ const Income = ({ history }) => {
       timer.current = setTimeout(() => { timer.current = null; }, 5000);
     }
   }, [dispatch, incomes]);
+
+  // Redirect to login if token has expired
+  useEffect(() => { (userError || !user.token) &&
+    history.push('/login?redirect=income') }, [user, userError]);
 
   return (
     <div className={"flex flex-col mx-0 mt-4 sm:m-4 h-full "}>

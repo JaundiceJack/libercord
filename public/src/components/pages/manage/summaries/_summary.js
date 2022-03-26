@@ -17,7 +17,7 @@ import DetailWindow from '../../../containers/detailWindow.js';
 
 const Summary = ({ history }) => {
   // Get state variables from redux
-  const { user }     = useSelector(state => state.user);
+  const { user, error: userError } = useSelector(state => state.user);
   const { expenses } = useSelector(state => state.expense);
   const { incomes }  = useSelector(state => state.income);
 
@@ -39,6 +39,10 @@ const Summary = ({ history }) => {
       timer.current = setTimeout(() => { timer.current = null; }, 5000);
     }
   }, [dispatch, user, expenses, incomes, history]);
+
+  // Redirect to login if token has expired
+  useEffect(() => { (userError || !user.token) &&
+    history.push('/login?redirect=summary') }, [user, userError]);
 
   return (
     <div className={`flex flex-col mx-0 mt-4 sm:m-4 h-full `}>
